@@ -18,7 +18,8 @@ import {
   LogOut,
   UserCheck,
   Shield,
-  Wrench
+  Wrench,
+  X
 } from "lucide-react";
 import { useCrm } from "@/context/CrmContext";
 import { UserRole } from "@/types";
@@ -28,13 +29,17 @@ interface SidebarProps {
   setActiveTab: (tab: string) => void;
   onOpenNewQuote: () => void;
   onOpenNewContact: () => void;
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
   activeTab, 
   setActiveTab, 
   onOpenNewQuote, 
-  onOpenNewContact 
+  onOpenNewContact,
+  mobileOpen = false,
+  onCloseMobile
 }) => {
   const { 
     jobs, 
@@ -61,10 +66,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const navItems = allNavItems.filter(item => item.roles.includes(currentRole));
 
-  return (
-    <aside className="w-64 bg-white dark:bg-[#0d0e12] border-r border-slate-200 dark:border-[#20242e] flex flex-col h-screen select-none shrink-0 z-20 transition-colors no-print">
+  const handleNavClick = (tabId: string) => {
+    setActiveTab(tabId);
+    if (onCloseMobile) onCloseMobile();
+  };
+
+  const handleQuoteClick = () => {
+    onOpenNewQuote();
+    if (onCloseMobile) onCloseMobile();
+  };
+
+  const handleContactClick = () => {
+    onOpenNewContact();
+    if (onCloseMobile) onCloseMobile();
+  };
+
+  const renderContent = (isMobile: boolean = false) => (
+    <>
       {/* Brand Header */}
-      <div className="p-4 border-b border-slate-200 dark:border-[#20242e] flex flex-col gap-2">
+      <div className="p-4 border-b border-slate-200 dark:border-[#20242e] flex flex-col gap-2 shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="relative w-36 h-10 flex items-center">
@@ -75,10 +95,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
               />
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 text-[10px] uppercase font-mono font-bold tracking-widest px-2.5 py-1 rounded-md bg-slate-900 text-white dark:bg-[#161922] dark:text-zinc-100 border border-slate-800 dark:border-[#2a3040] shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#fe7518]" />
-            MULTAN
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="inline-flex items-center gap-1.5 text-[10px] uppercase font-mono font-bold tracking-widest px-2.5 py-1 rounded-md bg-slate-900 text-white dark:bg-[#161922] dark:text-zinc-100 border border-slate-800 dark:border-[#2a3040] shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#fe7518]" />
+              MULTAN
+            </span>
+            {isMobile && (
+              <button
+                type="button"
+                onClick={onCloseMobile}
+                aria-label="Close menu"
+                className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic ml-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+          </div>
         </div>
         <div className="flex items-center justify-between text-[11px] text-[#7d8594] font-mono">
           <span className="flex items-center gap-1.5">
@@ -87,14 +119,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </span>
           <span className="flex items-center gap-1 text-[10px] text-emerald-400">
             <Database className="w-3 h-3" />
-            <span>SQLite Active</span>
+            <span>Edge Synced</span>
           </span>
         </div>
       </div>
 
       {/* Quick Action Bar */}
       {currentRole === "machinist" ? (
-        <div className="p-3 border-b border-slate-200 dark:border-[#1c202a]">
+        <div className="p-3 border-b border-slate-200 dark:border-[#1c202a] shrink-0">
           <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-[#101726] border border-blue-200 dark:border-blue-900/60 text-blue-800 dark:text-blue-300 text-xs font-mono flex items-center justify-between">
             <span className="flex items-center gap-1.5 font-bold">
               <Wrench className="w-3.5 h-3.5 text-blue-500" />
@@ -106,18 +138,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
       ) : (
-        <div className="p-3 border-b border-slate-200 dark:border-[#1c202a] grid grid-cols-2 gap-2">
+        <div className="p-3 border-b border-slate-200 dark:border-[#1c202a] grid grid-cols-2 gap-2 shrink-0">
           <button
-            onClick={onOpenNewQuote}
-            className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-md bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold shadow-sm border border-[#e56208] btn-haptic"
+            onClick={handleQuoteClick}
+            className="flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold shadow-sm border border-[#e56208] btn-haptic min-h-[44px]"
             aria-label="Create New Auto Quote"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>New Quote</span>
           </button>
           <button
-            onClick={onOpenNewContact}
-            className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-md bg-slate-100 dark:bg-[#181b22] hover:bg-slate-200 dark:hover:bg-[#222631] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-[#2a303d] text-xs font-semibold btn-haptic"
+            onClick={handleContactClick}
+            className="flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-lg bg-slate-100 dark:bg-[#181b22] hover:bg-slate-200 dark:hover:bg-[#222631] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-[#2a303d] text-xs font-semibold btn-haptic min-h-[44px]"
             aria-label="Add New Client Contact"
           >
             <Users className="w-3.5 h-3.5" />
@@ -137,8 +169,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium btn-haptic group transition-colors ${
+              onClick={() => handleNavClick(item.id)}
+              className={`w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] rounded-lg text-sm font-medium btn-haptic group transition-colors touch-manipulation ${
                 isActive 
                   ? "bg-white dark:bg-[#181c26] text-slate-900 dark:text-white border-l-4 border-l-[#fe7518] border-y border-r border-slate-300 dark:border-[#2a3040] shadow-sm font-semibold" 
                   : "text-slate-700 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100 hover:bg-slate-200/60 dark:hover:bg-[#15171f]"
@@ -162,10 +194,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
 
         {/* Currency & Active Trades Telemetry */}
-        <div className="pt-6 px-2">
+        <div className="pt-4 sm:pt-6 px-2">
           <div className="pb-2 text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-500 flex items-center justify-between">
             <span>Active Trades (PKR)</span>
-            <Flame className="w-3 h-3 text-[#fe7518]" />
+            <Flame className="w-3.5 h-3.5 text-[#fe7518]" />
           </div>
           <div className="flex flex-wrap gap-1.5">
             {[
@@ -177,7 +209,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             ].map(t => (
               <span 
                 key={t.label} 
-                className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200/90 dark:bg-[#161923] text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-[#272b38] font-medium"
+                className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2 py-1 rounded bg-slate-200/90 dark:bg-[#161923] text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-[#272b38] font-medium"
               >
                 <span className={`w-1.5 h-1.5 rounded-full ${t.pip}`} />
                 {t.label}
@@ -188,7 +220,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       {/* User Account & Role Profile Footer */}
-      <div className="p-3 border-t border-slate-200 dark:border-[#20242e] bg-slate-50 dark:bg-[#0b0c0f] space-y-2.5">
+      <div className="p-3 border-t border-slate-200 dark:border-[#20242e] bg-slate-50 dark:bg-[#0b0c0f] space-y-2.5 shrink-0">
         {/* User Badge & Sign Out */}
         <div className="p-2 rounded-lg bg-white dark:bg-[#12141a] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between">
           <div className="min-w-0 flex items-center gap-2">
@@ -223,7 +255,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={logout}
             aria-label="Sign out of console"
             title="Sign out of PAKMEC console"
-            className="p-1.5 rounded text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic shrink-0"
+            className="p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic shrink-0"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -234,7 +266,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => switchRole("admin")}
-            className={`py-1 px-1 rounded text-center transition-all ${
+            className={`py-1.5 px-1 min-h-[32px] rounded text-center transition-all ${
               currentRole === "admin"
                 ? "bg-[#fe7518] text-slate-950 font-bold shadow-sm"
                 : "bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
@@ -246,7 +278,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => switchRole("machinist")}
-            className={`py-1 px-1 rounded text-center transition-all ${
+            className={`py-1.5 px-1 min-h-[32px] rounded text-center transition-all ${
               currentRole === "machinist"
                 ? "bg-blue-600 text-white font-bold shadow-sm"
                 : "bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
@@ -258,7 +290,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => switchRole("sales")}
-            className={`py-1 px-1 rounded text-center transition-all ${
+            className={`py-1.5 px-1 min-h-[32px] rounded text-center transition-all ${
               currentRole === "sales"
                 ? "bg-emerald-600 text-white font-bold shadow-sm"
                 : "bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
@@ -273,7 +305,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <button
           onClick={toggleTheme}
           aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-          className="w-full flex items-center justify-between p-2 rounded-lg bg-white dark:bg-[#14161d] hover:bg-slate-100 dark:hover:bg-[#1b1f29] border border-slate-300/80 dark:border-[#242934] btn-haptic text-left text-xs text-slate-800 dark:text-zinc-200"
+          className="w-full flex items-center justify-between p-2 min-h-[38px] rounded-lg bg-white dark:bg-[#14161d] hover:bg-slate-100 dark:hover:bg-[#1b1f29] border border-slate-300/80 dark:border-[#242934] btn-haptic text-left text-xs text-slate-800 dark:text-zinc-200"
         >
           <div className="flex items-center gap-2">
             {theme === "dark" ? (
@@ -292,7 +324,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-2 rounded-lg bg-white dark:bg-[#12141a] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between text-[10px] font-mono">
           <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span className="font-bold">SQLite Secured</span>
+            <span className="font-bold">Edge Cloud Synced</span>
           </div>
           <span className="text-slate-600 dark:text-zinc-400">PAKMEC Multan</span>
         </div>
@@ -312,6 +344,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <span className="font-mono text-[10px] text-slate-500 dark:text-zinc-400">Multan, PK</span>
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop Persistent Sidebar */}
+      <aside className="hidden md:flex w-64 bg-white dark:bg-[#0d0e12] border-r border-slate-200 dark:border-[#20242e] flex-col h-screen select-none shrink-0 z-20 transition-colors no-print">
+        {renderContent(false)}
+      </aside>
+
+      {/* Mobile Drawer (Shown when mobileOpen is true) */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex no-print">
+          {/* Backdrop overlay */}
+          <div 
+            onClick={onCloseMobile}
+            className="fixed inset-0 bg-black/70 backdrop-blur-xs transition-opacity animate-fade-in" 
+            aria-hidden="true"
+          />
+
+          {/* Drawer content */}
+          <aside className="relative z-50 w-72 max-w-[85vw] bg-white dark:bg-[#0d0e12] border-r border-slate-200 dark:border-[#20242e] flex flex-col h-full shadow-2xl animate-slide-in">
+            {renderContent(true)}
+          </aside>
+        </div>
+      )}
+    </>
   );
 };

@@ -21,8 +21,8 @@ import { UserRole } from "@/types";
 
 export const LoginView: React.FC = () => {
   const { login, switchRole } = useCrm();
-  const [email, setEmail] = useState("admin@pakmec.com");
-  const [password, setPassword] = useState("Yasir@123..");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -52,12 +52,12 @@ export const LoginView: React.FC = () => {
   return (
     <div className="min-h-screen w-full bg-[#08090d] text-zinc-100 flex flex-col justify-between font-sans selection:bg-[#fe7518] selection:text-black">
       {/* Precision Top Bar */}
-      <header className="px-6 py-4 border-b border-zinc-800/80 flex items-center justify-between">
+      <header className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-zinc-800/80 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img 
             src="/pakmec-logo.png" 
             alt="PAKMEC Engineering" 
-            className="h-9 w-auto object-contain brightness-110 drop-shadow-[0_2px_8px_rgba(254,117,24,0.3)]" 
+            className="h-8 sm:h-9 w-auto object-contain brightness-110 drop-shadow-[0_2px_8px_rgba(254,117,24,0.3)]" 
           />
           <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-zinc-400 pl-3 border-l border-zinc-800">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -65,17 +65,17 @@ export const LoginView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2 sm:gap-3 text-xs font-mono">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900/90 border border-zinc-800 text-zinc-300">
             <Database className="w-3 h-3 text-emerald-400" />
-            <span>Edge Cloud Synced</span>
+            <span className="text-[11px] sm:text-xs">Edge Cloud</span>
           </span>
         </div>
       </header>
 
       {/* Main Login Card Area */}
       <main className="flex-1 flex items-center justify-center p-4 sm:p-6 my-auto">
-        <div className="w-full max-w-md space-y-6">
+        <div className="w-full max-w-md space-y-5 sm:space-y-6">
           {/* Brand Header */}
           <div className="text-center space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fe7518]/10 border border-[#fe7518]/30 text-[#fe7518] text-xs font-mono font-semibold">
@@ -85,13 +85,13 @@ export const LoginView: React.FC = () => {
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
               PAKMEC Workshop Console
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-400">
+            <p className="text-xs sm:text-sm text-zinc-400 px-2">
               Sign in with your engineering or administrative credentials.
             </p>
           </div>
 
           {/* Form Card */}
-          <div className="bg-[#10131b] border border-zinc-800/90 rounded-2xl p-6 sm:p-7 shadow-2xl space-y-5">
+          <div className="bg-[#10131b] border border-zinc-800/90 rounded-2xl p-5 sm:p-7 shadow-2xl space-y-5">
             {errorMessage && (
               <div 
                 role="alert" 
@@ -116,7 +116,7 @@ export const LoginView: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@pakmec.com"
                     autoComplete="email"
-                    className="w-full bg-[#161a24] text-white text-sm pl-10 pr-3 py-2.5 rounded-lg border border-zinc-800 focus:border-[#fe7518] focus:bg-[#1a202c] focus:outline-none transition-colors font-mono"
+                    className="w-full bg-[#161a24] text-white text-[16px] sm:text-sm pl-10 pr-3 py-2.5 sm:py-2.5 min-h-[44px] rounded-lg border border-zinc-800 focus:border-[#fe7518] focus:bg-[#1a202c] focus:outline-none transition-colors font-mono touch-manipulation"
                   />
                 </div>
               </div>
@@ -126,9 +126,6 @@ export const LoginView: React.FC = () => {
                   <label className="text-xs font-mono text-zinc-400 font-medium">
                     Password
                   </label>
-                  <span className="text-[11px] font-mono text-zinc-500">
-                    Default: <code className="text-[#fe7518]">Yasir@123..</code>
-                  </span>
                 </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -137,15 +134,15 @@ export const LoginView: React.FC = () => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
+                    placeholder="Enter your password"
                     autoComplete="current-password"
-                    className="w-full bg-[#161a24] text-white text-sm pl-10 pr-10 py-2.5 rounded-lg border border-zinc-800 focus:border-[#fe7518] focus:bg-[#1a202c] focus:outline-none transition-colors font-mono"
+                    className="w-full bg-[#161a24] text-white text-[16px] sm:text-sm pl-10 pr-11 py-2.5 sm:py-2.5 min-h-[44px] rounded-lg border border-zinc-800 focus:border-[#fe7518] focus:bg-[#1a202c] focus:outline-none transition-colors font-mono touch-manipulation"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? "Hide password" : "Show password"}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-1 rounded transition-colors"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -155,7 +152,7 @@ export const LoginView: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-2 py-2.5 px-4 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-bold text-sm shadow-md border border-[#e56208] flex items-center justify-center gap-2 transition-all btn-haptic disabled:opacity-50"
+                className="w-full mt-2 py-3 sm:py-2.5 px-4 min-h-[46px] rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-bold text-sm shadow-md border border-[#e56208] flex items-center justify-center gap-2 transition-all btn-haptic disabled:opacity-50 touch-manipulation"
               >
                 {loading ? (
                   <>

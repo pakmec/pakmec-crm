@@ -90,16 +90,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     .slice(0, 5);
 
   return (
-    <div className="p-6 lg:p-8 space-y-7 max-w-7xl mx-auto">
+    <div className="p-3.5 sm:p-6 lg:p-8 space-y-5 sm:space-y-7 max-w-7xl mx-auto">
       {/* Workshop Executive Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-5 sm:pb-6">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100 font-sans">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100 font-sans">
               PAKMEC Workshop Console
             </h1>
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-[#151922] text-slate-900 dark:text-zinc-100 border border-slate-300 dark:border-[#2a3040] shadow-sm font-semibold">
-              <Database className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono px-2 py-0.5 sm:py-1 rounded-md bg-slate-100 dark:bg-[#151922] text-slate-900 dark:text-zinc-100 border border-slate-300 dark:border-[#2a3040] shadow-sm font-semibold">
+              <Database className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>Multan Industrial Hub</span>
             </span>
           </div>
@@ -112,7 +112,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {permissions.canCreateQuotes && (
             <button
               onClick={onOpenNewQuote}
-              className="flex items-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2.5 px-4 rounded-lg shadow-sm border border-[#e56208] btn-haptic"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2.5 px-4 min-h-[44px] rounded-lg shadow-sm border border-[#e56208] btn-haptic touch-manipulation"
             >
               <Calculator className="w-3.5 h-3.5" />
               <span>Generate Auto-Quote</span>

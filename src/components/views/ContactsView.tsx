@@ -19,7 +19,8 @@ import {
   Trash2,
   RotateCcw,
   AlertTriangle,
-  ShieldAlert
+  ShieldAlert,
+  ChevronLeft
 } from "lucide-react";
 import { useCrm } from "@/context/CrmContext";
 import { Contact, TradeType, WhatsAppLog } from "@/types";
@@ -49,6 +50,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
   const [filterTrade, setFilterTrade] = useState<string>("all");
   const [localSearch, setLocalSearch] = useState("");
   const [selectedContact, setSelectedContact] = useState<Contact | null>(contacts[0] || null);
+  const [showMobileDetail, setShowMobileDetail] = useState(false);
   const [newLogText, setNewLogText] = useState("");
   const [logType, setLogType] = useState<WhatsAppLog["type"]>("general");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -161,7 +163,9 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col lg:flex-row overflow-hidden no-print">
       {/* Left Column: Contact List & Filters */}
-      <div className="w-full lg:w-96 border-r border-[var(--border)] bg-[var(--surface-50)] flex flex-col shrink-0">
+      <div className={`w-full lg:w-96 border-r border-[var(--border)] bg-[var(--surface-50)] flex flex-col shrink-0 ${
+        showMobileDetail ? "hidden lg:flex" : "flex"
+      }`}>
         {/* Top Controls */}
         <div className="p-4 border-b border-[var(--border)] space-y-3">
           <div className="flex items-center justify-between">
@@ -181,7 +185,6 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
             </button>
           </div>
 
-          {/* Search box */}
           <div className="relative">
             <Search className="w-3.5 h-3.5 text-[var(--muted)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
@@ -189,7 +192,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
               placeholder="Search by name, company, city, phone…"
-              className="w-full bg-[var(--surface-100)] text-xs text-[var(--foreground)] placeholder-[var(--muted)] pl-8 pr-3 py-2 rounded-md border border-[var(--border)] focus:border-[#fe7518] outline-none font-mono"
+              className="w-full bg-[var(--surface-100)] text-[16px] sm:text-xs text-[var(--foreground)] placeholder-[var(--muted)] pl-8 pr-3 py-2 min-h-[40px] rounded-md border border-[var(--border)] focus:border-[#fe7518] outline-none font-mono touch-manipulation"
             />
           </div>
 
@@ -273,8 +276,11 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
               return (
                 <div
                   key={c.id}
-                  onClick={() => setSelectedContact(c)}
-                  className={`p-3.5 transition-colors cursor-pointer text-left ${
+                  onClick={() => {
+                    setSelectedContact(c);
+                    setShowMobileDetail(true);
+                  }}
+                  className={`p-3 rounded-lg cursor-pointer transition-all border text-left min-h-[44px] touch-manipulation ${
                     isSelected 
                       ? "bg-white dark:bg-[#1c202d] border-l-4 border-l-[#fe7518] shadow-sm font-semibold" 
                       : "hover:bg-[var(--surface-100)]"
@@ -319,13 +325,23 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
         <div 
           tabIndex={0}
           aria-label="Client details and activity"
-          className="flex-1 bg-[var(--background)] flex flex-col overflow-y-auto focus:outline-none focus:ring-1 focus:ring-[#fe7518]"
+          className={`flex-1 bg-[var(--background)] flex flex-col overflow-y-auto focus:outline-none focus:ring-1 focus:ring-[#fe7518] ${
+            !showMobileDetail ? "hidden lg:flex" : "flex"
+          }`}
         >
           {/* Contact Header Card */}
-          <div className="p-6 border-b border-[var(--border)] bg-[var(--surface-50)] flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-4 sm:p-6 border-b border-[var(--border)] bg-[var(--surface-50)] flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
-              <div className="flex items-center gap-3">
-                <h1 className="text-xl font-bold text-[var(--foreground)]">{activeContact.name}</h1>
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setShowMobileDetail(false)}
+                  className="lg:hidden inline-flex items-center gap-1 px-2.5 py-1 min-h-[36px] rounded-lg bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 text-xs font-semibold btn-haptic mr-1"
+                >
+                  <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+                  <span>Clients</span>
+                </button>
+                <h1 className="text-lg sm:text-xl font-bold text-[var(--foreground)]">{activeContact.name}</h1>
                 <span className="text-xs font-mono px-2 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] border border-[var(--border)]">
                   {activeContact.id}
                 </span>

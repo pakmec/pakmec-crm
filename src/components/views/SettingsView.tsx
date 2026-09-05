@@ -52,27 +52,27 @@ export const SettingsView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-8 max-w-5xl mx-auto no-print">
+    <div className="p-3.5 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-5xl mx-auto no-print">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#202532] pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#202532] pb-5 sm:pb-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
             <Settings className="w-5 h-5 text-[#fe7518]" />
-            <span>PAKMEC Trade Rates & Database Settings</span>
+            <span>PAKMEC Trade Rates & Settings</span>
           </h1>
-          <p className="text-sm text-slate-600 dark:text-zinc-400 mt-1 font-sans">
-            Configure hourly machine rates, material prices (PKR), bank IBAN, and Multan workshop defaults. Persisted in SQLite.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-400 mt-1 font-sans">
+            Configure hourly machine rates, material prices (PKR), bank IBAN, and Multan workshop defaults.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             type="button"
             onClick={handleExportData}
-            className="flex items-center gap-1.5 bg-slate-100 dark:bg-[#171922] hover:bg-slate-200 dark:hover:bg-[#202430] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-[#262c3a] text-xs font-mono py-2 px-3 rounded-lg transition-all"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#171922] hover:bg-slate-200 dark:hover:bg-[#202430] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-[#262c3a] text-xs font-mono py-2.5 px-3 min-h-[40px] rounded-lg transition-all btn-haptic touch-manipulation"
           >
             <Download className="w-3.5 h-3.5 text-[#fe7518]" />
-            <span>Export SQLite Backup</span>
+            <span>Export Backup</span>
           </button>
 
           <button
@@ -82,7 +82,7 @@ export const SettingsView: React.FC = () => {
                 resetToDefaults();
               }
             }}
-            className="flex items-center gap-1.5 bg-slate-100 dark:bg-[#171922] hover:bg-rose-100 dark:hover:bg-[#2b0f14] text-slate-700 dark:text-zinc-300 hover:text-rose-900 dark:hover:text-rose-300 border border-slate-300 dark:border-[#262c3a] hover:border-rose-400 dark:hover:border-rose-800 text-xs font-mono py-2 px-3 rounded-lg transition-all btn-haptic"
+            className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#171922] hover:bg-rose-100 dark:hover:bg-[#2b0f14] text-slate-700 dark:text-zinc-300 hover:text-rose-900 dark:hover:text-rose-300 border border-slate-300 dark:border-[#262c3a] hover:border-rose-400 dark:hover:border-rose-800 text-xs font-mono py-2.5 px-3 min-h-[40px] rounded-lg transition-all btn-haptic touch-manipulation"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Demo</span>

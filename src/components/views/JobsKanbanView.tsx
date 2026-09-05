@@ -69,6 +69,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
   const [isAdvanceModalOpen, setIsAdvanceModalOpen] = useState(false);
   const [isSettlementModalOpen, setIsSettlementModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [mobileTab, setMobileTab] = useState<"kanban" | "details">("kanban");
 
   // Pin Form State
   const [pinTitle, setPinTitle] = useState("");
@@ -228,10 +229,40 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
         </div>
       </div>
 
+      {/* Mobile Tab Switcher between Kanban & Media Pin Board */}
+      <div className="lg:hidden px-3 py-2 bg-[var(--surface-100)] border-b border-[var(--border)] flex items-center gap-2 shrink-0">
+        <button
+          type="button"
+          onClick={() => setMobileTab("kanban")}
+          className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold font-mono transition-all min-h-[40px] flex items-center justify-center gap-1.5 touch-manipulation ${
+            mobileTab === "kanban" 
+              ? "bg-[#fe7518] text-slate-950 shadow-sm" 
+              : "bg-[var(--surface-200)] text-[var(--muted)] hover:text-[var(--foreground)]"
+          }`}
+        >
+          <KanbanSquare className="w-4 h-4" />
+          <span>Kanban Floor</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab("details")}
+          className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold font-mono transition-all min-h-[40px] flex items-center justify-center gap-1.5 touch-manipulation ${
+            mobileTab === "details" 
+              ? "bg-[#fe7518] text-slate-950 shadow-sm" 
+              : "bg-[var(--surface-200)] text-[var(--muted)] hover:text-[var(--foreground)]"
+          }`}
+        >
+          <Pin className="w-4 h-4" />
+          <span>Drawings & Media ({activeJob?.referenceItems?.length || 0})</span>
+        </button>
+      </div>
+
       {/* Main Split: Kanban Columns & Reference Pin Board */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Kanban Board Area */}
-        <div className="w-full lg:w-3/5 border-r border-[var(--border)] bg-[var(--background)] p-4 overflow-x-auto overflow-y-auto">
+        <div className={`w-full lg:w-3/5 border-r border-[var(--border)] bg-[var(--background)] p-3 sm:p-4 overflow-x-auto overflow-y-auto ${
+          mobileTab === "details" ? "hidden lg:block" : "block"
+        }`}>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3.5 min-w-[850px]">
             {columns.map((col) => {
               const colJobs = activeJobs.filter((j) => j.stage === col.stage);
@@ -268,8 +299,11 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                         return (
                           <div
                             key={job.id}
-                            onClick={() => setActiveJobId(job.id)}
-                            className={`p-3 rounded-lg border text-left transition-all cursor-pointer space-y-2 ${
+                            onClick={() => {
+                              setActiveJobId(job.id);
+                              setMobileTab("details");
+                            }}
+                            className={`p-3 rounded-lg border text-left cursor-pointer transition-all space-y-2 touch-manipulation ${
                               isSelected
                                 ? "bg-white dark:bg-[#1c202d] border-2 border-[#fe7518] shadow-md ring-1 ring-[#fe7518]"
                                 : "bg-[var(--surface-100)] border-[var(--border)] hover:border-slate-400 dark:hover:border-zinc-600"
@@ -390,13 +424,25 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
 
         {/* Right Reference Board (Pinterest-Style Media & Pin Grid) */}
         {activeJob ? (
-          <div className="w-full lg:w-2/5 bg-[var(--background)] flex flex-col overflow-y-auto">
+          <div className={`w-full lg:w-2/5 bg-[var(--background)] flex flex-col overflow-y-auto ${
+            mobileTab === "kanban" ? "hidden lg:flex" : "flex"
+          }`}>
             {/* Job Header & Advance Telemetry */}
-            <div className="p-5 border-b border-[var(--border)] bg-[var(--surface-50)] space-y-3">
+            <div className="p-4 sm:p-5 border-b border-[var(--border)] bg-[var(--surface-50)] space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-[#fe7518] font-bold">
-                  PIN BOARD • {activeJob.id}
-                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setMobileTab("kanban")}
+                    className="lg:hidden inline-flex items-center gap-1 px-2.5 py-1 min-h-[34px] rounded-lg bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 text-xs font-semibold btn-haptic"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+                    <span>Board</span>
+                  </button>
+                  <span className="text-xs font-mono text-[#fe7518] font-bold">
+                    PIN BOARD • {activeJob.id}
+                  </span>
+                </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] uppercase">
                   {activeJob.stage.replace("_", " ")}
                 </span>

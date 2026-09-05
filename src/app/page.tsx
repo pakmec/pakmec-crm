@@ -11,11 +11,13 @@ import { InvoicesView } from "@/components/views/InvoicesView";
 import { SettingsView } from "@/components/views/SettingsView";
 import { LoginView } from "@/components/auth/LoginView";
 import { useCrm } from "@/context/CrmContext";
-import { Plus, Users, KanbanSquare } from "lucide-react";
+import { Plus, Users, KanbanSquare, LayoutDashboard, Calculator, Receipt, Settings, Menu } from "lucide-react";
 import { TradeType, JobPriority } from "@/types";
 
 export default function Home() {
   const { 
+    jobs,
+    quotes,
     addContact, 
     createJob, 
     contacts, 
@@ -27,8 +29,12 @@ export default function Home() {
   } = useCrm();
 
   const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [targetJobId, setTargetJobId] = useState<string | null>(null);
   const [targetContactIdForQuote, setTargetContactIdForQuote] = useState<string | undefined>(undefined);
+
+  const activeJobsCount = jobs.filter(j => !j.isArchived && j.stage !== "delivered").length;
+  const pendingQuotesCount = quotes.filter(q => !q.isArchived && (q.status === "sent" || q.status === "approved")).length;
 
   // Enforce role-based active tab boundaries
   useEffect(() => {
@@ -161,12 +167,14 @@ export default function Home() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#f4f6f9] dark:bg-[#0a0b0e] text-[#0f172a] dark:text-[#f4f5f8] transition-colors duration-200">
-      {/* Dark Linear-Style Sidebar */}
+      {/* Dark Linear-Style Sidebar (Desktop Persistent & Mobile Drawer) */}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenNewQuote={() => setActiveTab("quotes")}
         onOpenNewContact={() => setIsNewContactOpen(true)}
+        mobileOpen={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
       />
 
       {/* Main Content Area */}
@@ -175,9 +183,10 @@ export default function Home() {
           onOpenNewQuote={() => setActiveTab("quotes")}
           onOpenNewJob={() => setIsNewJobOpen(true)}
           onOpenNewContact={() => setIsNewContactOpen(true)}
+          onToggleMobileMenu={() => setIsMobileMenuOpen(prev => !prev)}
         />
 
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto pb-20 md:pb-0">
           {activeTab === "dashboard" && (
             <DashboardView
               onNavigateTab={setActiveTab}
@@ -442,6 +451,91 @@ export default function Home() {
           </div>
         </div>
       )}
+      {/* Mobile Bottom Navigation Bar */}
+      <nav 
+        aria-label="Mobile Bottom Navigation"
+        className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-[#0c0e14]/95 backdrop-blur-md border-t border-slate-200 dark:border-zinc-800 z-30 flex items-center justify-around px-2 no-print"
+      >
+        <button
+          type="button"
+          onClick={() => setActiveTab("dashboard")}
+          className={`flex flex-col items-center justify-center gap-1 flex-1 py-1.5 min-h-[48px] rounded-lg transition-colors btn-haptic touch-manipulation ${
+            activeTab === "dashboard" 
+              ? "text-[#fe7518] font-bold" 
+              : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
+          }`}
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          <span className="text-[10px] tracking-tight">Overview</span>
+        </button>
+
+        {permissions.canCreateQuotes && (
+          <button
+            type="button"
+            onClick={() => setActiveTab("quotes")}
+            className={`flex flex-col items-center justify-center gap-1 flex-1 py-1.5 min-h-[48px] rounded-lg transition-colors relative btn-haptic touch-manipulation ${
+              activeTab === "quotes" 
+                ? "text-[#fe7518] font-bold" 
+                : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
+            }`}
+          >
+            <div className="relative">
+              <Calculator className="w-5 h-5" />
+              {pendingQuotesCount > 0 && (
+                <span className="absolute -top-1 -right-2 bg-[#fe7518] text-slate-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center">
+                  {pendingQuotesCount}
+                </span>
+              )}
+            </div>
+            <span className="text-[10px] tracking-tight">Quoter</span>
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("jobs")}
+          className={`flex flex-col items-center justify-center gap-1 flex-1 py-1.5 min-h-[48px] rounded-lg transition-colors relative btn-haptic touch-manipulation ${
+            activeTab === "jobs" 
+              ? "text-[#fe7518] font-bold" 
+              : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
+          }`}
+        >
+          <div className="relative">
+            <KanbanSquare className="w-5 h-5" />
+            {activeJobsCount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-blue-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center">
+                {activeJobsCount}
+              </span>
+            )}
+          </div>
+          <span className="text-[10px] tracking-tight">Floor Jobs</span>
+        </button>
+
+        {permissions.canViewFinancials && (
+          <button
+            type="button"
+            onClick={() => setActiveTab("contacts")}
+            className={`flex flex-col items-center justify-center gap-1 flex-1 py-1.5 min-h-[48px] rounded-lg transition-colors btn-haptic touch-manipulation ${
+              activeTab === "contacts" 
+                ? "text-[#fe7518] font-bold" 
+                : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
+            }`}
+          >
+            <Users className="w-5 h-5" />
+            <span className="text-[10px] tracking-tight">Clients</span>
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(true)}
+          aria-label="Open workshop menu drawer"
+          className="flex flex-col items-center justify-center gap-1 flex-1 py-1.5 min-h-[48px] rounded-lg text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 btn-haptic touch-manipulation"
+        >
+          <Menu className="w-5 h-5" />
+          <span className="text-[10px] tracking-tight">Menu</span>
+        </button>
+      </nav>
     </div>
   );
 }

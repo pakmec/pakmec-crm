@@ -8,7 +8,8 @@ import {
   Plus,
   Sun,
   Moon,
-  Database
+  Database,
+  Menu
 } from "lucide-react";
 import { useCrm } from "@/context/CrmContext";
 import { CurrencyDisplay } from "@/components/ui/CurrencyDisplay";
@@ -17,12 +18,14 @@ interface HeaderProps {
   onOpenNewQuote: () => void;
   onOpenNewJob: () => void;
   onOpenNewContact: () => void;
+  onToggleMobileMenu?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
   onOpenNewQuote, 
   onOpenNewJob, 
-  onOpenNewContact 
+  onOpenNewContact,
+  onToggleMobileMenu 
 }) => {
   const { 
     searchQuery, 
@@ -55,20 +58,37 @@ export const Header: React.FC<HeaderProps> = ({
     .reduce((sum, j) => sum + j.balanceDue, 0);
 
   return (
-    <header className="h-16 border-b border-slate-200/90 dark:border-zinc-800/80 bg-white dark:bg-[#0c0e14] px-6 flex items-center justify-between sticky top-0 z-10 select-none no-print transition-colors">
+    <header className="h-16 border-b border-slate-200/90 dark:border-zinc-800/80 bg-white dark:bg-[#0c0e14] px-3 sm:px-6 flex items-center justify-between sticky top-0 z-10 select-none no-print transition-colors">
+      {/* Mobile Hamburger Button + Logo */}
+      <div className="flex items-center gap-2 md:hidden shrink-0 mr-2">
+        <button
+          type="button"
+          onClick={onToggleMobileMenu}
+          aria-label="Open navigation menu"
+          className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-slate-700 hover:text-slate-900 dark:text-zinc-300 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic touch-manipulation"
+        >
+          <Menu className="w-5 h-5 text-[#fe7518]" />
+        </button>
+        <img 
+          src="/pakmec-logo.png" 
+          alt="PAKMEC" 
+          className="h-6 w-auto object-contain brightness-110 hidden xs:block" 
+        />
+      </div>
+
       {/* Search Input Bar */}
       <div className="flex items-center gap-4 flex-1 max-w-md">
         <div className="relative w-full">
-          <Search className="w-4 h-4 text-slate-500 dark:text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-slate-500 dark:text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             aria-label="Search clients, quotes, jobs, and engineering specs"
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search clients, quotes, jobs, specs…"
-            className="w-full bg-slate-100 dark:bg-[#131620] text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-500 dark:placeholder-zinc-400 pl-10 pr-14 py-2 rounded-lg border border-slate-300/80 dark:border-zinc-700/80 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#161926] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fe7518]/50 transition-all font-sans"
+            placeholder="Search clients, quotes, jobs…"
+            className="w-full bg-slate-100 dark:bg-[#131620] text-[16px] sm:text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-500 dark:placeholder-zinc-400 pl-9 sm:pl-10 pr-12 sm:pr-14 py-2 min-h-[40px] rounded-lg border border-slate-300/80 dark:border-zinc-700/80 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#161926] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fe7518]/50 transition-all font-sans touch-manipulation"
           />
-          <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
             {searchQuery ? (
               <button 
                 onClick={() => setSearchQuery("")}

@@ -89,25 +89,25 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="p-3.5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 max-w-7xl mx-auto">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-6 no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-5 sm:pb-6 no-print">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--foreground)] flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--foreground)] flex items-center gap-2">
             <Receipt className="w-5 h-5 text-[#fe7518]" />
             <span>PAKMEC Invoicing & Settlements (PKR)</span>
           </h1>
-          <p className="text-sm text-[var(--muted)] mt-1">
+          <p className="text-xs sm:text-sm text-[var(--muted)] mt-1">
             Deducts initial advance deposits, tracks settlements across Bank Transfer, JazzCash & Cash in Multan, and generates clean printable tax invoices.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 flex-wrap">
           {["all", "unpaid", "partial", "paid"].map((status) => (
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono uppercase transition-colors ${
+              className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-mono uppercase transition-colors btn-haptic touch-manipulation ${
                 filterStatus === status 
                   ? "bg-[#fe7518] text-slate-950 font-black" 
                   : "bg-[var(--surface-100)] text-[var(--muted)] hover:bg-[var(--surface-200)] border border-[var(--border)]"
@@ -131,7 +131,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
               aria-label="Search invoices by ID or client name"
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search invoices by ID, client…"
-              className="w-full bg-[var(--surface-100)] text-xs text-[var(--foreground)] placeholder-slate-500 dark:placeholder-zinc-400 pl-8 pr-3 py-2 rounded-lg border border-[var(--border)] focus:border-[#fe7518] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fe7518]/50 font-sans"
+              className="w-full bg-[var(--surface-100)] text-[16px] sm:text-xs text-[var(--foreground)] placeholder-slate-500 dark:placeholder-zinc-400 pl-8 pr-3 py-2 min-h-[40px] rounded-lg border border-[var(--border)] focus:border-[#fe7518] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fe7518]/50 font-sans touch-manipulation"
             />
           </div>
 

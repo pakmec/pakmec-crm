@@ -427,30 +427,30 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="p-3.5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 max-w-7xl mx-auto">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222735] pb-6 no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222735] pb-5 sm:pb-6 no-print">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-[#f3f4f6] flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#f3f4f6] flex items-center gap-2">
               <Calculator className="w-5 h-5 text-[#fe7518]" />
               <span>PAKMEC Auto-Quoter (PKR)</span>
             </h1>
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold px-2.5 py-1 rounded-md bg-slate-900 text-white dark:bg-[#161922] dark:text-zinc-100 border border-slate-800 dark:border-[#2a3040] shadow-sm">
+            <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold px-2.5 py-1 rounded-md bg-slate-900 text-white dark:bg-[#161922] dark:text-zinc-100 border border-slate-800 dark:border-[#2a3040] shadow-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-[#fe7518] shadow-[0_0_6px_rgba(254,117,24,0.8)]" />
               Multan Workshop
             </span>
           </div>
-          <p className="text-sm text-slate-600 dark:text-zinc-300 mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-300 mt-1">
             Pick trade parameters to compute accurate pricing from configured machine and material rates in Pakistani Rupees.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="bg-[#14161f] p-1 rounded-lg border border-[#232734] flex items-center gap-1 font-mono text-xs">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="w-full sm:w-auto bg-[#14161f] p-1 rounded-lg border border-[#232734] flex items-center gap-1 font-mono text-xs">
             <button
               onClick={() => setActiveTab("generator")}
-              className={`px-3 py-1.5 rounded-md transition-colors ${
+              className={`flex-1 sm:flex-initial px-3 py-2 min-h-[40px] rounded-md transition-colors flex items-center justify-center btn-haptic touch-manipulation ${
                 activeTab === "generator" 
                   ? "bg-[#fe7518] text-slate-950 font-black" 
                   : "text-slate-600 dark:text-zinc-300 hover:text-white"
@@ -460,7 +460,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             </button>
             <button
               onClick={() => setActiveTab("list")}
-              className={`px-3 py-1.5 rounded-md transition-colors ${
+              className={`flex-1 sm:flex-initial px-3 py-2 min-h-[40px] rounded-md transition-colors flex items-center justify-center btn-haptic touch-manipulation ${
                 activeTab === "list" 
                   ? "bg-[#fe7518] text-slate-950 font-black" 
                   : "text-slate-600 dark:text-zinc-300 hover:text-white"
