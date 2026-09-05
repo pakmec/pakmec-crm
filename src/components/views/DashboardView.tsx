@@ -141,39 +141,39 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mt-4 pt-2 border-t border-slate-100 dark:border-zinc-800/70">
-                <div>
-                  <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">Active Machine Floor WIP</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/70">
+                <div className="p-3 rounded-lg bg-slate-50/70 dark:bg-zinc-900/40 border border-slate-100 dark:border-zinc-800/60">
+                  <span className="text-xs text-slate-500 dark:text-zinc-400 font-medium">Active Machine Floor WIP</span>
                   <div className="mt-1 flex items-baseline gap-2">
-                    <span className="text-2xl font-bold font-mono text-slate-900 dark:text-zinc-100">{activeJobs.length}</span>
+                    <span className="text-2xl sm:text-3xl font-bold font-mono text-slate-900 dark:text-zinc-100">{activeJobs.length}</span>
                     <span className="text-xs text-slate-500 dark:text-zinc-400 font-mono">Running Jobs</span>
                   </div>
-                  <div className="text-[11px] text-blue-600 dark:text-blue-400 mt-1 font-mono flex items-center gap-1">
+                  <div className="text-xs text-blue-600 dark:text-blue-400 mt-1.5 font-mono flex items-center gap-1">
                     <span>{urgentJobs.length} High Priority runs scheduled</span>
                   </div>
                 </div>
 
-                <div>
-                  <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">Tooling & Spindle Readiness</span>
+                <div className="p-3 rounded-lg bg-slate-50/70 dark:bg-zinc-900/40 border border-slate-100 dark:border-zinc-800/60">
+                  <span className="text-xs text-slate-500 dark:text-zinc-400 font-medium">Tooling & Spindle Readiness</span>
                   <div className="mt-1 flex items-baseline gap-2">
-                    <span className="text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400">100%</span>
+                    <span className="text-2xl sm:text-3xl font-bold font-mono text-emerald-600 dark:text-emerald-400">100%</span>
                     <span className="text-xs text-slate-500 dark:text-zinc-400 font-mono">Calibrated</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 dark:text-zinc-400 mt-1 font-mono">
+                  <div className="text-xs text-slate-500 dark:text-zinc-400 mt-1.5 font-mono">
                     5-Axis CNC, 150W Laser & SLA active
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/70 flex items-center justify-between text-[11px] text-slate-500 dark:text-zinc-400 font-mono">
+            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/70 flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400 font-mono">
               <span>Multan Precision Shop Floor</span>
               <button 
                 onClick={() => onNavigateTab("jobs")} 
-                className="text-[#fe7518] hover:underline flex items-center gap-1"
+                className="text-[#fe7518] hover:underline flex items-center gap-1 font-medium"
               >
                 <span>Open Kanban Floor</span>
-                <ArrowUpRight className="w-3 h-3" />
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -182,50 +182,50 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-400 font-medium">
+                  <span className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-400 font-semibold">
                     Financial Settlement Telemetry
                   </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-[#0c1c14] text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 font-bold">
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-[#0c1c14] text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 font-bold">
                     SQLite Verified
                   </span>
                 </div>
-                <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-[#171b26] border border-slate-200 dark:border-[#242938] flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                  <TrendingUp className="w-3.5 h-3.5" />
+                <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-[#171b26] border border-slate-200 dark:border-[#242938] flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                  <TrendingUp className="w-4 h-4" />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mt-4 pt-2 border-t border-slate-100 dark:border-zinc-800/70">
-                <div>
-                  <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">Total Cash Collected</span>
-                  <div className="mt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/70">
+                <div className="p-3.5 rounded-lg bg-slate-50/70 dark:bg-zinc-900/40 border border-slate-100 dark:border-zinc-800/60">
+                  <span className="text-xs text-slate-500 dark:text-zinc-400 font-medium block mb-1">Total Cash Collected</span>
+                  <div className="mt-0.5">
                     <CurrencyDisplay amount={totalRevenuePKR} size="xl" numberColor="text-slate-900 dark:text-zinc-100" />
                   </div>
-                  <div className="text-[11px] text-emerald-700 dark:text-emerald-400 mt-1 font-mono flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3" />
+                  <div className="text-xs text-emerald-700 dark:text-emerald-400 mt-2 font-mono flex items-center gap-1.5 flex-wrap">
+                    <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
                     <span>Adv: {formatCurrency(totalAdvancesCollected)} • Settle: {formatCurrency(totalSettlementsCollected)}</span>
                   </div>
                 </div>
 
-                <div>
-                  <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">Outstanding Receivables</span>
-                  <div className="mt-1">
+                <div className="p-3.5 rounded-lg bg-slate-50/70 dark:bg-zinc-900/40 border border-slate-100 dark:border-zinc-800/60">
+                  <span className="text-xs text-slate-500 dark:text-zinc-400 font-medium block mb-1">Outstanding Receivables</span>
+                  <div className="mt-0.5">
                     <CurrencyDisplay amount={totalPendingBalance} size="xl" numberColor="text-amber-600 dark:text-amber-400" />
                   </div>
-                  <div className="text-[11px] text-slate-500 dark:text-zinc-400 mt-1 font-mono">
+                  <div className="text-xs text-slate-500 dark:text-zinc-400 mt-2 font-mono">
                     {totalPendingBalance === 0 ? "All accounts fully settled" : `${nonArchivedJobs.filter(j => j.balanceDue > 0).length} jobs with pending balance`}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/70 flex items-center justify-between text-[11px] text-slate-500 dark:text-zinc-400 font-mono">
-              <span>Meezan Bank IBAN & JazzCash active</span>
+            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/70 flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400 font-mono">
+              <span className="truncate mr-2">Meezan Bank IBAN & JazzCash</span>
               <button 
                 onClick={() => onNavigateTab("invoices")} 
-                className="text-[#fe7518] hover:underline flex items-center gap-1"
+                className="text-[#fe7518] hover:underline flex items-center gap-1 shrink-0 font-medium"
               >
                 <span>Ledger Details</span>
-                <ArrowUpRight className="w-3 h-3" />
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -333,48 +333,50 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <div 
                     key={job.id}
                     onClick={() => onOpenJobDetail(job.id)}
-                    className="p-4 hover:bg-slate-50 dark:hover:bg-zinc-900/40 transition-colors cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                    className="p-3.5 sm:p-4 hover:bg-slate-50 dark:hover:bg-zinc-900/40 transition-colors cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                   >
-                    <div className="space-y-1.5 min-w-0">
+                    <div className="space-y-2 min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-mono text-xs font-semibold text-slate-500 dark:text-zinc-400">{job.id}</span>
-                        <span className="font-semibold text-sm text-slate-900 dark:text-zinc-100 truncate hover:text-[#fe7518] transition-colors">
+                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 text-[#fe7518]">
+                          {job.id}
+                        </span>
+                        <span className="font-bold text-sm sm:text-base text-slate-900 dark:text-zinc-100 hover:text-[#fe7518] transition-colors leading-snug">
                           {job.title}
                         </span>
-                        <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${stageColors[job.stage]}`}>
+                        <span className={`text-[11px] font-mono uppercase font-bold px-2.5 py-0.5 rounded border ${stageColors[job.stage]}`}>
                           {job.stage.replace("_", " ")}
                         </span>
                         {job.priority === "urgent" && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 dark:bg-[#2b0f14] text-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700 font-bold">
+                          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-100 dark:bg-[#2b0f14] text-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700 font-bold">
                             URGENT
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-zinc-400 font-mono">
-                        <span>Client: <strong className="text-slate-700 dark:text-zinc-200">{job.contactName}</strong></span>
-                        <span>•</span>
-                        <span>Trade: <strong className="text-slate-700 dark:text-zinc-200">{job.trade}</strong></span>
-                        <span>•</span>
-                        <span>Shop: <strong className="text-[#fe7518]">Multan</strong></span>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 dark:text-zinc-400 font-mono">
+                        <span>Client: <strong className="text-slate-800 dark:text-zinc-200 font-semibold">{job.contactName}</strong></span>
+                        <span className="text-slate-300 dark:text-zinc-600 hidden sm:inline">•</span>
+                        <span>Trade: <strong className="text-slate-800 dark:text-zinc-200 font-semibold">{job.trade}</strong></span>
+                        <span className="text-slate-300 dark:text-zinc-600 hidden sm:inline">•</span>
+                        <span>Shop: <strong className="text-[#fe7518] font-semibold">Multan</strong></span>
                       </div>
                     </div>
 
-                    <div className="flex items-center sm:flex-col sm:items-end justify-between shrink-0 font-mono">
+                    <div className="flex items-center sm:flex-col sm:items-end justify-between shrink-0 font-mono pt-2.5 sm:pt-0 border-t border-slate-100 dark:border-zinc-800/60 sm:border-0">
                       {permissions.canViewFinancials ? (
                         <>
                           <div>
-                            <CurrencyDisplay amount={job.totalAmount} size="md" />
+                            <CurrencyDisplay amount={job.totalAmount} size="md" color="orange" />
                           </div>
-                          <div className="text-[11px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
+                          <div className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 mt-0.5">
                             <span>Advance:</span>
                             <CurrencyDisplay amount={job.advancePaid} size="xs" numberColor="text-emerald-600 dark:text-emerald-400" />
-                            {job.advanceStatus === "collected" && <CheckCircle2 className="w-3 h-3 text-emerald-500" />}
+                            {job.advanceStatus === "collected" && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />}
                           </div>
                         </>
                       ) : (
                         <div className="text-right">
                           <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 block">{job.trade}</span>
-                          <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono">Shop Floor Active</span>
+                          <span className="text-xs text-blue-600 dark:text-blue-400 font-mono">Shop Floor Active</span>
                         </div>
                       )}
                     </div>
@@ -385,8 +387,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           {/* Weekly Throughput Telemetry Chart */}
-          <div className="bg-white dark:bg-[#11131a] p-5 rounded-xl border border-slate-200/90 dark:border-zinc-800/90 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white dark:bg-[#11131a] p-4 sm:p-5 rounded-xl border border-slate-200/90 dark:border-zinc-800/90 shadow-sm">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
               <div>
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-zinc-100 font-mono">
                   Weekly Calibrated Machine Runs
@@ -400,13 +402,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             {/* Bar visualization */}
-            <div className="h-36 flex items-end justify-between gap-3 pt-4 px-2 border-b border-slate-200/70 dark:border-zinc-800">
+            <div className="h-32 sm:h-36 flex items-end justify-between gap-2 sm:gap-3 pt-4 px-1 sm:px-2 border-b border-slate-200/70 dark:border-zinc-800">
               {weeklyOutput.map((bar) => (
                 <div key={bar.day} className="flex-1 flex flex-col items-center gap-1.5 group">
-                  <span className="text-[10px] font-mono text-slate-400 dark:text-zinc-500 group-hover:text-[#fe7518] transition-colors">
+                  <span className="text-xs font-mono text-slate-400 dark:text-zinc-500 group-hover:text-[#fe7518] transition-colors">
                     {bar.count}
                   </span>
-                  <div className="w-full bg-slate-100 dark:bg-zinc-800/60 rounded-t-md h-28 flex items-end p-1">
+                  <div className="w-full bg-slate-100 dark:bg-zinc-800/60 rounded-t-md h-24 sm:h-28 flex items-end p-0.5 sm:p-1">
                     <div 
                       style={{ height: bar.height }}
                       className={`w-full rounded-t-sm transition-all duration-500 ${
@@ -416,7 +418,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       }`}
                     />
                   </div>
-                  <span className="text-[11px] font-mono text-slate-500 dark:text-zinc-400 mt-1">{bar.day}</span>
+                  <span className="text-xs font-mono text-slate-500 dark:text-zinc-400 mt-1">{bar.day}</span>
                 </div>
               ))}
             </div>
@@ -426,7 +428,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Right Col: Trade Distribution & WhatsApp Activity */}
         <div className="space-y-6">
           {/* Trade Share Breakdown */}
-          <div className="bg-white dark:bg-[#11131a] p-5 rounded-xl border border-slate-200/90 dark:border-zinc-800/90 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-[#11131a] p-4 sm:p-5 rounded-xl border border-slate-200/90 dark:border-zinc-800/90 shadow-sm space-y-4">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-zinc-100 font-mono flex items-center gap-2">
               <Boxes className="w-4 h-4 text-[#fe7518]" />
               <span>Jobs by Trade Domain</span>
@@ -442,7 +444,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       <span className="text-slate-600 dark:text-zinc-400 font-medium">{t.name}</span>
                       <span className="text-slate-900 dark:text-zinc-100 font-semibold">{t.count} ({percent}%)</span>
                     </div>
-                    <div className="w-full h-1.5 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
                       <div 
                         className="h-full rounded-full transition-all duration-700" 
                         style={{ width: `${percent}%`, backgroundColor: t.color }}
@@ -473,24 +475,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
             <div className="p-4 space-y-3">
               {recentLogs.map((log) => (
-                <div key={log.id} className="p-3 rounded-lg bg-slate-50 dark:bg-zinc-900/60 border border-slate-200/70 dark:border-zinc-800/70 space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px]">
-                    <span className="font-semibold text-slate-900 dark:text-zinc-100">{log.contactName}</span>
-                    <span className="text-slate-500 dark:text-zinc-400 font-mono text-[10px]">{log.date.split(" ")[0]}</span>
+                <div key={log.id} className="p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-900/60 border border-slate-200/70 dark:border-zinc-800/70 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-900 dark:text-zinc-100">{log.contactName}</span>
+                    <span className="text-slate-500 dark:text-zinc-400 font-mono text-xs">{log.date.split(" ")[0]}</span>
                   </div>
-                  <p className="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed line-clamp-2">
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-zinc-300 leading-relaxed line-clamp-2">
                     {log.text}
                   </p>
-                  <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-zinc-400 pt-1 border-t border-slate-100 dark:border-zinc-800/50">
+                  <div className="flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400 pt-1.5 border-t border-slate-100 dark:border-zinc-800/50">
                     <span className="font-mono">By {log.author}</span>
                     <a
                       href={`https://wa.me/${log.contactPhone.replace(/[^0-9]/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-emerald-700 dark:text-emerald-300 hover:underline flex items-center gap-1 font-mono font-semibold"
+                      className="text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 font-mono font-semibold"
                     >
                       <span>Open WhatsApp</span>
-                      <ExternalLink className="w-2.5 h-2.5" />
+                      <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
                 </div>
@@ -501,41 +503,41 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Industrial Console Status Bar (Bottom Architecture) */}
-      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-slate-500 dark:text-zinc-400">
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="flex items-center gap-1.5 text-slate-700 dark:text-zinc-300">
+      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono text-slate-500 dark:text-zinc-400">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <span className="flex items-center gap-1.5 text-slate-800 dark:text-zinc-200 font-medium">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
             <span>PAKMEC Multan Facility Active</span>
           </span>
-          <span>•</span>
+          <span className="text-slate-300 dark:text-zinc-700 hidden sm:inline">•</span>
           <span>Plot 18-A, Phase 2, Industrial Estate, Multan</span>
-          <span>•</span>
-          <span className="text-emerald-700 dark:text-emerald-300 font-semibold flex items-center gap-1">
+          <span className="text-slate-300 dark:text-zinc-700 hidden sm:inline">•</span>
+          <span className="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>SQLite Secured</span>
+            <span>Cloud & SQLite Secured</span>
           </span>
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-mono">
+        <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono pt-2 sm:pt-0">
           <button 
             onClick={() => onNavigateTab("quotes")}
-            className="hover:text-[#fe7518] transition-colors"
+            className="hover:text-[#fe7518] transition-colors py-1"
           >
-            Auto-Quoter Engine
+            Auto-Quoter
           </button>
-          <span>•</span>
+          <span className="text-slate-300 dark:text-zinc-700">•</span>
           <button 
             onClick={() => onNavigateTab("jobs")}
-            className="hover:text-[#fe7518] transition-colors"
+            className="hover:text-[#fe7518] transition-colors py-1"
           >
-            Production Kanban
+            Floor Kanban
           </button>
-          <span>•</span>
+          <span className="text-slate-300 dark:text-zinc-700">•</span>
           <button 
             onClick={() => onNavigateTab("invoices")}
-            className="hover:text-[#fe7518] transition-colors"
+            className="hover:text-[#fe7518] transition-colors py-1"
           >
-            Meezan Settlements
+            Settlements
           </button>
         </div>
       </div>

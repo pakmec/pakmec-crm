@@ -280,37 +280,39 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                     setSelectedContact(c);
                     setShowMobileDetail(true);
                   }}
-                  className={`p-3 rounded-lg cursor-pointer transition-all border text-left min-h-[44px] touch-manipulation ${
+                  className={`p-3.5 sm:p-4 rounded-xl cursor-pointer transition-all border text-left min-h-[50px] touch-manipulation space-y-2.5 ${
                     isSelected 
-                      ? "bg-white dark:bg-[#1c202d] border-l-4 border-l-[#fe7518] shadow-sm font-semibold" 
-                      : "hover:bg-[var(--surface-100)]"
+                      ? "bg-white dark:bg-[#1a1e2c] border-2 border-[#fe7518] shadow-sm font-semibold" 
+                      : "bg-[var(--card)] border-[var(--border)] hover:bg-[var(--surface-100)]"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium text-sm text-[var(--foreground)] truncate">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="font-bold text-sm sm:text-base text-[var(--foreground)] truncate">
                       {c.name}
                     </div>
-                    <span className="text-[10px] font-mono text-[var(--muted)]">{c.city}</span>
+                    <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 shrink-0">
+                      {c.city}
+                    </span>
                   </div>
 
                   {c.company && (
-                    <div className="text-xs text-[var(--muted)] truncate flex items-center gap-1 mt-0.5">
-                      <Building2 className="w-3 h-3 text-[var(--muted)]" />
-                      <span>{c.company}</span>
+                    <div className="text-xs text-[var(--muted)] truncate flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-[#fe7518] shrink-0" />
+                      <span className="font-medium">{c.company}</span>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between mt-2 pt-1">
-                    <div className="flex flex-wrap gap-1">
+                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--border)]">
+                    <div className="flex flex-wrap gap-1.5">
                       {c.tradeTags.slice(0, 2).map((tag) => (
-                        <span key={tag} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)]">
+                        <span key={tag} className="text-xs font-mono px-2 py-0.5 rounded-md bg-[var(--surface-200)] text-slate-700 dark:text-zinc-300">
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
-                      <MessageSquare className="w-3 h-3" />
-                      {c.whatsappLogs?.length || 0}
+                    <span className="text-xs text-emerald-600 dark:text-emerald-400 font-mono font-medium flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 shrink-0">
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>{c.whatsappLogs?.length || 0}</span>
                     </span>
                   </div>
                 </div>
@@ -474,30 +476,30 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
           )}
 
           {/* Quick Metrics Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 border-b border-[var(--border)] bg-[var(--surface-50)]">
-            <div className="bg-[var(--card)] p-3.5 rounded-lg border border-[var(--border)]">
-              <span className="text-[10px] font-mono text-[var(--muted)] uppercase">Lifetime Invoiced</span>
-              <div className="mt-1">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-6 border-b border-[var(--border)] bg-[var(--surface-50)]">
+            <div className="bg-[var(--card)] p-3.5 sm:p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-mono text-[var(--muted)] uppercase font-semibold">Lifetime Invoiced</span>
+              <div className="mt-1.5">
                 <CurrencyDisplay amount={totalSpentPKR} size="md" />
               </div>
             </div>
-            <div className="bg-[var(--card)] p-3.5 rounded-lg border border-[var(--border)]">
-              <span className="text-[10px] font-mono text-[var(--muted)] uppercase">Current Balance Due</span>
-              <div className="mt-1">
+            <div className="bg-[var(--card)] p-3.5 sm:p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-mono text-[var(--muted)] uppercase font-semibold">Current Balance Due</span>
+              <div className="mt-1.5">
                 <CurrencyDisplay amount={pendingDuePKR} size="md" color={pendingDuePKR > 0 ? "amber" : "green"} />
               </div>
             </div>
-            <div className="bg-[var(--card)] p-3.5 rounded-lg border border-[var(--border)]">
-              <span className="text-[10px] font-mono text-[var(--muted)] uppercase">Associated Jobs</span>
-              <div className="text-base font-bold font-mono text-[var(--foreground)] mt-1">
+            <div className="bg-[var(--card)] p-3.5 sm:p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-mono text-[var(--muted)] uppercase font-semibold">Associated Jobs</span>
+              <div className="text-base sm:text-lg font-bold font-mono text-[var(--foreground)] mt-1.5">
                 {contactJobs.length} Jobs
               </div>
             </div>
-            <div className="bg-[var(--card)] p-3.5 rounded-lg border border-[var(--border)]">
-              <span className="text-[10px] font-mono text-[var(--muted)] uppercase">Trade Tags</span>
-              <div className="flex flex-wrap gap-1 mt-1">
+            <div className="bg-[var(--card)] p-3.5 sm:p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-mono text-[var(--muted)] uppercase font-semibold">Trade Tags</span>
+              <div className="flex flex-wrap gap-1.5 mt-1.5">
                 {activeContact.tradeTags.map((t) => (
-                  <span key={t} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)]">
+                  <span key={t} className="text-xs font-mono px-2 py-0.5 rounded-md bg-[var(--surface-200)] text-slate-700 dark:text-zinc-300 font-medium">
                     {t}
                   </span>
                 ))}
@@ -506,7 +508,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
           </div>
 
           {/* WhatsApp Conversation Timeline & Entry Form */}
-          <div className="p-6 flex-1 space-y-6">
+          <div className="p-4 sm:p-6 flex-1 space-y-5 sm:space-y-6">
             <div>
               <h2 className="text-sm font-bold text-[var(--foreground)] flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-emerald-400" />
@@ -518,8 +520,8 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
             </div>
 
             {/* Add New Note Box */}
-            <form onSubmit={handleAddLog} className="bg-[var(--card)] p-4 rounded-xl border border-[var(--border)] space-y-3 shadow-md">
-              <div className="flex items-center gap-2">
+            <form onSubmit={handleAddLog} className="bg-[var(--card)] p-4 rounded-xl border border-[var(--border)] space-y-3.5 shadow-md">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs text-[var(--muted)] font-mono">Category:</span>
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {(["general", "inquiry", "quote", "payment", "delivery"] as const).map((t) => (
@@ -527,9 +529,9 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                       key={t}
                       type="button"
                       onClick={() => setLogType(t)}
-                      className={`text-[10px] font-mono uppercase px-2.5 py-1 min-h-[26px] rounded transition-colors ${
+                      className={`text-xs font-mono uppercase px-3 py-1 min-h-[30px] rounded-md transition-colors ${
                         logType === t 
-                          ? "bg-[#fe7518] text-slate-950 font-bold" 
+                          ? "bg-[#fe7518] text-slate-950 font-bold shadow-sm" 
                           : "bg-[var(--surface-200)] text-[var(--muted)] hover:bg-[var(--surface-100)]"
                       }`}
                     >
@@ -545,12 +547,12 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                 aria-label="WhatsApp message summary note"
                 onChange={(e) => setNewLogText(e.target.value)}
                 placeholder="Type or paste client WhatsApp message summary…"
-                className="w-full bg-[var(--surface-100)] text-xs text-[var(--foreground)] placeholder-[var(--muted)] p-3 rounded-lg border border-[var(--border)] focus:border-[#fe7518] outline-none resize-none leading-relaxed"
+                className="w-full bg-[var(--surface-100)] text-[16px] sm:text-xs text-[var(--foreground)] placeholder-[var(--muted)] p-3.5 rounded-lg border border-[var(--border)] focus:border-[#fe7518] outline-none resize-none leading-relaxed"
               />
 
               <div className="flex items-center justify-between pt-1">
-                <span className="text-[11px] text-[var(--muted)] font-mono">
-                  Saves directly into SQLite database
+                <span className="text-xs text-[var(--muted)] font-mono">
+                  Saves directly into database
                 </span>
                 <button
                   type="submit"

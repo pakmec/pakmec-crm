@@ -8,7 +8,8 @@ import {
   DollarSign, 
   Search, 
   Clock, 
-  ExternalLink
+  ExternalLink,
+  ChevronLeft
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useCrm } from "@/context/CrmContext";
@@ -28,6 +29,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
   );
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [search, setSearch] = useState("");
+  const [mobileTab, setMobileTab] = useState<"list" | "preview">("list");
 
   // Payment Recording Modal
   const [paymentModalInvoice, setPaymentModalInvoice] = useState<Invoice | null>(null);
@@ -119,10 +121,39 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
         </div>
       </div>
 
+      {/* Mobile View Switcher Tab */}
+      <div className="lg:hidden flex items-center gap-2 p-1 rounded-lg bg-[var(--surface-100)] border border-[var(--border)] font-mono text-xs no-print">
+        <button
+          type="button"
+          onClick={() => setMobileTab("list")}
+          className={`flex-1 py-2 px-3 rounded-md transition-all font-bold min-h-[38px] flex items-center justify-center gap-1.5 touch-manipulation ${
+            mobileTab === "list"
+              ? "bg-[#fe7518] text-slate-950 shadow-sm"
+              : "text-[var(--muted)] hover:text-[var(--foreground)]"
+          }`}
+        >
+          <Receipt className="w-4 h-4" />
+          <span>Invoices List ({filteredInvoices.length})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab("preview")}
+          disabled={!selectedInvoice}
+          className={`flex-1 py-2 px-3 rounded-md transition-all font-bold min-h-[38px] flex items-center justify-center gap-1.5 touch-manipulation disabled:opacity-40 ${
+            mobileTab === "preview"
+              ? "bg-[#fe7518] text-slate-950 shadow-sm"
+              : "text-[var(--muted)] hover:text-[var(--foreground)]"
+          }`}
+        >
+          <Printer className="w-4 h-4" />
+          <span>Invoice & Pay</span>
+        </button>
+      </div>
+
       {/* Main Grid: Invoices List & Branded Invoice Canvas */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column (4 Cols): Invoices List */}
-        <div className="lg:col-span-4 space-y-3 no-print">
+        <div className={`lg:col-span-4 space-y-3 no-print ${mobileTab === "preview" ? "hidden lg:block" : "block"}`}>
           <div className="relative">
             <Search className="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
@@ -138,7 +169,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
           <div 
             tabIndex={0}
             aria-label="Invoices list"
-            className="space-y-2.5 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1 focus:outline-none focus:ring-1 focus:ring-[#fe7518]"
+            className="space-y-3 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1 focus:outline-none focus:ring-1 focus:ring-[#fe7518]"
           >
             {filteredInvoices.length === 0 ? (
               <div className="p-6 text-left bg-white dark:bg-[var(--surface-50)] rounded-xl border border-[var(--border)] space-y-3">
@@ -175,31 +206,34 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
                 return (
                   <div
                     key={inv.id}
-                    onClick={() => setSelectedInvoiceId(inv.id)}
-                    className={`p-4 rounded-xl border transition-all cursor-pointer space-y-2 ${
+                    onClick={() => {
+                      setSelectedInvoiceId(inv.id);
+                      setMobileTab("preview");
+                    }}
+                    className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer space-y-2.5 min-h-[50px] touch-manipulation ${
                       isSelected 
-                        ? "bg-white dark:bg-[#1c202d] border-2 border-[#fe7518] shadow-md ring-1 ring-[#fe7518]" 
+                        ? "bg-white dark:bg-[#1a1e2c] border-2 border-[#fe7518] shadow-md ring-1 ring-[#fe7518]/50" 
                         : "bg-[var(--card)] border-[var(--border)] hover:bg-[var(--surface-100)]"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-bold text-[#fe7518]">{inv.id}</span>
-                      <span className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded border ${statusColors[inv.status]}`}>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-xs sm:text-sm font-bold text-[#fe7518]">{inv.id}</span>
+                      <span className={`text-xs font-mono uppercase px-2.5 py-0.5 rounded-md border ${statusColors[inv.status]}`}>
                         {inv.status}
                       </span>
                     </div>
 
-                    <div className="text-sm font-semibold text-[var(--foreground)] truncate">
+                    <div className="text-sm sm:text-base font-bold text-[var(--foreground)] truncate">
                       {inv.contactName}
                     </div>
 
                     <div className="text-xs text-[var(--muted)] flex items-center justify-between font-mono">
                       <span>Ref: {inv.jobId || "Custom"}</span>
-                      <CurrencyDisplay amount={inv.totalAmount} size="xs" />
+                      <CurrencyDisplay amount={inv.totalAmount} size="sm" color="orange" />
                     </div>
 
                     {/* Advance Deducted Tag */}
-                    <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between text-[10px] font-mono">
+                    <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-mono">
                       <span className="text-[var(--muted)] flex items-center gap-1">
                         Adv: <CurrencyDisplay amount={inv.advanceDeducted} size="xs" />
                       </span>
@@ -219,15 +253,23 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
         </div>
 
         {/* Right Column (8 Cols): Branded Invoice Preview & Isolated Print Canvas */}
-        <div className="lg:col-span-8">
+        <div className={`lg:col-span-8 ${mobileTab === "list" ? "hidden lg:block" : "block"}`}>
           {selectedInvoice ? (
             <div className="space-y-4">
               {/* Action Bar */}
-              <div className="flex items-center justify-between no-print bg-[var(--card)] p-4 rounded-xl border border-[var(--border)]">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print bg-[var(--card)] p-3.5 sm:p-4 rounded-xl border border-[var(--border)]">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => setMobileTab("list")}
+                    className="lg:hidden inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[36px] rounded-lg bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 text-xs font-semibold btn-haptic mr-1"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+                    <span>Invoices</span>
+                  </button>
                   <span className="font-mono text-xs text-[var(--muted)]">Invoice:</span>
-                  <strong className="text-[var(--foreground)] font-mono">{selectedInvoice.id}</strong>
-                  <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border ml-2 ${
+                  <strong className="text-[var(--foreground)] font-mono text-sm sm:text-base">{selectedInvoice.id}</strong>
+                  <span className={`text-xs font-mono uppercase px-2.5 py-0.5 rounded-md border ml-1 ${
                     selectedInvoice.status === "paid" 
                       ? "bg-emerald-100 dark:bg-[#0d1f16] text-emerald-950 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-bold" 
                       : "bg-amber-100 dark:bg-[#241a0a] text-amber-950 dark:text-amber-300 border-amber-300 dark:border-amber-700 font-bold"
@@ -236,19 +278,19 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <button
                     onClick={handlePrint}
-                    className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2 px-4 rounded-lg shadow-sm border border-[#e56208] btn-haptic"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2.5 px-4 min-h-[40px] rounded-lg shadow-sm border border-[#e56208] btn-haptic"
                   >
                     <Printer className="w-4 h-4" />
-                    <span>Print Invoice Sheet</span>
+                    <span>Print Invoice</span>
                   </button>
 
                   {selectedInvoice.status !== "paid" && (
                     <button
                       onClick={() => handleOpenPaymentModal(selectedInvoice)}
-                      className="flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold py-2 px-3.5 rounded-lg shadow-sm border border-emerald-800 btn-haptic"
+                      className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold py-2.5 px-3.5 min-h-[40px] rounded-lg shadow-sm border border-emerald-800 btn-haptic"
                     >
                       <DollarSign className="w-3.5 h-3.5" />
                       <span>Record Settlement</span>

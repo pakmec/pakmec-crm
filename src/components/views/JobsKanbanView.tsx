@@ -319,19 +319,19 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                     </div>
 
                   {/* Column Cards */}
-                  <div className="p-2 space-y-2.5 flex-1 overflow-y-auto">
+                  <div className="p-3 space-y-3.5 flex-1 overflow-y-auto">
                     {colJobs.length === 0 ? (
-                      <div className="p-4 text-center text-[11px] text-[var(--muted)] font-mono">
-                        No jobs queued
+                      <div className="py-8 px-4 text-center text-xs text-[var(--muted)] font-mono border-2 border-dashed border-[var(--border)] rounded-xl">
+                        No jobs currently in this stage
                       </div>
                     ) : (
                       colJobs.map((job) => {
                         const isSelected = activeJob?.id === job.id;
                         const priorityColors: Record<JobPriority, string> = {
-                          urgent: "bg-rose-100 dark:bg-[#2b0f14] text-rose-950 dark:text-rose-300 border-rose-300 dark:border-rose-700 font-bold",
-                          high: "bg-amber-100 dark:bg-[#261b09] text-amber-950 dark:text-amber-300 border-amber-300 dark:border-amber-700 font-bold",
-                          medium: "bg-blue-100 dark:bg-[#0e1b2d] text-blue-950 dark:text-blue-300 border-blue-300 dark:border-blue-700 font-bold",
-                          low: "bg-slate-200 dark:bg-[#181b24] text-slate-900 dark:text-zinc-300 border-slate-300 dark:border-zinc-700 font-medium",
+                          urgent: "bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30",
+                          high: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30",
+                          medium: "bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30",
+                          low: "bg-slate-500/15 text-slate-600 dark:text-zinc-400 border border-slate-500/30",
                         };
 
                         return (
@@ -341,86 +341,76 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                               setActiveJobId(job.id);
                               setMobileTab("details");
                             }}
-                            className={`p-3 rounded-lg border text-left cursor-pointer transition-all space-y-2 touch-manipulation ${
+                            className={`p-4 rounded-xl border text-left cursor-pointer transition-all space-y-3 touch-manipulation ${
                               isSelected
-                                ? "bg-white dark:bg-[#1c202d] border-2 border-[#fe7518] shadow-md ring-1 ring-[#fe7518]"
-                                : "bg-[var(--surface-100)] border-[var(--border)] hover:border-slate-400 dark:hover:border-zinc-600"
+                                ? "bg-white dark:bg-[#191d29] border-2 border-[#fe7518] shadow-md ring-1 ring-[#fe7518]/40"
+                                : "bg-white dark:bg-[#12141c] border-slate-200 dark:border-[#222736] hover:border-[#fe7518]/50 shadow-xs"
                             }`}
                           >
-                            <div className="flex items-center justify-between">
-                              <span className="font-mono text-[10px] text-[#fe7518] font-bold">{job.id}</span>
-                              <span className={`text-[9px] font-mono uppercase px-1.5 py-0.5 rounded border ${priorityColors[job.priority]}`}>
+                            {/* Card Header: Job ID & Priority Badge */}
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 text-[#fe7518]">
+                                  {job.id}
+                                </span>
+                                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 truncate">
+                                  {job.trade}
+                                </span>
+                              </div>
+                              <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full shrink-0 ${priorityColors[job.priority]}`}>
                                 {job.priority}
                               </span>
                             </div>
 
-                            <div className="text-xs font-semibold text-[var(--foreground)] line-clamp-2 leading-snug">
+                            {/* Prominent Legible Title */}
+                            <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-zinc-100 line-clamp-2 leading-snug">
                               {job.title}
-                            </div>
+                            </h4>
 
-                            <div className="text-[10px] font-mono text-[var(--muted)] truncate">
-                              Client: {job.contactName}
-                            </div>
-
-                            {/* Telemetry Footer */}
-                            <div className="pt-1 border-t border-[var(--border)] flex items-center justify-between text-[10px] font-mono">
-                              {permissions.canViewFinancials ? (
-                                <CurrencyDisplay amount={job.totalAmount} size="xs" color="orange" />
-                              ) : (
-                                <span className="font-semibold text-slate-700 dark:text-zinc-300">{job.trade}</span>
-                              )}
-                              <div className="flex items-center gap-1 text-[var(--muted)]">
-                                <Pin className="w-3 h-3 text-[#fe7518]" />
+                            {/* Client Contact & Media Pin Count */}
+                            <div className="text-xs text-slate-600 dark:text-zinc-400 flex items-center justify-between">
+                              <span className="truncate">
+                                Client: <strong className="text-slate-800 dark:text-zinc-200">{job.contactName}</strong>
+                              </span>
+                              <div className="flex items-center gap-1 shrink-0 ml-2 font-mono text-[11px] text-[#fe7518]">
+                                <Pin className="w-3.5 h-3.5" />
                                 <span>{job.referenceItems?.length || 0}</span>
                               </div>
                             </div>
 
-                            {/* Advance & Delivery Clearance Status (Financial vs Technical) */}
-                            <div className="flex flex-col gap-1 text-[9px] font-mono pt-1">
-                              {permissions.canViewFinancials ? (
-                                <>
-                                  <div className="flex items-center justify-between">
-                                    {job.advanceStatus === "collected" ? (
-                                      <span className="text-emerald-700 dark:text-emerald-400 flex items-center gap-1 font-semibold">
-                                        <CheckCircle2 className="w-2.5 h-2.5" />
-                                        <span>Advance Paid</span>
-                                      </span>
-                                    ) : (
-                                      <span className="text-amber-700 dark:text-amber-400 flex items-center gap-1 font-semibold animate-pulse">
-                                        <AlertCircle className="w-2.5 h-2.5" />
-                                        <span>Advance Pending</span>
-                                      </span>
-                                    )}
-                                    <span className="text-[var(--muted)]">{job.trade}</span>
-                                  </div>
-
-                                  {/* Delivery Clearance Indicator */}
-                                  <div className="flex items-center justify-between pt-0.5 border-t border-[var(--border)]/60">
-                                    {job.balanceDue === 0 ? (
-                                      <span className="text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
-                                        <ShieldCheck className="w-2.5 h-2.5" />
-                                        <span>100% Cleared for Dispatch</span>
-                                      </span>
-                                    ) : (
-                                      <span className="text-amber-700 dark:text-amber-400 font-medium flex items-center gap-1">
-                                        <Clock className="w-2.5 h-2.5" />
-                                        <span>Due: {formatCurrency(job.balanceDue)}</span>
-                                      </span>
-                                    )}
-                                  </div>
-                                </>
-                              ) : (
-                                <div className="flex items-center justify-between pt-0.5">
-                                  <span className="text-blue-600 dark:text-blue-400 font-semibold font-mono">
-                                    Machine Floor Run
+                            {/* Clean Financial & Advance Status Box */}
+                            {permissions.canViewFinancials ? (
+                              <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-[#161924] border border-slate-200/80 dark:border-zinc-800/80 flex items-center justify-between gap-2">
+                                <div>
+                                  <span className="text-[10px] uppercase font-mono text-slate-500 dark:text-zinc-400 block font-medium">
+                                    Total Agreed
                                   </span>
-                                  <span className="text-[var(--muted)]">Plot 18-A Multan</span>
+                                  <CurrencyDisplay amount={job.totalAmount} size="sm" color="orange" />
                                 </div>
-                              )}
-                            </div>
+
+                                <div className="text-right">
+                                  {job.advanceStatus === "collected" ? (
+                                    <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded bg-emerald-100/60 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800">
+                                      <CheckCircle2 className="w-3.5 h-3.5" />
+                                      <span>Advance Paid</span>
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded bg-amber-100/60 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800">
+                                      <AlertCircle className="w-3.5 h-3.5" />
+                                      <span>Advance Pending</span>
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="p-2 rounded-lg bg-blue-50/50 dark:bg-[#101728] border border-blue-200 dark:border-blue-900/50 flex items-center justify-between text-xs font-mono">
+                                <span className="text-blue-700 dark:text-blue-300 font-bold">Multan CNC Floor Run</span>
+                                <span className="text-slate-500 dark:text-zinc-400 capitalize">{job.stage.replace("_", " ")}</span>
+                              </div>
+                            )}
 
                             {/* Stage Stepper Buttons */}
-                            <div className="pt-2 flex items-center justify-between gap-1">
+                            <div className="pt-2 border-t border-slate-100 dark:border-zinc-800/70 flex items-center justify-between gap-2">
                               <button
                                 type="button"
                                 disabled={job.stage === "queued"}
@@ -428,11 +418,12 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                                   e.stopPropagation();
                                   handlePrevStage(job.id, job.stage);
                                 }}
-                                className="p-1.5 rounded bg-slate-100 dark:bg-[#1c202a] hover:bg-slate-200 dark:hover:bg-[#252a37] disabled:cursor-not-allowed disabled:bg-slate-200 dark:disabled:bg-[#161822] text-slate-700 dark:text-zinc-300 disabled:text-slate-400 dark:disabled:text-zinc-600 border border-slate-300 dark:border-zinc-800 btn-haptic"
+                                className="flex-1 min-h-[42px] py-2 px-3 rounded-lg bg-slate-100 dark:bg-[#1a1d28] hover:bg-slate-200 dark:hover:bg-[#232736] disabled:opacity-35 text-slate-700 dark:text-zinc-300 border border-slate-300 dark:border-zinc-700 text-xs font-semibold flex items-center justify-center gap-1.5 btn-haptic touch-manipulation"
                                 title="Move to Previous Stage"
                                 aria-label="Move to previous stage"
                               >
-                                <ChevronLeft className="w-3.5 h-3.5" />
+                                <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+                                <span>Prev Stage</span>
                               </button>
 
                               <button
@@ -442,11 +433,12 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                                   e.stopPropagation();
                                   handleNextStage(job.id, job.stage);
                                 }}
-                                className="p-1.5 rounded bg-[#fe7518] hover:bg-[#e56208] text-white disabled:cursor-not-allowed disabled:bg-slate-200 dark:disabled:bg-[#161822] disabled:text-slate-400 dark:disabled:text-zinc-600 border border-[#fe7518] disabled:border-slate-300 dark:disabled:border-zinc-800 btn-haptic"
+                                className="flex-1 min-h-[42px] py-2 px-3 rounded-lg bg-[#fe7518] hover:bg-[#e56208] disabled:opacity-35 text-slate-950 text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm border border-[#e56208] btn-haptic touch-manipulation"
                                 title="Advance to Next Stage"
                                 aria-label="Advance to next stage"
                               >
-                                <ChevronRight className="w-3.5 h-3.5" />
+                                <span>Next Stage</span>
+                                <ChevronRight className="w-4 h-4" />
                               </button>
                             </div>
                           </div>

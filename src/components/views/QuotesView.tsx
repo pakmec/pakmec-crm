@@ -13,7 +13,8 @@ import {
   Compass, 
   Building,
   FileText,
-  AlertCircle
+  AlertCircle,
+  ChevronLeft
 } from "lucide-react";
 import { useCrm } from "@/context/CrmContext";
 import { TradeType, Quote, QuoteLineItem, TradeSpecs } from "@/types";
@@ -39,6 +40,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
   } = useCrm();
 
   const [activeTab, setActiveTab] = useState<"generator" | "list">("generator");
+  const [quotesMobileTab, setQuotesMobileTab] = useState<"list" | "preview">("list");
   const activeQuotes = quotes.filter((q) => !q.isArchived);
   const activeContacts = contacts.filter((c) => !c.isArchived);
   const [selectedQuoteForPreview, setSelectedQuoteForPreview] = useState<Quote | null>(activeQuotes[0] || null);
@@ -1074,122 +1076,163 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
         </div>
       ) : (
         /* Saved Quotes Tab & Clean Isolated Printable Sheet */
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Quotes List (4 Cols) */}
-          <div className="lg:col-span-4 space-y-3 no-print">
-            <h2 className="text-xs font-mono uppercase text-slate-600 dark:text-zinc-400 font-semibold">
-              Saved Quotations ({activeQuotes.length})
-            </h2>
-
-            <div 
-              tabIndex={0}
-              aria-label="Saved quotations list"
-              className="space-y-2.5 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1 focus:outline-none focus:ring-1 focus:ring-[#fe7518]"
+        <div className="space-y-4">
+          {/* Mobile View Switcher Tab */}
+          <div className="lg:hidden flex items-center gap-2 p-1 rounded-lg bg-[#14161f] border border-[#232734] font-mono text-xs no-print">
+            <button
+              type="button"
+              onClick={() => setQuotesMobileTab("list")}
+              className={`flex-1 py-2 px-3 rounded-md transition-all font-bold min-h-[38px] flex items-center justify-center gap-1.5 touch-manipulation ${
+                quotesMobileTab === "list"
+                  ? "bg-[#fe7518] text-slate-950 shadow-sm"
+                  : "text-[#828c9c] hover:text-white"
+              }`}
             >
-              {activeQuotes.length === 0 ? (
-                <div className="p-6 text-left bg-white dark:bg-[#12141a] rounded-xl border border-slate-200 dark:border-[#222735] space-y-3">
-                  <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-[#1a1e28] text-[#fe7518] border border-slate-200 dark:border-[#2b3040] flex items-center justify-center">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">No Quotations Generated</h3>
-                    <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
-                      Configure trade parameters to automatically calculate PKR machine rates and issue quotes.
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setActiveTab("generator")}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold btn-haptic"
-                  >
-                    <Calculator className="w-3.5 h-3.5" />
-                    <span>Launch Auto-Quoter</span>
-                  </button>
-                </div>
-              ) : (
-                activeQuotes.map((q) => {
-                const isSelected = selectedQuoteForPreview?.id === q.id;
-
-                return (
-                  <div
-                    key={q.id}
-                    onClick={() => setSelectedQuoteForPreview(q)}
-                    className={`p-4 rounded-xl border transition-all cursor-pointer space-y-2 ${
-                      isSelected 
-                        ? "bg-white dark:bg-[#1c202d] border-2 border-[#fe7518] shadow-md ring-1 ring-[#fe7518]" 
-                        : "bg-white dark:bg-[#12141a] border-slate-200 dark:border-[#222735] hover:bg-slate-50 dark:hover:bg-[#161821]"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-bold text-[#fe7518]">{q.id}</span>
-                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-emerald-300 dark:border-emerald-700/60 bg-emerald-100 dark:bg-[#0d1f16] text-emerald-950 dark:text-emerald-300 font-bold">
-                        {q.status}
-                      </span>
-                    </div>
-
-                    <div className="text-sm font-semibold text-[#f1f3f7] truncate">
-                      {q.title}
-                    </div>
-
-                    <div className="text-xs text-[#828c9c] flex items-center justify-between font-mono">
-                      <span>{q.contactName}</span>
-                      <CurrencyDisplay amount={q.total} size="sm" />
-                    </div>
-
-                    {q.convertedToJobId ? (
-                      <div className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span>Converted to {q.convertedToJobId}</span>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOpenConvertModal(q);
-                        }}
-                        className="w-full mt-2 flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded bg-[#1c212d] hover:bg-[#fe7518] hover:text-white text-xs font-mono text-[#c3c9d5] transition-all"
-                      >
-                        <span>Convert to Production Job</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
-                );
-              })
-              )}
-            </div>
+              <FileText className="w-4 h-4" />
+              <span>Quotes List ({activeQuotes.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setQuotesMobileTab("preview")}
+              disabled={!selectedQuoteForPreview}
+              className={`flex-1 py-2 px-3 rounded-md transition-all font-bold min-h-[38px] flex items-center justify-center gap-1.5 touch-manipulation disabled:opacity-40 ${
+                quotesMobileTab === "preview"
+                  ? "bg-[#fe7518] text-slate-950 shadow-sm"
+                  : "text-[#828c9c] hover:text-white"
+              }`}
+            >
+              <Printer className="w-4 h-4" />
+              <span>Quotation Sheet</span>
+            </button>
           </div>
 
-          {/* Branded Quotation Preview (8 Cols) */}
-          <div className="lg:col-span-8">
-            {selectedQuoteForPreview ? (
-              <div className="space-y-4">
-                {/* Action Bar */}
-                <div className="flex items-center justify-between no-print bg-[#12141a] p-4 rounded-xl border border-[#222735]">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs text-[#848e9f]">Previewing:</span>
-                    <strong className="text-white font-mono">{selectedQuoteForPreview.id}</strong>
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Quotes List (4 Cols) */}
+            <div className={`lg:col-span-4 space-y-3 no-print ${quotesMobileTab === "preview" ? "hidden lg:block" : "block"}`}>
+              <h2 className="text-xs font-mono uppercase text-slate-600 dark:text-zinc-400 font-semibold">
+                Saved Quotations ({activeQuotes.length})
+              </h2>
 
-                  <div className="flex items-center gap-2">
+              <div 
+                tabIndex={0}
+                aria-label="Saved quotations list"
+                className="space-y-3 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1 focus:outline-none focus:ring-1 focus:ring-[#fe7518]"
+              >
+                {activeQuotes.length === 0 ? (
+                  <div className="p-6 text-left bg-white dark:bg-[#12141a] rounded-xl border border-slate-200 dark:border-[#222735] space-y-3">
+                    <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-[#1a1e28] text-[#fe7518] border border-slate-200 dark:border-[#2b3040] flex items-center justify-center">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">No Quotations Generated</h3>
+                      <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
+                        Configure trade parameters to automatically calculate PKR machine rates and issue quotes.
+                      </p>
+                    </div>
                     <button
-                      onClick={handlePrint}
-                      className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2 px-4 rounded-lg shadow-sm border border-[#e56208] btn-haptic"
+                      onClick={() => setActiveTab("generator")}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold btn-haptic"
                     >
-                      <Printer className="w-4 h-4" />
-                      <span>Print Quotation Sheet</span>
+                      <Calculator className="w-3.5 h-3.5" />
+                      <span>Launch Auto-Quoter</span>
                     </button>
-
-                    {!selectedQuoteForPreview.convertedToJobId && (
-                      <button
-                        onClick={() => handleOpenConvertModal(selectedQuoteForPreview)}
-                        className="flex items-center gap-1.5 bg-slate-100 dark:bg-[#1a1d27] hover:bg-slate-200 dark:hover:bg-[#232836] text-slate-800 dark:text-[#f1f3f7] border border-slate-300 dark:border-[#2b3142] text-xs font-semibold py-2 px-3.5 rounded-lg btn-haptic"
-                      >
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                        <span>Start Production</span>
-                      </button>
-                    )}
                   </div>
-                </div>
+                ) : (
+                  activeQuotes.map((q) => {
+                  const isSelected = selectedQuoteForPreview?.id === q.id;
+
+                  return (
+                    <div
+                      key={q.id}
+                      onClick={() => {
+                        setSelectedQuoteForPreview(q);
+                        setQuotesMobileTab("preview");
+                      }}
+                      className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer space-y-2.5 min-h-[50px] touch-manipulation ${
+                        isSelected 
+                          ? "bg-white dark:bg-[#1c202d] border-2 border-[#fe7518] shadow-md ring-1 ring-[#fe7518]/50" 
+                          : "bg-white dark:bg-[#12141a] border-slate-200 dark:border-[#222735] hover:bg-slate-50 dark:hover:bg-[#161821]"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-mono text-xs sm:text-sm font-bold text-[#fe7518]">{q.id}</span>
+                        <span className="text-xs font-mono uppercase font-bold px-2.5 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-700/60 bg-emerald-100 dark:bg-[#0d1f16] text-emerald-950 dark:text-emerald-300">
+                          {q.status}
+                        </span>
+                      </div>
+
+                      <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-[#f1f3f7] truncate">
+                        {q.title}
+                      </div>
+
+                      <div className="text-xs text-slate-600 dark:text-[#828c9c] flex items-center justify-between font-mono">
+                        <span>{q.contactName}</span>
+                        <CurrencyDisplay amount={q.total} size="sm" color="orange" />
+                      </div>
+
+                      {q.convertedToJobId ? (
+                        <div className="text-xs font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 pt-1 border-t border-slate-100 dark:border-zinc-800/60 font-semibold">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Converted to {q.convertedToJobId}</span>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenConvertModal(q);
+                          }}
+                          className="w-full mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-slate-100 dark:bg-[#1c212d] hover:bg-[#fe7518] hover:text-white text-xs font-mono font-bold text-slate-800 dark:text-[#c3c9d5] transition-all min-h-[40px] touch-manipulation"
+                        >
+                          <span>Convert to Production Job</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })
+                )}
+              </div>
+            </div>
+
+            {/* Branded Quotation Preview (8 Cols) */}
+            <div className={`lg:col-span-8 ${quotesMobileTab === "list" ? "hidden lg:block" : "block"}`}>
+              {selectedQuoteForPreview ? (
+                <div className="space-y-4">
+                  {/* Action Bar */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print bg-[#12141a] p-3.5 sm:p-4 rounded-xl border border-[#222735]">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => setQuotesMobileTab("list")}
+                        className="lg:hidden inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[36px] rounded-lg bg-slate-800 text-white text-xs font-semibold btn-haptic mr-1"
+                      >
+                        <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+                        <span>Quotes</span>
+                      </button>
+                      <span className="font-mono text-xs text-[#848e9f]">Previewing:</span>
+                      <strong className="text-white font-mono text-sm sm:text-base">{selectedQuoteForPreview.id}</strong>
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <button
+                        onClick={handlePrint}
+                        className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2.5 px-4 min-h-[40px] rounded-lg shadow-sm border border-[#e56208] btn-haptic"
+                      >
+                        <Printer className="w-4 h-4" />
+                        <span>Print Quotation</span>
+                      </button>
+
+                      {!selectedQuoteForPreview.convertedToJobId && (
+                        <button
+                          onClick={() => handleOpenConvertModal(selectedQuoteForPreview)}
+                          className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#1a1d27] hover:bg-slate-200 dark:hover:bg-[#232836] text-slate-800 dark:text-[#f1f3f7] border border-slate-300 dark:border-[#2b3142] text-xs font-semibold py-2.5 px-3.5 min-h-[40px] rounded-lg btn-haptic"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                          <span>Start Production</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
               {/* Printable Document Canvas (with isolated #quotation-print-area) */}
               <div 
                 id="quotation-print-area"
@@ -1336,6 +1379,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             </div>
           ) : null}
           </div>
+        </div>
         </div>
       )}
 
