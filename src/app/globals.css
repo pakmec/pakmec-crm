@@ -1,0 +1,431 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f1f5f9;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --surface-50: #f8fafc;
+  --surface-100: #f1f5f9;
+  --surface-200: #e2e8f0;
+  --surface-300: #cbd5e1;
+  --border: #cbd5e1;
+  --muted: #475569;
+  --muted-light: #64748b;
+  --accent: #fe7518;
+  --accent-hover: #e56208;
+  --accent-subtle: #fff7ed;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", monospace;
+  --font-geist-sans: var(--font-sans);
+  --font-geist-mono: var(--font-mono);
+  --radius-outer: 14px;
+  --radius-inner: 10px;
+  --radius-control: 8px;
+  --radius-badge: 4px;
+  color-scheme: light;
+}
+
+html.dark {
+  --background: #090a0f;
+  --foreground: #f4f5f8;
+  --card: #12151e;
+  --surface-50: #0d0f15;
+  --surface-100: #171b26;
+  --surface-200: #1f2533;
+  --surface-300: #2b3346;
+  --border: #262c3b;
+  --muted: #94a3b8;
+  --muted-light: #64748b;
+  --accent: #fe7518;
+  --accent-hover: #ff8c3a;
+  --accent-subtle: #24150a;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Typographic Balance & Line Rag Control (Anti-Orphan) */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Tabular figures for telemetry, feeds/speeds, dimensions & currency */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Double-Bezel Hardware Architecture */
+.double-bezel {
+  border-radius: var(--radius-outer);
+  padding: 1.5px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+html:not(.dark) .double-bezel {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.02) 100%);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.double-bezel-inner {
+  border-radius: var(--radius-inner);
+  background: #12141a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+html:not(.dark) .double-bezel-inner {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Agency Spring & Haptic Press Dynamics */
+.spring-transition {
+  transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.btn-haptic {
+  transition: transform 0.15s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-haptic:active {
+  transform: scale(0.98);
+}
+
+/* Crisp custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #0d0e12;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #252932;
+  border-radius: 3px;
+}
+
+html:not(.dark) ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+html:not(.dark) ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+/* Accessible focus visible rings across all interactive elements */
+:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #fe7518 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 3px rgba(254, 117, 24, 0.25) !important;
+}
+
+/* Touch manipulation */
+button, input, select, textarea, a {
+  touch-action: manipulation;
+}
+
+/* ==========================================================================
+   COMPREHENSIVE EXECUTIVE LIGHT THEME (WHITE THEME)
+   Activated whenever .dark is not present on <html> or data-theme="light"
+   ========================================================================== */
+
+html:not(.dark) {
+  --background: #f1f5f9;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --surface-50: #f8fafc;
+  --surface-100: #f1f5f9;
+  --surface-200: #e2e8f0;
+  --surface-300: #cbd5e1;
+  --border: #cbd5e1;
+  --muted: #475569;
+  --muted-light: #64748b;
+  --accent: #fe7518;
+  --accent-hover: #e56208;
+  --accent-subtle: #fff7ed;
+  color-scheme: light;
+}
+
+html:not(.dark) body {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Outer frame and background surfaces */
+html:not(.dark) .bg-\[\#0a0b0e\],
+html:not(.dark) .bg-\[\#0c0d11\],
+html:not(.dark) .bg-\[\#0c0d11\]\/80,
+html:not(.dark) .bg-\[\#0d0e12\] {
+  background-color: #f8fafc !important;
+}
+
+html:not(.dark) aside {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.03);
+}
+
+html:not(.dark) header {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* Cards, tiles, panels, and data surfaces */
+html:not(.dark) .bg-\[\#12141a\],
+html:not(.dark) .bg-\[\#161821\],
+html:not(.dark) .bg-\[\#181b22\],
+html:not(.dark) .bg-\[\#14161f\],
+html:not(.dark) .bg-\[\#101217\],
+html:not(.dark) .bg-\[\#1a1d26\],
+html:not(.dark) .bg-\[\#141721\],
+html:not(.dark) .bg-\[\#1c202a\] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* Secondary inset boxes & input surfaces */
+html:not(.dark) .bg-\[\#1c212d\],
+html:not(.dark) .bg-\[\#181a24\],
+html:not(.dark) .bg-\[\#181a22\],
+html:not(.dark) .bg-\[\#13151b\],
+html:not(.dark) .bg-\[\#13151c\],
+html:not(.dark) .bg-\[\#1a1d28\],
+html:not(.dark) .bg-\[\#0c0d12\],
+html:not(.dark) .bg-\[\#1b1e29\],
+html:not(.dark) .bg-\[\#171922\] {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Clean slate borders */
+html:not(.dark) .border-\[\#20242e\],
+html:not(.dark) .border-\[\#222631\],
+html:not(.dark) .border-\[\#232733\],
+html:not(.dark) .border-\[\#242938\],
+html:not(.dark) .border-\[\#242833\],
+html:not(.dark) .border-\[\#202531\],
+html:not(.dark) .border-\[\#262b36\],
+html:not(.dark) .border-\[\#2a3040\],
+html:not(.dark) .border-\[\#202533\],
+html:not(.dark) .border-\[\#222735\],
+html:not(.dark) .border-\[\#252a37\],
+html:not(.dark) .border-\[\#272c38\],
+html:not(.dark) .border-\[\#282d3b\],
+html:not(.dark) .border-\[\#212633\],
+html:not(.dark) .border-\[\#1e2330\],
+html:not(.dark) .border-\[\#2b3142\],
+html:not(.dark) .border-\[\#232734\] {
+  border-color: #e2e8f0 !important;
+}
+
+/* High-contrast headings and primary text */
+html:not(.dark) .text-\[\#f3f4f6\],
+html:not(.dark) .text-\[\#f4f5f8\],
+html:not(.dark) .text-\[\#f1f3f7\],
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3 {
+  color: #0f172a !important;
+}
+
+/* Text white override (unless inside dark badges or orange buttons) */
+html:not(.dark) span.text-white,
+html:not(.dark) div.text-white,
+html:not(.dark) p.text-white,
+html:not(.dark) strong.text-white {
+  color: #0f172a !important;
+}
+
+/* Elements inside dark badges retain white text in light mode */
+html:not(.dark) span.bg-slate-900,
+html:not(.dark) span.bg-slate-900 *,
+html:not(.dark) div.bg-slate-900,
+html:not(.dark) div.bg-slate-900 *,
+html:not(.dark) span.bg-slate-800,
+html:not(.dark) span.bg-slate-800 *,
+html:not(.dark) .badge-dark,
+html:not(.dark) .badge-dark * {
+  color: #ffffff !important;
+}
+
+/* Secondary & helper text */
+html:not(.dark) .text-\[\#848d9d\],
+html:not(.dark) .text-\[\#858e9f\],
+html:not(.dark) .text-\[\#7f8898\],
+html:not(.dark) .text-\[\#828c9c\],
+html:not(.dark) .text-\[\#717a8a\],
+html:not(.dark) .text-\[\#717b8b\],
+html:not(.dark) .text-\[\#6d7686\],
+html:not(.dark) .text-\[\#9ba3af\],
+html:not(.dark) .text-\[\#9ba4b4\],
+html:not(.dark) .text-\[\#8b95a5\],
+html:not(.dark) .text-\[\#8a92a2\],
+html:not(.dark) .text-\[\#7d8697\],
+html:not(.dark) .text-\[\#7d8594\],
+html:not(.dark) .text-\[\#808b9c\],
+html:not(.dark) .text-\[\#8e98a8\],
+html:not(.dark) .text-\[\#737c8d\],
+html:not(.dark) .text-\[\#666f7f\],
+html:not(.dark) .text-\[\#5f6877\],
+html:not(.dark) .text-\[\#626b7c\] {
+  color: #475569 !important;
+}
+
+html:not(.dark) .text-\[\#c5cbd6\],
+html:not(.dark) .text-\[\#c3c9d5\],
+html:not(.dark) .text-\[\#e1e4ea\] {
+  color: #1e293b !important;
+}
+
+/* Inputs, Select dropdowns & Textareas */
+html:not(.dark) input,
+html:not(.dark) select,
+html:not(.dark) textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html:not(.dark) input:focus,
+html:not(.dark) select:focus,
+html:not(.dark) textarea:focus {
+  border-color: #fe7518 !important;
+  box-shadow: 0 0 0 1px #fe7518;
+}
+
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* WCAG AAA Compliant Contrast on Brand Orange Buttons (7.76:1 ratio) */
+.bg-\[\#fe7518\],
+.bg-\[\#fe7518\] *,
+button.bg-\[\#fe7518\],
+button.bg-\[\#fe7518\] *,
+.bg-\[\#e56208\],
+.bg-\[\#e56208\] * {
+  color: #090a0f !important;
+  font-weight: 700 !important;
+}
+
+/* In light mode: ensure high-contrast emerald, orange, and muted text */
+html:not(.dark) .text-emerald-400,
+html:not(.dark) .text-emerald-500 {
+  color: #047857 !important; /* emerald-700, 6.8:1 contrast */
+}
+
+html:not(.dark) .text-\[\#fe7518\] {
+  color: #c2410c !important; /* deep rust orange, 5.8:1 contrast */
+}
+
+html:not(.dark) .text-slate-400,
+html:not(.dark) .text-zinc-400,
+html:not(.dark) .text-gray-400 {
+  color: #334155 !important; /* slate-700, 7.5:1 contrast */
+}
+
+/* In dark mode: ensure secondary text meets 4.5:1 minimum */
+html.dark .text-slate-500,
+html.dark .text-zinc-500 {
+  color: #94a3b8 !important; /* slate-400, 6.8:1 contrast */
+}
+
+html.dark .text-\[\#6e7787\],
+html.dark .text-\[\#6d7585\],
+html.dark .text-\[\#656e7e\],
+html.dark .text-\[\#555d6d\],
+html.dark .text-\[\#6b7280\] {
+  color: #a1a1aa !important; /* zinc-400, 7.2:1 contrast */
+}
+
+/* Interactive hover rows */
+html:not(.dark) .hover\:bg-\[\#161821\]:hover,
+html:not(.dark) .hover\:bg-\[\#1b1e29\]:hover,
+html:not(.dark) .hover\:bg-\[\#20242f\]:hover,
+html:not(.dark) .hover\:bg-\[\#222631\]:hover,
+html:not(.dark) .hover\:bg-\[\#232836\]:hover,
+html:not(.dark) .hover\:bg-\[\#202532\]:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Modals & Dialog overlays */
+html:not(.dark) .bg-black\/70,
+html:not(.dark) .bg-black\/60 {
+  background-color: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Print Stylesheet for PAKMEC Documents */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 14mm;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Hide app chrome: sidebar, headers, controls, navigation */
+  header, aside, nav, .no-print, [role="navigation"], button, input, select, textarea, [role="tablist"], [role="dialog"] {
+    display: none !important;
+  }
+
+  /* Clean flow for main printable container */
+  main, .printable-document {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .print-surface {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}

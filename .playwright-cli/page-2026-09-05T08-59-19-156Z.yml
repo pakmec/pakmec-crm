@@ -1,0 +1,282 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - img "PAKMEC Engineering" [ref=e8]
+        - generic [ref=e9]: CRM v1.0
+      - paragraph [ref=e10]: Industrial Trades Engine
+    - generic [ref=e12]:
+      - button "Create New Auto Quote" [ref=e13] [cursor=pointer]:
+        - generic [ref=e15]: New Quote
+      - button "Add New Contact" [ref=e16] [cursor=pointer]:
+        - generic [ref=e22]: New Client
+    - navigation [ref=e23]:
+      - generic [ref=e24]: Workflows
+      - button "Dashboard" [ref=e25] [cursor=pointer]
+      - button "Contacts & WhatsApp" [ref=e33] [cursor=pointer]
+      - button "Auto-Quoter 4" [ref=e41] [cursor=pointer]:
+        - generic [ref=e42]: Auto-Quoter
+        - generic [ref=e46]: "4"
+      - button "Production & Pins 4" [ref=e47] [cursor=pointer]:
+        - generic [ref=e48]: Production & Pins
+        - generic [ref=e52]: "4"
+      - button "Invoices & Payments" [ref=e53] [cursor=pointer]
+      - button "Rates & Branding" [ref=e59] [cursor=pointer]
+      - generic [ref=e65]:
+        - generic [ref=e66]: Active Trades
+        - generic [ref=e70]:
+          - generic [ref=e71]: 3D Print
+          - generic [ref=e72]: Laser Cut
+          - generic [ref=e73]: CNC Machining
+          - generic [ref=e74]: CAD Design
+          - generic [ref=e75]: Fabrication
+    - generic [ref=e76]:
+      - generic [ref=e77]:
+        - generic [ref=e78]: Operator
+        - generic [ref=e79]: ● Active
+      - button "👨‍🔧 Sultan Founder" [ref=e80] [cursor=pointer]:
+        - generic [ref=e81]:
+          - generic [ref=e82]: 👨‍🔧
+          - generic [ref=e83]:
+            - generic [ref=e84]: Sultan
+            - generic [ref=e85]: Founder
+      - generic [ref=e88]:
+        - link "pakmec.com" [ref=e89] [cursor=pointer]:
+          - /url: https://pakmec.com
+        - generic [ref=e95]: Lahore, PK
+  - generic [ref=e96]:
+    - banner [ref=e97]:
+      - textbox "Search clients, quotes, jobs, CAD specs, phone numbers…" [ref=e100]
+      - generic [ref=e101]:
+        - generic [ref=e102]: PKT 1:40 PM
+        - generic [ref=e107]:
+          - generic [ref=e108]: "Open Balance:"
+          - generic [ref=e109]: ₨39,800
+        - generic [ref=e110]:
+          - button "Auto-Quote" [ref=e111] [cursor=pointer]
+          - button "Job" [ref=e115] [cursor=pointer]
+    - main [ref=e118]:
+      - generic [ref=e119]:
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - heading "PAKMEC Workshop Telemetry" [level=1] [ref=e123]
+              - generic [ref=e124]: Machinery Active
+            - paragraph [ref=e125]: Pipeline overview from trade quotation to advance deposits, workshop CNC/3D run, and final invoicing.
+          - button "Generate Auto-Quote" [ref=e127] [cursor=pointer]
+        - generic [ref=e131]:
+          - generic [ref=e132]:
+            - generic [ref=e133]: Collected Revenue
+            - generic [ref=e139]: ₨6,000
+            - generic [ref=e141]:
+              - generic [ref=e142]: 100% verified
+              - text: bank & JazzCash
+          - generic [ref=e143] [cursor=pointer]:
+            - generic [ref=e144]: Active Jobs in Shop
+            - generic [ref=e149]:
+              - generic [ref=e150]: 4 Jobs
+              - generic [ref=e151]: 3 marked High / Urgent
+            - generic [ref=e152]: Click to view Kanban Board
+          - generic [ref=e157] [cursor=pointer]:
+            - generic [ref=e158]: Pending Dues & Balances
+            - generic [ref=e164]:
+              - generic [ref=e165]: ₨39,800
+              - generic [ref=e166]: All advances secured
+            - generic [ref=e167]: Billable upon delivery inspection
+          - generic [ref=e169] [cursor=pointer]:
+            - generic [ref=e170]: Client Database
+            - generic [ref=e178]:
+              - generic [ref=e179]: 5 Accounts
+              - generic [ref=e180]: WhatsApp CRM enabled
+            - generic [ref=e181]: Direct WhatsApp call / chat ready
+        - generic [ref=e183]:
+          - generic [ref=e184]:
+            - generic [ref=e185]:
+              - generic [ref=e186]:
+                - generic [ref=e187]:
+                  - heading "Active Jobs on Shop Floor" [level=2] [ref=e190]
+                  - generic [ref=e191]: "4"
+                - button "View Full Kanban" [ref=e192] [cursor=pointer]
+              - generic [ref=e196]:
+                - generic [ref=e197] [cursor=pointer]:
+                  - generic [ref=e198]:
+                    - generic [ref=e199]:
+                      - generic [ref=e200]: JOB-2026-001
+                      - generic [ref=e201]: 50x CNC Machined 6061 Drone Motor Brackets
+                      - generic [ref=e202]: in progress
+                      - generic [ref=e203]: URGENT
+                    - generic [ref=e204]:
+                      - generic [ref=e205]:
+                        - text: "Client:"
+                        - strong [ref=e206]: Tariq Mahmood
+                      - generic [ref=e207]: •
+                      - generic [ref=e208]:
+                        - text: "Trade:"
+                        - strong [ref=e209]: CNC Machining
+                      - generic [ref=e210]: •
+                      - generic [ref=e211]:
+                        - text: "Assignee:"
+                        - strong [ref=e212]: Ahmed
+                  - generic [ref=e213]:
+                    - generic [ref=e214]: ₨48,500
+                    - generic [ref=e215]: "Advance: ₨24,250"
+                - generic [ref=e220] [cursor=pointer]:
+                  - generic [ref=e221]:
+                    - generic [ref=e222]:
+                      - generic [ref=e223]: JOB-2026-002
+                      - generic [ref=e224]: 10x High-Detail SLA Resin Robotic Gripper Mechanism
+                      - generic [ref=e225]: qc
+                    - generic [ref=e226]:
+                      - generic [ref=e227]:
+                        - text: "Client:"
+                        - strong [ref=e228]: Bilal Farooq
+                      - generic [ref=e229]: •
+                      - generic [ref=e230]:
+                        - text: "Trade:"
+                        - strong [ref=e231]: 3D Printing
+                      - generic [ref=e232]: •
+                      - generic [ref=e233]:
+                        - text: "Assignee:"
+                        - strong [ref=e234]: Hamza
+                  - generic [ref=e235]:
+                    - generic [ref=e236]: ₨18,400
+                    - generic [ref=e237]: "Advance: ₨9,200"
+                - generic [ref=e242] [cursor=pointer]:
+                  - generic [ref=e243]:
+                    - generic [ref=e244]:
+                      - generic [ref=e245]: JOB-2026-003
+                      - generic [ref=e246]: Architectural Scale Model Laser Cutting
+                      - generic [ref=e247]: ready
+                    - generic [ref=e248]:
+                      - generic [ref=e249]:
+                        - text: "Client:"
+                        - strong [ref=e250]: Ayesha Khan
+                      - generic [ref=e251]: •
+                      - generic [ref=e252]:
+                        - text: "Trade:"
+                        - strong [ref=e253]: Laser Cutting
+                      - generic [ref=e254]: •
+                      - generic [ref=e255]:
+                        - text: "Assignee:"
+                        - strong [ref=e256]: Hamza
+                  - generic [ref=e257]:
+                    - generic [ref=e258]: ₨12,000
+                    - generic [ref=e259]: "Advance: ₨6,000"
+                - generic [ref=e264] [cursor=pointer]:
+                  - generic [ref=e265]:
+                    - generic [ref=e266]:
+                      - generic [ref=e267]: JOB-2026-004
+                      - generic [ref=e268]: Parametric Gimbal CAD Design & FEA Analysis
+                      - generic [ref=e269]: queued
+                    - generic [ref=e270]:
+                      - generic [ref=e271]:
+                        - text: "Client:"
+                        - strong [ref=e272]: David Miller
+                      - generic [ref=e273]: •
+                      - generic [ref=e274]:
+                        - text: "Trade:"
+                        - strong [ref=e275]: CAD Design
+                      - generic [ref=e276]: •
+                      - generic [ref=e277]:
+                        - text: "Assignee:"
+                        - strong [ref=e278]: Faizan
+                  - generic [ref=e279]:
+                    - generic [ref=e280]: $700
+                    - generic [ref=e281]: "Advance: $350"
+            - generic [ref=e286]:
+              - generic [ref=e287]:
+                - generic [ref=e288]:
+                  - heading "Weekly Workshop Production Flow" [level=3] [ref=e289]
+                  - paragraph [ref=e290]: Number of calibrated machine runs completed
+                - generic [ref=e291]: 41 Runs This Week
+              - generic [ref=e292]:
+                - generic [ref=e293]:
+                  - generic [ref=e294]: "4"
+                  - generic [ref=e297]: Mon
+                - generic [ref=e298]:
+                  - generic [ref=e299]: "7"
+                  - generic [ref=e302]: Tue
+                - generic [ref=e303]:
+                  - generic [ref=e304]: "5"
+                  - generic [ref=e307]: Wed
+                - generic [ref=e308]:
+                  - generic [ref=e309]: "9"
+                  - generic [ref=e312]: Thu
+                - generic [ref=e313]:
+                  - generic [ref=e314]: "6"
+                  - generic [ref=e317]: Fri
+                - generic [ref=e318]:
+                  - generic [ref=e319]: "8"
+                  - generic [ref=e322]: Sat
+                - generic [ref=e323]:
+                  - generic [ref=e324]: "2"
+                  - generic [ref=e327]: Sun
+          - generic [ref=e328]:
+            - generic [ref=e329]:
+              - heading "Jobs by Trade Domain" [level=3] [ref=e330]
+              - generic [ref=e342]:
+                - generic [ref=e344]:
+                  - generic [ref=e345]: CNC Machining
+                  - generic [ref=e346]: 1 (25%)
+                - generic [ref=e350]:
+                  - generic [ref=e351]: 3D Printing
+                  - generic [ref=e352]: 1 (25%)
+                - generic [ref=e356]:
+                  - generic [ref=e357]: Laser Cutting
+                  - generic [ref=e358]: 1 (25%)
+                - generic [ref=e362]:
+                  - generic [ref=e363]: CAD Design
+                  - generic [ref=e364]: 1 (25%)
+                - generic [ref=e368]:
+                  - generic [ref=e369]: Industrial Fabrication
+                  - generic [ref=e370]: 0 (0%)
+            - generic [ref=e372]:
+              - generic [ref=e373]:
+                - heading "WhatsApp Activity Feed" [level=3] [ref=e377]
+                - button "All Logs" [ref=e378] [cursor=pointer]
+              - generic [ref=e379]:
+                - generic [ref=e380]:
+                  - generic [ref=e381]:
+                    - generic [ref=e382]: Bilal Farooq
+                    - generic [ref=e383]: 2026-09-04
+                  - paragraph [ref=e384]: Sent quote QT-2026-002 for ₨18,400. Client asked if we can do EasyPaisa for 50% deposit.
+                  - generic [ref=e385]:
+                    - generic [ref=e386]: Logged by Sultan
+                    - link "Open WA" [ref=e387] [cursor=pointer]:
+                      - /url: https://wa.me/923018847219
+                - generic [ref=e393]:
+                  - generic [ref=e394]:
+                    - generic [ref=e395]: David Miller
+                    - generic [ref=e396]: 2026-09-03
+                  - paragraph [ref=e397]: Received $350 advance via Stripe. Job queued for design validation.
+                  - generic [ref=e398]:
+                    - generic [ref=e399]: Logged by Sultan
+                    - link "Open WA" [ref=e400] [cursor=pointer]:
+                      - /url: https://wa.me/14158902234
+                - generic [ref=e406]:
+                  - generic [ref=e407]:
+                    - generic [ref=e408]: Bilal Farooq
+                    - generic [ref=e409]: 2026-09-03
+                  - paragraph [ref=e410]: Discussed custom gripper gear tolerance on WhatsApp audio. Client requested 0.15mm layer height on resin SLA.
+                  - generic [ref=e411]:
+                    - generic [ref=e412]: Logged by Faizan
+                    - link "Open WA" [ref=e413] [cursor=pointer]:
+                      - /url: https://wa.me/923018847219
+                - generic [ref=e419]:
+                  - generic [ref=e420]:
+                    - generic [ref=e421]: Ayesha Khan
+                    - generic [ref=e422]: 2026-09-03
+                  - paragraph [ref=e423]: "Advance payment of ₨12,000 received via JazzCash. Production running on laser cutter #2."
+                  - generic [ref=e424]:
+                    - generic [ref=e425]: Logged by Sultan
+                    - link "Open WA" [ref=e426] [cursor=pointer]:
+                      - /url: https://wa.me/923335591204
+                - generic [ref=e432]:
+                  - generic [ref=e433]:
+                    - generic [ref=e434]: Tariq Mahmood
+                    - generic [ref=e435]: 2026-09-03
+                  - paragraph [ref=e436]: "Received ₨24,250 advance via Meezan Bank transfer. Verified transaction ID #MEZN883921. Moved job to queued production."
+                  - generic [ref=e437]:
+                    - generic [ref=e438]: Logged by Sultan
+                    - link "Open WA" [ref=e439] [cursor=pointer]:
+                      - /url: https://wa.me/923214458921
