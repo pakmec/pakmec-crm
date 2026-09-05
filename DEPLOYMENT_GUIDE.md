@@ -72,7 +72,7 @@ When you or your staff visit your live URL, you are greeted with the PAKMEC Secu
 
 | Role | Email | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
-| **👑 Admin (Director)** | `admin@pakmec.com` | `pakmec2026!` | Full Authority: Financial Inflow, Invoices, Settlements, Rates, Deletion/Archive |
+| **👑 Admin (Director - Yasir Aslam)** | `admin@pakmec.com` | `Yasir@123..` | Full Authority: Financial Inflow, Invoices, Settlements, Rates, Deletion/Archive |
 | **🛠️ Machinist (Floor Lead)** | `machinist@pakmec.com` | `pakmec2026!` | Shop Floor Only: Production Kanban, QC, Machine Pins. Financials & Billing are hidden. |
 | **📋 Sales Estimator** | `sales@pakmec.com` | `pakmec2026!` | Quoter & CRM: Auto-Quoter, Client Database, WhatsApp. Bank settings & deletions locked. |
 

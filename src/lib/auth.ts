@@ -4,13 +4,12 @@ export const SEEDED_USERS: (UserAccount & { passwordHash: string })[] = [
   {
     id: "usr-admin-01",
     email: "admin@pakmec.com",
-    name: "Tariq Mahmood (CEO)",
+    name: "Yasir Aslam",
     role: "admin",
-    department: "Executive & Engineering Direction",
+    department: "Managing Director & Chief Engineer",
     phone: "+92 300 8631100",
     avatarUrl: "/avatars/admin.png",
-    // Base64 of SHA256 of "pakmec2026!"
-    passwordHash: "pakmec2026!",
+    passwordHash: "Yasir@123..",
   },
   {
     id: "usr-mach-01",
@@ -67,7 +66,7 @@ export function getRolePermissions(role: UserRole): RolePermissions {
 }
 
 export async function verifyCredentials(email: string, password: string): Promise<UserAccount | null> {
-  const normalizedEmail = email.trim().toLowerCase();
+  const normalizedEmail = email.trim().toLowerCase().replace(/,com$/, '.com');
   const user = SEEDED_USERS.find(u => u.email.toLowerCase() === normalizedEmail);
 
   if (!user) {

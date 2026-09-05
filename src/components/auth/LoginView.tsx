@@ -22,7 +22,7 @@ import { UserRole } from "@/types";
 export const LoginView: React.FC = () => {
   const { login, switchRole } = useCrm();
   const [email, setEmail] = useState("admin@pakmec.com");
-  const [password, setPassword] = useState("pakmec2026!");
+  const [password, setPassword] = useState("Yasir@123..");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -127,7 +127,7 @@ export const LoginView: React.FC = () => {
                     Password
                   </label>
                   <span className="text-[11px] font-mono text-zinc-500">
-                    Default: <code className="text-[#fe7518]">pakmec2026!</code>
+                    Default: <code className="text-[#fe7518]">Yasir@123..</code>
                   </span>
                 </div>
                 <div className="relative">
@@ -188,7 +188,7 @@ export const LoginView: React.FC = () => {
                     <span>👑 Admin</span>
                   </div>
                   <span className="text-[10px] text-zinc-500 block truncate font-mono">
-                    Full Authority
+                    Yasir Aslam
                   </span>
                 </button>
 

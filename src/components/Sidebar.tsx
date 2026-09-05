@@ -199,11 +199,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 ? "bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30"
                 : "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
             }`}>
-              {currentRole === "admin" ? "AD" : currentRole === "machinist" ? "MC" : "SL"}
+              {currentRole === "admin" ? "YA" : currentRole === "machinist" ? "RA" : "ZK"}
             </div>
             <div className="min-w-0">
               <div className="text-xs font-bold text-slate-900 dark:text-zinc-100 truncate">
-                {currentUser?.name || "Staff Member"}
+                {currentUser?.name || (currentRole === "admin" ? "Yasir Aslam" : "Staff Member")}
               </div>
               <div className="flex items-center gap-1 mt-0.5">
                 <span className={`text-[9px] font-mono uppercase px-1.5 py-0.2 rounded font-semibold ${

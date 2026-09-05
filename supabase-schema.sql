@@ -76,3 +76,15 @@ CREATE POLICY "Allow public read-write for API" ON jobs FOR ALL USING (true) WIT
 CREATE POLICY "Allow public read-write for API" ON invoices FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public read-write for API" ON settings FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public read-write for API" ON user_profiles FOR ALL USING (true) WITH CHECK (true);
+
+-- Seed Initial Profiles
+INSERT INTO user_profiles (id, email, name, role, department, phone)
+VALUES 
+  ('usr-admin-01', 'admin@pakmec.com', 'Yasir Aslam', 'admin', 'Managing Director & Chief Engineer', '+92 300 8631100'),
+  ('usr-mach-01', 'machinist@pakmec.com', 'Rashid Ali (CNC Lead)', 'machinist', 'Shop Floor & Machine Operations', '+92 321 4458921'),
+  ('usr-sales-01', 'sales@pakmec.com', 'Zainab Khan (Estimator)', 'sales', 'Client Relations & Quotations', '+92 301 7762244')
+ON CONFLICT (email) DO UPDATE SET 
+  name = EXCLUDED.name,
+  role = EXCLUDED.role,
+  department = EXCLUDED.department;
+
