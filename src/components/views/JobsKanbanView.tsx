@@ -70,6 +70,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
   const [isSettlementModalOpen, setIsSettlementModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<"kanban" | "details">("kanban");
+  const [selectedMobileStage, setSelectedMobileStage] = useState<string>("all");
 
   // Pin Form State
   const [pinTitle, setPinTitle] = useState("");
@@ -211,16 +212,16 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
   };
 
   return (
-    <div className="h-[calc(100vh-4rem)] flex flex-col overflow-hidden no-print">
+    <div className="w-full flex-1 flex flex-col min-h-full no-print">
       {/* Top Bar */}
-      <div className="p-4 border-b border-[var(--border)] bg-[var(--surface-50)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0">
+      <div className="p-3 sm:p-4 border-b border-[var(--border)] bg-[var(--surface-50)] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 shrink-0">
         <div>
-          <h1 className="text-lg font-bold text-[var(--foreground)] flex items-center gap-2">
-            <KanbanSquare className="w-5 h-5 text-[#fe7518]" />
+          <h1 className="text-base sm:text-lg font-bold text-[var(--foreground)] flex items-center gap-2">
+            <KanbanSquare className="w-4 sm:w-5 h-4 sm:h-5 text-[#fe7518]" />
             <span>Production Floor & Reference Board</span>
           </h1>
           <p className="text-xs text-[var(--muted)]">
-            Multan workshop Kanban pipeline, advance status tracking, and Pinterest-style project media upload board.
+            Multan workshop Kanban pipeline, advance status tracking, and project media board.
           </p>
         </div>
 
@@ -229,7 +230,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
         </div>
       </div>
 
-      {/* Mobile Tab Switcher between Kanban & Media Pin Board */}
+      {/* Mobile View Switcher (Kanban Board vs Drawings & Media) */}
       <div className="lg:hidden px-3 py-2 bg-[var(--surface-100)] border-b border-[var(--border)] flex items-center gap-2 shrink-0">
         <button
           type="button"
@@ -241,7 +242,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
           }`}
         >
           <KanbanSquare className="w-4 h-4" />
-          <span>Kanban Floor</span>
+          <span>Floor Pipeline ({activeJobs.length})</span>
         </button>
         <button
           type="button"
@@ -253,32 +254,69 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
           }`}
         >
           <Pin className="w-4 h-4" />
-          <span>Drawings & Media ({activeJob?.referenceItems?.length || 0})</span>
+          <span>Job Media ({activeJob?.referenceItems?.length || 0})</span>
         </button>
       </div>
 
       {/* Main Split: Kanban Columns & Reference Pin Board */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden w-full">
         {/* Kanban Board Area */}
-        <div className={`w-full lg:w-3/5 border-r border-[var(--border)] bg-[var(--background)] p-3 sm:p-4 overflow-x-auto overflow-y-auto ${
+        <div className={`w-full lg:w-3/5 border-r border-[var(--border)] bg-[var(--background)] p-3 sm:p-4 overflow-y-auto ${
           mobileTab === "details" ? "hidden lg:block" : "block"
         }`}>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3.5 min-w-[850px]">
+          {/* Mobile Stage Selector Pills */}
+          <div className="md:hidden flex items-center gap-1.5 overflow-x-auto pb-2.5 mb-2 no-scrollbar w-full">
+            <button
+              type="button"
+              onClick={() => setSelectedMobileStage("all")}
+              className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-mono whitespace-nowrap transition-all touch-manipulation ${
+                selectedMobileStage === "all"
+                  ? "bg-[#fe7518] text-slate-950 font-bold shadow-sm"
+                  : "bg-[var(--surface-100)] text-[var(--muted)] hover:text-[var(--foreground)] border border-[var(--border)]"
+              }`}
+            >
+              All Stages ({activeJobs.length})
+            </button>
             {columns.map((col) => {
-              const colJobs = activeJobs.filter((j) => j.stage === col.stage);
-
+              const count = activeJobs.filter(j => j.stage === col.stage).length;
+              const isSelected = selectedMobileStage === col.stage;
               return (
-                <div key={col.stage} className="flex flex-col bg-[var(--card)] rounded-xl border border-[var(--border)] overflow-hidden min-h-[500px]">
-                  {/* Column Header */}
-                  <div className={`p-3 border-b ${col.border} bg-[var(--surface-100)] flex items-center justify-between`}>
-                    <div className="flex items-center gap-2">
-                      {React.createElement(col.icon, { className: "w-4 h-4 text-[#fe7518]" })}
-                      <span className="text-xs font-bold text-[var(--foreground)] truncate">{col.label}</span>
+                <button
+                  key={col.stage}
+                  type="button"
+                  onClick={() => setSelectedMobileStage(col.stage)}
+                  className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-mono whitespace-nowrap transition-all flex items-center gap-1.5 touch-manipulation ${
+                    isSelected
+                      ? "bg-[#fe7518] text-slate-950 font-bold shadow-sm"
+                      : "bg-[var(--surface-100)] text-[var(--muted)] hover:text-[var(--foreground)] border border-[var(--border)]"
+                  }`}
+                >
+                  <span>{col.label.split(" ")[0]}</span>
+                  <span className="text-[10px] opacity-80 font-bold">({count})</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Kanban Columns (Full width on mobile, 5-col grid on desktop) */}
+          <div className="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-5 gap-3.5 md:min-w-[850px] w-full">
+            {columns
+              .filter((col) => selectedMobileStage === "all" || col.stage === selectedMobileStage)
+              .map((col) => {
+                const colJobs = activeJobs.filter((j) => j.stage === col.stage);
+
+                return (
+                  <div key={col.stage} className="flex flex-col bg-[var(--card)] rounded-xl border border-[var(--border)] overflow-hidden w-full min-h-0 md:min-h-[500px]">
+                    {/* Column Header */}
+                    <div className={`p-3 border-b ${col.border} bg-[var(--surface-100)] flex items-center justify-between`}>
+                      <div className="flex items-center gap-2 min-w-0">
+                        {React.createElement(col.icon, { className: "w-4 h-4 text-[#fe7518] shrink-0" })}
+                        <span className="text-xs font-bold text-[var(--foreground)] truncate">{col.label}</span>
+                      </div>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] shrink-0 ml-1">
+                        {colJobs.length}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)]">
-                      {colJobs.length}
-                    </span>
-                  </div>
 
                   {/* Column Cards */}
                   <div className="p-2 space-y-2.5 flex-1 overflow-y-auto">
