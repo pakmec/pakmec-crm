@@ -104,7 +104,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-1.5 shrink-0 flex-wrap sm:flex-nowrap">
           {["all", "unpaid", "partial", "paid"].map((status) => (
             <button
               key={status}

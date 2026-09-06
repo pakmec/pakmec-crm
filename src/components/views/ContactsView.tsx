@@ -227,14 +227,14 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
           </div>
 
           {/* Trade Filter Tabs */}
-          <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px] font-mono">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar text-[11px] font-mono w-full">
             {["all", "CNC Machining", "3D Printing", "Laser Cutting", "CAD Design"].map((t) => (
               <button
                 key={t}
                 onClick={() => setFilterTrade(t)}
-                className={`px-2.5 py-1 rounded whitespace-nowrap transition-colors ${
+                className={`px-2.5 py-1 rounded-md whitespace-nowrap shrink-0 transition-colors ${
                   filterTrade === t 
-                    ? "bg-[#fe7518] text-white font-bold shadow-sm" 
+                    ? "bg-[#fe7518] text-slate-950 font-bold shadow-sm" 
                     : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-200)]"
                 }`}
               >

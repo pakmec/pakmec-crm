@@ -126,8 +126,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Quick Action Bar */}
       {currentRole === "machinist" ? (
-        <div className="p-3 border-b border-slate-200 dark:border-[#1c202a] shrink-0">
-          <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-[#101726] border border-blue-200 dark:border-blue-900/60 text-blue-800 dark:text-blue-300 text-xs font-mono flex items-center justify-between">
+        <div className={`border-b border-slate-200 dark:border-[#1c202a] shrink-0 ${isMobile ? "p-3" : "p-2.5"}`}>
+          <div className="p-2 rounded-lg bg-blue-50 dark:bg-[#101726] border border-blue-200 dark:border-blue-900/60 text-blue-800 dark:text-blue-300 text-xs font-mono flex items-center justify-between">
             <span className="flex items-center gap-1.5 font-bold">
               <Wrench className="w-3.5 h-3.5 text-blue-500" />
               <span>Machinist Mode</span>
@@ -138,10 +138,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
       ) : (
-        <div className="p-3 border-b border-slate-200 dark:border-[#1c202a] grid grid-cols-2 gap-2 shrink-0">
+        <div className={`border-b border-slate-200 dark:border-[#1c202a] grid grid-cols-2 gap-2 shrink-0 ${isMobile ? "p-3" : "p-2.5"}`}>
           <button
             onClick={handleQuoteClick}
-            className="flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold shadow-sm border border-[#e56208] btn-haptic min-h-[44px]"
+            className={`flex items-center justify-center gap-1.5 px-2.5 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold shadow-sm border border-[#e56208] btn-haptic ${
+              isMobile ? "py-2.5 min-h-[44px]" : "py-2 min-h-[36px]"
+            }`}
             aria-label="Create New Auto Quote"
           >
             <Plus className="w-3.5 h-3.5" />
@@ -149,7 +151,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
           <button
             onClick={handleContactClick}
-            className="flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-lg bg-slate-100 dark:bg-[#181b22] hover:bg-slate-200 dark:hover:bg-[#222631] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-[#2a303d] text-xs font-semibold btn-haptic min-h-[44px]"
+            className={`flex items-center justify-center gap-1.5 px-2.5 rounded-lg bg-slate-100 dark:bg-[#181b22] hover:bg-slate-200 dark:hover:bg-[#222631] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-[#2a303d] text-xs font-semibold btn-haptic ${
+              isMobile ? "py-2.5 min-h-[44px]" : "py-2 min-h-[36px]"
+            }`}
             aria-label="Add New Client Contact"
           >
             <Users className="w-3.5 h-3.5" />
@@ -159,8 +163,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       {/* Navigation Links */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5">
-        <div className="px-2 pb-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-500">
+      <nav className={`flex-1 overflow-y-auto px-3 ${isMobile ? "py-4 space-y-1.5" : "py-2.5 space-y-1"}`}>
+        <div className="px-2 pb-1 text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-500">
           Workflows
         </div>
         {navItems.map((item) => {
@@ -170,13 +174,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => handleNavClick(item.id)}
-              className={`w-full flex items-center justify-between px-3 py-2.5 min-h-[44px] rounded-lg text-sm font-medium btn-haptic group transition-colors touch-manipulation ${
+              className={`w-full flex items-center justify-between px-3 rounded-lg text-sm font-medium btn-haptic group transition-colors touch-manipulation ${
+                isMobile ? "py-2.5 min-h-[44px]" : "py-1.5 min-h-[36px] text-xs sm:text-sm"
+              } ${
                 isActive 
                   ? "bg-white dark:bg-[#181c26] text-slate-900 dark:text-white border-l-4 border-l-[#fe7518] border-y border-r border-slate-300 dark:border-[#2a3040] shadow-sm font-semibold" 
                   : "text-slate-700 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100 hover:bg-slate-200/60 dark:hover:bg-[#15171f]"
               }`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <Icon className={`w-4 h-4 transition-colors ${isActive ? "text-[#fe7518]" : "text-slate-500 dark:text-zinc-500 group-hover:text-slate-800 dark:group-hover:text-zinc-200"}`} />
                 <span>{item.label}</span>
               </div>
@@ -194,12 +200,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
 
         {/* Currency & Active Trades Telemetry */}
-        <div className="pt-4 sm:pt-6 px-2">
-          <div className="pb-2 text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-500 flex items-center justify-between">
+        <div className={`px-2 ${isMobile ? "pt-4 sm:pt-6" : "pt-3"}`}>
+          <div className="pb-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-500 flex items-center justify-between">
             <span>Active Trades (PKR)</span>
             <Flame className="w-3.5 h-3.5 text-[#fe7518]" />
           </div>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1">
             {[
               { label: "CNC Mill/Turn", pip: "bg-emerald-500" },
               { label: "3D Print (SLA/FDM)", pip: "bg-cyan-500" },
@@ -209,7 +215,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             ].map(t => (
               <span 
                 key={t.label} 
-                className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2 py-1 rounded bg-slate-200/90 dark:bg-[#161923] text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-[#272b38] font-medium"
+                className={`inline-flex items-center gap-1.5 text-[10px] font-mono rounded bg-slate-200/90 dark:bg-[#161923] text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-[#272b38] font-medium ${
+                  isMobile ? "px-2 py-1" : "px-1.5 py-0.5"
+                }`}
               >
                 <span className={`w-1.5 h-1.5 rounded-full ${t.pip}`} />
                 {t.label}
@@ -220,9 +228,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       {/* User Account & Role Profile Footer */}
-      <div className="p-3 border-t border-slate-200 dark:border-[#20242e] bg-slate-50 dark:bg-[#0b0c0f] space-y-2.5 shrink-0">
+      <div className={`border-t border-slate-200 dark:border-[#20242e] bg-slate-50 dark:bg-[#0b0c0f] shrink-0 ${
+        isMobile ? "p-3 space-y-2.5" : "p-2.5 space-y-1.5"
+      }`}>
         {/* User Badge & Sign Out */}
-        <div className="p-2 rounded-lg bg-white dark:bg-[#12141a] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between">
+        <div className={`rounded-lg bg-white dark:bg-[#12141a] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between ${
+          isMobile ? "p-2" : "p-1.5"
+        }`}>
           <div className="min-w-0 flex items-center gap-2">
             <div className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shrink-0 ${
               currentRole === "admin" 
@@ -255,7 +267,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={logout}
             aria-label="Sign out of console"
             title="Sign out of PAKMEC console"
-            className="p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic shrink-0"
+            className={`flex items-center justify-center rounded text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic shrink-0 ${
+              isMobile ? "p-2 min-h-[36px] min-w-[36px]" : "p-1.5 min-h-[30px] min-w-[30px]"
+            }`}
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -266,7 +280,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => switchRole("admin")}
-            className={`py-1.5 px-1 min-h-[32px] rounded text-center transition-all ${
+            className={`rounded text-center transition-all ${
+              isMobile ? "py-1.5 px-1 min-h-[32px]" : "py-1 px-1 min-h-[28px]"
+            } ${
               currentRole === "admin"
                 ? "bg-[#fe7518] text-slate-950 font-bold shadow-sm"
                 : "bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
@@ -278,7 +294,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => switchRole("machinist")}
-            className={`py-1.5 px-1 min-h-[32px] rounded text-center transition-all ${
+            className={`rounded text-center transition-all ${
+              isMobile ? "py-1.5 px-1 min-h-[32px]" : "py-1 px-1 min-h-[28px]"
+            } ${
               currentRole === "machinist"
                 ? "bg-blue-600 text-white font-bold shadow-sm"
                 : "bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
@@ -290,7 +308,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => switchRole("sales")}
-            className={`py-1.5 px-1 min-h-[32px] rounded text-center transition-all ${
+            className={`rounded text-center transition-all ${
+              isMobile ? "py-1.5 px-1 min-h-[32px]" : "py-1 px-1 min-h-[28px]"
+            } ${
               currentRole === "sales"
                 ? "bg-emerald-600 text-white font-bold shadow-sm"
                 : "bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
@@ -305,7 +325,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <button
           onClick={toggleTheme}
           aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-          className="w-full flex items-center justify-between p-2 min-h-[38px] rounded-lg bg-white dark:bg-[#14161d] hover:bg-slate-100 dark:hover:bg-[#1b1f29] border border-slate-300/80 dark:border-[#242934] btn-haptic text-left text-xs text-slate-800 dark:text-zinc-200"
+          className={`w-full flex items-center justify-between rounded-lg bg-white dark:bg-[#14161d] hover:bg-slate-100 dark:hover:bg-[#1b1f29] border border-slate-300/80 dark:border-[#242934] btn-haptic text-left text-xs text-slate-800 dark:text-zinc-200 ${
+            isMobile ? "p-2 min-h-[38px]" : "p-1.5 min-h-[32px]"
+          }`}
         >
           <div className="flex items-center gap-2">
             {theme === "dark" ? (
@@ -321,7 +343,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </button>
 
         {/* Database Security Status */}
-        <div className="p-2 rounded-lg bg-white dark:bg-[#12141a] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between text-[10px] font-mono">
+        <div className={`rounded-lg bg-white dark:bg-[#12141a] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between text-[10px] font-mono ${
+          isMobile ? "p-2" : "p-1.5"
+        }`}>
           <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span className="font-bold">Edge Cloud Synced</span>
@@ -330,13 +354,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* External Website Link */}
-        <div className="pt-1 flex items-center justify-between text-[11px] text-slate-600 dark:text-zinc-400">
+        <div className={`flex items-center justify-between text-[11px] text-slate-600 dark:text-zinc-400 ${
+          isMobile ? "pt-1" : "pt-0.5"
+        }`}>
           <a 
             href="https://pakmec.com" 
             target="_blank" 
             rel="noopener noreferrer"
             aria-label="Visit PAKMEC official website (opens in new tab)"
-            className="hover:text-[#fe7518] flex items-center gap-1 transition-colors min-h-[24px] py-0.5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#fe7518]"
+            className="hover:text-[#fe7518] flex items-center gap-1 transition-colors min-h-[20px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#fe7518]"
           >
             <span>pakmec.com</span>
             <ExternalLink className="w-2.5 h-2.5" />

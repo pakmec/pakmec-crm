@@ -19,7 +19,7 @@ export async function POST(req: Request) {
 
     const user = await verifyCredentials(email, password);
     if (!user) {
-      return NextResponse.json({ error: "Invalid credentials. Use admin@pakmec.com / pakmec2026!" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
     return NextResponse.json({ success: true, user });

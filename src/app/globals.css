@@ -438,3 +438,13 @@ html:not(.dark) .bg-black\/60 {
     border: none !important;
   }
 }
+
+/* Utility to hide scrollbars while allowing smooth touch/trackpad scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

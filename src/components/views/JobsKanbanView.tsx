@@ -26,7 +26,8 @@ import {
   PackageCheck,
   Truck,
   ShieldCheck,
-  Clock
+  Clock,
+  X
 } from "lucide-react";
 import { useCrm } from "@/context/CrmContext";
 import { Job, JobStage, JobPriority, ReferenceItem, PaymentRecord } from "@/types";
@@ -71,6 +72,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<"kanban" | "details">("kanban");
   const [selectedMobileStage, setSelectedMobileStage] = useState<string>("all");
+  const [isDesktopInspectorOpen, setIsDesktopInspectorOpen] = useState(true);
 
   // Pin Form State
   const [pinTitle, setPinTitle] = useState("");
@@ -227,6 +229,16 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
 
         <div className="flex items-center gap-3 font-mono text-xs text-[var(--muted)]">
           <span>Active Workshop Jobs: <strong className="text-[var(--foreground)]">{activeJobs.filter(j => j.stage !== "delivered").length}</strong></span>
+          {activeJob && !isDesktopInspectorOpen && (
+            <button
+              type="button"
+              onClick={() => setIsDesktopInspectorOpen(true)}
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#1a1d27] hover:bg-slate-200 dark:hover:bg-[#232836] border border-slate-300 dark:border-[#2a3040] text-xs font-mono font-semibold text-slate-800 dark:text-zinc-200 btn-haptic shadow-xs transition-colors"
+            >
+              <Pin className="w-3.5 h-3.5 text-[#fe7518]" />
+              <span>Media Board ({activeJob.referenceItems?.length || 0})</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -261,11 +273,11 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
       {/* Main Split: Kanban Columns & Reference Pin Board */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden w-full">
         {/* Kanban Board Area */}
-        <div className={`w-full lg:w-3/5 border-r border-[var(--border)] bg-[var(--background)] p-3 sm:p-4 overflow-y-auto ${
-          mobileTab === "details" ? "hidden lg:block" : "block"
+        <div className={`flex-1 min-w-0 bg-[var(--background)] p-3 sm:p-4 flex flex-col overflow-hidden ${
+          mobileTab === "details" ? "hidden lg:flex" : "flex"
         }`}>
           {/* Mobile Stage Selector Pills */}
-          <div className="md:hidden flex items-center gap-1.5 overflow-x-auto pb-2.5 mb-2 no-scrollbar w-full">
+          <div className="md:hidden flex items-center gap-1.5 overflow-x-auto pb-2.5 mb-2 no-scrollbar w-full shrink-0">
             <button
               type="button"
               onClick={() => setSelectedMobileStage("all")}
@@ -298,28 +310,29 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
             })}
           </div>
 
-          {/* Kanban Columns (Full width on mobile, 5-col grid on desktop) */}
-          <div className="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-5 gap-3.5 md:min-w-[850px] w-full">
+          {/* Kanban Columns (Full width vertically on mobile, horizontal scrolling columns on desktop) */}
+          <div className="flex-1 overflow-y-auto md:overflow-y-hidden md:overflow-x-auto pb-2">
+            <div className="flex flex-col md:flex-row gap-3.5 md:gap-4 md:h-full md:items-stretch min-w-0">
             {columns
               .filter((col) => selectedMobileStage === "all" || col.stage === selectedMobileStage)
               .map((col) => {
                 const colJobs = activeJobs.filter((j) => j.stage === col.stage);
 
                 return (
-                  <div key={col.stage} className="flex flex-col bg-[var(--card)] rounded-xl border border-[var(--border)] overflow-hidden w-full min-h-0 md:min-h-[500px]">
+                  <div key={col.stage} className="flex flex-col bg-[var(--card)] rounded-xl border border-[var(--border)] overflow-hidden w-full md:w-[280px] xl:w-[300px] md:shrink-0 md:h-full">
                     {/* Column Header */}
-                    <div className={`p-3 border-b ${col.border} bg-[var(--surface-100)] flex items-center justify-between`}>
+                    <div className={`p-3 border-b ${col.border} bg-[var(--surface-100)] flex items-center justify-between shrink-0`}>
                       <div className="flex items-center gap-2 min-w-0">
                         {React.createElement(col.icon, { className: "w-4 h-4 text-[#fe7518] shrink-0" })}
                         <span className="text-xs font-bold text-[var(--foreground)] truncate">{col.label}</span>
                       </div>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] shrink-0 ml-1">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] shrink-0 ml-1 font-bold">
                         {colJobs.length}
                       </span>
                     </div>
 
                   {/* Column Cards */}
-                  <div className="p-3 space-y-3.5 flex-1 overflow-y-auto">
+                  <div className="p-3 space-y-3 flex-1 overflow-y-auto">
                     {colJobs.length === 0 ? (
                       <div className="py-8 px-4 text-center text-xs text-[var(--muted)] font-mono border-2 border-dashed border-[var(--border)] rounded-xl">
                         No jobs currently in this stage
@@ -339,6 +352,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                             key={job.id}
                             onClick={() => {
                               setActiveJobId(job.id);
+                              setIsDesktopInspectorOpen(true);
                               setMobileTab("details");
                             }}
                             className={`p-4 rounded-xl border text-left cursor-pointer transition-all space-y-3 touch-manipulation ${
@@ -418,7 +432,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                                   e.stopPropagation();
                                   handlePrevStage(job.id, job.stage);
                                 }}
-                                className="flex-1 min-h-[42px] py-2 px-3 rounded-lg bg-slate-100 dark:bg-[#1a1d28] hover:bg-slate-200 dark:hover:bg-[#232736] disabled:opacity-35 text-slate-700 dark:text-zinc-300 border border-slate-300 dark:border-zinc-700 text-xs font-semibold flex items-center justify-center gap-1.5 btn-haptic touch-manipulation"
+                                className="flex-1 min-h-[40px] sm:min-h-[36px] py-1.5 px-2.5 rounded-lg bg-slate-100 dark:bg-[#1a1d28] hover:bg-slate-200 dark:hover:bg-[#232736] disabled:opacity-35 text-slate-700 dark:text-zinc-300 border border-slate-300 dark:border-zinc-700 text-xs font-semibold flex items-center justify-center gap-1 btn-haptic touch-manipulation"
                                 title="Move to Previous Stage"
                                 aria-label="Move to previous stage"
                               >
@@ -433,7 +447,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                                   e.stopPropagation();
                                   handleNextStage(job.id, job.stage);
                                 }}
-                                className="flex-1 min-h-[42px] py-2 px-3 rounded-lg bg-[#fe7518] hover:bg-[#e56208] disabled:opacity-35 text-slate-950 text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm border border-[#e56208] btn-haptic touch-manipulation"
+                                className="flex-1 min-h-[40px] sm:min-h-[36px] py-1.5 px-2.5 rounded-lg bg-[#fe7518] hover:bg-[#e56208] disabled:opacity-35 text-slate-950 text-xs font-bold flex items-center justify-center gap-1 shadow-sm border border-[#e56208] btn-haptic touch-manipulation"
                                 title="Advance to Next Stage"
                                 aria-label="Advance to next stage"
                               >
@@ -449,16 +463,17 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                 </div>
               );
             })}
+            </div>
           </div>
         </div>
 
         {/* Right Reference Board (Pinterest-Style Media & Pin Grid) */}
-        {activeJob ? (
-          <div className={`w-full lg:w-2/5 bg-[var(--background)] flex flex-col overflow-y-auto ${
+        {activeJob && (
+          <div className={`w-full lg:w-[420px] xl:w-[460px] shrink-0 border-l border-[var(--border)] bg-[var(--background)] flex flex-col overflow-y-auto ${
             mobileTab === "kanban" ? "hidden lg:flex" : "flex"
-          }`}>
+          } ${!isDesktopInspectorOpen ? "lg:hidden" : ""}`}>
             {/* Job Header & Advance Telemetry */}
-            <div className="p-4 sm:p-5 border-b border-[var(--border)] bg-[var(--surface-50)] space-y-3">
+            <div className="p-4 sm:p-5 border-b border-[var(--border)] bg-[var(--surface-50)] space-y-3 shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <button
@@ -473,9 +488,20 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                     PIN BOARD • {activeJob.id}
                   </span>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] uppercase">
-                  {activeJob.stage.replace("_", " ")}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] uppercase">
+                    {activeJob.stage.replace("_", " ")}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setIsDesktopInspectorOpen(false)}
+                    className="hidden lg:flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 transition-colors btn-haptic"
+                    title="Close Pin Board (Full-Width Kanban)"
+                    aria-label="Close Pin Board"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
               <h2 className="text-base font-bold text-[var(--foreground)] leading-tight">
@@ -705,7 +731,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
               )}
             </div>
           </div>
-        ) : null}
+        )}
       </div>
 
       {/* Upload Media / Pin Modal */}
