@@ -42,10 +42,11 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
 
   const filteredInvoices = activeInvoices.filter((i) => {
     const matchesStatus = filterStatus === "all" || i.status === filterStatus;
+    const searchLower = (search || "").toLowerCase();
     const matchesSearch = 
-      i.id.toLowerCase().includes(search.toLowerCase()) ||
-      i.contactName.toLowerCase().includes(search.toLowerCase()) ||
-      (i.jobId && i.jobId.toLowerCase().includes(search.toLowerCase()));
+      (i.id || "").toLowerCase().includes(searchLower) ||
+      (i.contactName || "").toLowerCase().includes(searchLower) ||
+      (i.jobId && i.jobId.toLowerCase().includes(searchLower));
     return matchesStatus && matchesSearch;
   });
 
@@ -64,7 +65,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
     recordInvoicePayment(paymentModalInvoice.id, {
       amount: paymentAmount,
       method: paymentMethod,
-      referenceNumber: paymentRef.trim() || `TRX-${Date.now().toString().slice(-6)}`,
+      referenceNumber: paymentRef.trim() || `TRX-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
       notes: paymentNotes.trim(),
     });
 

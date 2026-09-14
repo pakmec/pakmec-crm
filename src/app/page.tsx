@@ -43,7 +43,7 @@ export default function Home() {
         setActiveTab("jobs");
       }
     } else if (currentRole === "sales") {
-      if (activeTab === "invoices" || activeTab === "settings") {
+      if (activeTab === "settings") {
         setActiveTab("dashboard");
       }
     }
@@ -66,6 +66,13 @@ export default function Home() {
   const [jobAdvance, setJobAdvance] = useState(12500);
   const [jobPriority, setJobPriority] = useState<JobPriority>("high");
   const [jobDeadline, setJobDeadline] = useState("");
+
+  // Sync jobContactId when contacts load
+  useEffect(() => {
+    if (!jobContactId && contacts.length > 0) {
+      setJobContactId(contacts[0].id);
+    }
+  }, [contacts, jobContactId]);
 
   // Keyboard shortcut listener (Cmd/Ctrl + K or Escape)
   useEffect(() => {

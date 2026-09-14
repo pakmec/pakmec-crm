@@ -34,16 +34,18 @@ export async function initDatabase() {
 
   if (isSupabaseConfigured()) {
     const supabase = getSupabase()!;
-    // Check if contacts are seeded in Supabase
     try {
-      const { data, error } = await supabase.from("contacts").select("id").limit(1);
-      if (!error && (!data || data.length === 0)) {
-        // Seed default dataset to Supabase
+      // Check if the system has been initialized before by checking the settings table
+      const { data: settingsData, error: sErr } = await supabase.from("settings").select("id").eq("id", "main").maybeSingle();
+      
+      if (!sErr && !settingsData) {
+        // First-time database setup only: create initial settings and initial seed dataset
+        console.log("First-time Supabase initialization: seeding initial schema data...");
+        await supabase.from("settings").upsert([{ id: "main", data: initialSettings }]);
         await supabase.from("contacts").upsert(initialContacts.map(c => ({ id: c.id, data: c })));
         await supabase.from("quotes").upsert(initialQuotes.map(q => ({ id: q.id, data: q })));
         await supabase.from("jobs").upsert(initialJobs.map(j => ({ id: j.id, data: j })));
         await supabase.from("invoices").upsert(initialInvoices.map(i => ({ id: i.id, data: i })));
-        await supabase.from("settings").upsert([{ id: "main", data: initialSettings }]);
       }
     } catch (err) {
       console.warn("Supabase check/seed warning:", err);
@@ -52,7 +54,7 @@ export async function initDatabase() {
     return;
   }
 
-  // Local SQLite Mode
+  // Local SQLite Mode: Create tables if not exist
   await db.execute(`
     CREATE TABLE IF NOT EXISTS contacts (
       id TEXT PRIMARY KEY,
@@ -88,11 +90,15 @@ export async function initDatabase() {
     )
   `);
 
-  // Seed default data if empty
-  const contactCheck = await db.execute("SELECT COUNT(*) as count FROM contacts");
-  const count = Number(contactCheck.rows[0]?.count || 0);
+  // Check if SQLite system is initialized by inspecting settings
+  const settingsCheck = await db.execute("SELECT id FROM settings WHERE id = 'main'");
+  if (settingsCheck.rows.length === 0) {
+    console.log("First-time SQLite initialization: seeding default settings and initial data...");
+    await db.execute({
+      sql: "INSERT OR REPLACE INTO settings (id, data) VALUES ('main', ?)",
+      args: [JSON.stringify(initialSettings)]
+    });
 
-  if (count === 0) {
     for (const c of initialContacts) {
       await db.execute({
         sql: "INSERT OR REPLACE INTO contacts (id, data) VALUES (?, ?)",
@@ -120,11 +126,6 @@ export async function initDatabase() {
         args: [i.id, JSON.stringify(i)]
       });
     }
-
-    await db.execute({
-      sql: "INSERT OR REPLACE INTO settings (id, data) VALUES ('main', ?)",
-      args: [JSON.stringify(initialSettings)]
-    });
   }
 
   initialized = true;
@@ -136,12 +137,18 @@ export async function getAllData() {
   if (isSupabaseConfigured()) {
     const supabase = getSupabase()!;
     const [cRes, qRes, jRes, iRes, sRes] = await Promise.all([
-      supabase.from("contacts").select("data"),
-      supabase.from("quotes").select("data"),
-      supabase.from("jobs").select("data"),
-      supabase.from("invoices").select("data"),
+      supabase.from("contacts").select("id, data, created_at").order("created_at", { ascending: false }),
+      supabase.from("quotes").select("id, data, created_at").order("created_at", { ascending: false }),
+      supabase.from("jobs").select("id, data, created_at").order("created_at", { ascending: false }),
+      supabase.from("invoices").select("id, data, created_at").order("created_at", { ascending: false }),
       supabase.from("settings").select("data").eq("id", "main").maybeSingle(),
     ]);
+
+    if (cRes.error) console.error("Supabase contacts fetch error:", cRes.error);
+    if (qRes.error) console.error("Supabase quotes fetch error:", qRes.error);
+    if (jRes.error) console.error("Supabase jobs fetch error:", jRes.error);
+    if (iRes.error) console.error("Supabase invoices fetch error:", iRes.error);
+    if (sRes.error) console.error("Supabase settings fetch error:", sRes.error);
 
     const contacts: Contact[] = (cRes.data || []).map(r => r.data as Contact);
     const quotes: Quote[] = (qRes.data || []).map(r => r.data as Quote);
@@ -172,15 +179,32 @@ export async function getAllData() {
   return { contacts, quotes, jobs, invoices, settings };
 }
 
-export async function syncEntity(table: "contacts" | "quotes" | "jobs" | "invoices" | "settings", id: string, data: any, action: "upsert" | "delete") {
+export async function syncEntity(
+  table: "contacts" | "quotes" | "jobs" | "invoices" | "settings", 
+  id: string, 
+  data: any, 
+  action: "upsert" | "delete"
+) {
   await initDatabase();
 
   if (isSupabaseConfigured()) {
     const supabase = getSupabase()!;
     if (action === "delete") {
-      await supabase.from(table).delete().eq("id", id);
+      const { error } = await supabase.from(table).delete().eq("id", id);
+      if (error) {
+        console.error(`Supabase DELETE error on ${table} (id=${id}):`, error);
+        throw new Error(`Failed to delete from ${table}: ${error.message}`);
+      }
     } else {
-      await supabase.from(table).upsert({ id, data });
+      const { error } = await supabase.from(table).upsert({ 
+        id, 
+        data,
+        updated_at: new Date().toISOString()
+      });
+      if (error) {
+        console.error(`Supabase UPSERT error on ${table} (id=${id}):`, error);
+        throw new Error(`Failed to save to ${table}: ${error.message}`);
+      }
     }
     return;
   }
@@ -196,5 +220,91 @@ export async function syncEntity(table: "contacts" | "quotes" | "jobs" | "invoic
       sql: `INSERT OR REPLACE INTO ${table} (id, data) VALUES (?, ?)`,
       args: [id, JSON.stringify(data)]
     });
+  }
+}
+
+const DEMO_CONTACT_IDS = ["cnt-001", "cnt-002", "cnt-003", "cnt-004"];
+const DEMO_QUOTE_IDS = ["QT-2026-001", "QT-2026-002", "QT-2026-003"];
+const DEMO_JOB_IDS = ["JOB-2026-001", "JOB-2026-002", "JOB-2026-003"];
+const DEMO_INVOICE_IDS = ["INV-2026-001", "INV-2026-002", "INV-2026-003"];
+
+/**
+ * Purges only the default demo mock data while strictly preserving real client records.
+ */
+export async function purgeDemoData() {
+  await initDatabase();
+
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabase()!;
+    await Promise.all([
+      supabase.from("contacts").delete().in("id", DEMO_CONTACT_IDS),
+      supabase.from("quotes").delete().in("id", DEMO_QUOTE_IDS),
+      supabase.from("jobs").delete().in("id", DEMO_JOB_IDS),
+      supabase.from("invoices").delete().in("id", DEMO_INVOICE_IDS),
+    ]);
+    return;
+  }
+
+  // SQLite mode
+  for (const id of DEMO_CONTACT_IDS) {
+    await db.execute({ sql: "DELETE FROM contacts WHERE id = ?", args: [id] });
+  }
+  for (const id of DEMO_QUOTE_IDS) {
+    await db.execute({ sql: "DELETE FROM quotes WHERE id = ?", args: [id] });
+  }
+  for (const id of DEMO_JOB_IDS) {
+    await db.execute({ sql: "DELETE FROM jobs WHERE id = ?", args: [id] });
+  }
+  for (const id of DEMO_INVOICE_IDS) {
+    await db.execute({ sql: "DELETE FROM invoices WHERE id = ?", args: [id] });
+  }
+}
+
+/**
+ * Resets database tables and re-seeds default template data.
+ */
+export async function resetAllData() {
+  await initDatabase();
+
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabase()!;
+    await Promise.all([
+      supabase.from("contacts").delete().neq("id", "none"),
+      supabase.from("quotes").delete().neq("id", "none"),
+      supabase.from("jobs").delete().neq("id", "none"),
+      supabase.from("invoices").delete().neq("id", "none"),
+      supabase.from("settings").upsert([{ id: "main", data: initialSettings }]),
+    ]);
+
+    await Promise.all([
+      supabase.from("contacts").upsert(initialContacts.map(c => ({ id: c.id, data: c }))),
+      supabase.from("quotes").upsert(initialQuotes.map(q => ({ id: q.id, data: q }))),
+      supabase.from("jobs").upsert(initialJobs.map(j => ({ id: j.id, data: j }))),
+      supabase.from("invoices").upsert(initialInvoices.map(i => ({ id: i.id, data: i }))),
+    ]);
+    return;
+  }
+
+  // SQLite mode
+  await db.execute("DELETE FROM contacts");
+  await db.execute("DELETE FROM quotes");
+  await db.execute("DELETE FROM jobs");
+  await db.execute("DELETE FROM invoices");
+  await db.execute({
+    sql: "INSERT OR REPLACE INTO settings (id, data) VALUES ('main', ?)",
+    args: [JSON.stringify(initialSettings)]
+  });
+
+  for (const c of initialContacts) {
+    await db.execute({ sql: "INSERT OR REPLACE INTO contacts (id, data) VALUES (?, ?)", args: [c.id, JSON.stringify(c)] });
+  }
+  for (const q of initialQuotes) {
+    await db.execute({ sql: "INSERT OR REPLACE INTO quotes (id, data) VALUES (?, ?)", args: [q.id, JSON.stringify(q)] });
+  }
+  for (const j of initialJobs) {
+    await db.execute({ sql: "INSERT OR REPLACE INTO jobs (id, data) VALUES (?, ?)", args: [j.id, JSON.stringify(j)] });
+  }
+  for (const i of initialInvoices) {
+    await db.execute({ sql: "INSERT OR REPLACE INTO invoices (id, data) VALUES (?, ?)", args: [i.id, JSON.stringify(i)] });
   }
 }

@@ -269,15 +269,31 @@ html:not(.dark) strong.text-white {
   color: #0f172a !important;
 }
 
-/* Elements inside dark badges retain white text in light mode */
+/* Elements inside dark badges or colored primary buttons retain white text in light mode */
 html:not(.dark) span.bg-slate-900,
 html:not(.dark) span.bg-slate-900 *,
 html:not(.dark) div.bg-slate-900,
 html:not(.dark) div.bg-slate-900 *,
 html:not(.dark) span.bg-slate-800,
 html:not(.dark) span.bg-slate-800 *,
+html:not(.dark) button.bg-emerald-600,
+html:not(.dark) button.bg-emerald-600 *,
+html:not(.dark) button.bg-emerald-700,
+html:not(.dark) button.bg-emerald-700 *,
+html:not(.dark) button.bg-rose-600,
+html:not(.dark) button.bg-rose-600 *,
+html:not(.dark) button.bg-rose-700,
+html:not(.dark) button.bg-rose-700 *,
+html:not(.dark) button.bg-blue-600,
+html:not(.dark) button.bg-blue-600 *,
+html:not(.dark) button.bg-slate-800,
+html:not(.dark) button.bg-slate-800 *,
+html:not(.dark) button.bg-slate-900,
+html:not(.dark) button.bg-slate-900 *,
 html:not(.dark) .badge-dark,
-html:not(.dark) .badge-dark * {
+html:not(.dark) .badge-dark *,
+html:not(.dark) .text-white-force,
+html:not(.dark) .text-white-force * {
   color: #ffffff !important;
 }
 

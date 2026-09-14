@@ -13,6 +13,7 @@ export interface WhatsAppLog {
   author: string;
   text: string;
   type: "inquiry" | "quote" | "payment" | "general" | "delivery";
+  updatedAt?: string;
 }
 
 export interface Contact {

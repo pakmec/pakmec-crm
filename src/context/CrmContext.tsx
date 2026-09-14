@@ -33,6 +33,8 @@ interface CrmContextType {
   settings: TradeRatesSettings;
   searchQuery: string;
   theme: "dark" | "light";
+  dataLoaded: boolean;
+  isDemoDataPresent: boolean;
 
   // Auth & Role-Based Access Control (RBAC)
   currentUser: UserAccount | null;
@@ -55,9 +57,15 @@ interface CrmContextType {
   archiveContact: (id: string, archiveRelatedData?: boolean) => void;
   unarchiveContact: (id: string) => void;
   addWhatsAppLog: (contactId: string, text: string, type?: WhatsAppLog["type"]) => void;
+  updateWhatsAppLog: (contactId: string, logId: string, text: string, type: WhatsAppLog["type"]) => void;
+  deleteWhatsAppLog: (contactId: string, logId: string) => void;
 
   // Quotes
   createQuote: (quote: Omit<Quote, "id">) => Quote;
+  createQuoteWithNewContact: (
+    quoteData: Omit<Quote, "id" | "contactId" | "contactName" | "contactPhone" | "contactCompany">,
+    newContactData: { name: string; phone: string; company?: string; city?: string }
+  ) => { quote: Quote; contact: Contact };
   updateQuote: (quote: Quote) => void;
   deleteQuote: (id: string) => void;
   convertQuoteToJob: (quoteId: string, deadline: string, advanceReceived: boolean) => Job;
@@ -80,7 +88,8 @@ interface CrmContextType {
 
   // Settings & DB
   updateSettings: (newSettings: TradeRatesSettings) => void;
-  resetToDefaults: () => void;
+  resetToDefaults: () => Promise<void>;
+  purgeDemoData: () => Promise<void>;
 
   // Utilities
   formatCurrency: (amount: number) => string;
@@ -88,28 +97,32 @@ interface CrmContextType {
 
 const CrmContext = createContext<CrmContextType | undefined>(undefined);
 
-// Helper to sync to SQLite DB
+// Helper to sync to Database (Supabase or SQLite)
 async function syncToDb(table: "contacts" | "quotes" | "jobs" | "invoices" | "settings", id: string, data: any, action: "upsert" | "delete" = "upsert") {
   try {
-    await fetch("/api/data", {
+    const res = await fetch("/api/data", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ table, id, data, action })
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.error(`DB sync failed for ${table}/${id}:`, err);
+    }
   } catch (err) {
     console.warn("DB sync warning:", err);
   }
 }
 
 export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [contacts, setContacts] = useState<Contact[]>(initialContacts);
-  const [quotes, setQuotes] = useState<Quote[]>(initialQuotes);
-  const [jobs, setJobs] = useState<Job[]>(initialJobs);
-  const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [settings, setSettings] = useState<TradeRatesSettings>(initialSettings);
   const [searchQuery, setSearchQuery] = useState("");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [hydrated, setHydrated] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   // Authentication & Role State
   const [currentUser, setCurrentUser] = useState<UserAccount | null>(null);
@@ -118,6 +131,10 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const currentRole: UserRole = currentUser?.role || "admin";
   const permissions = getRolePermissions(currentRole);
   const isAuthenticated = Boolean(currentUser);
+
+  // Check if any demo IDs exist
+  const DEMO_IDS = ["cnt-001", "cnt-002", "cnt-003", "cnt-004"];
+  const isDemoDataPresent = contacts.some(c => DEMO_IDS.includes(c.id));
 
   // Initialize auth, theme and load from DB
   useEffect(() => {
@@ -145,22 +162,28 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         .then(res => res.json())
         .then(dbData => {
           if (dbData && !dbData.error) {
-            if (dbData.contacts?.length) setContacts(dbData.contacts);
-            if (dbData.quotes?.length) setQuotes(dbData.quotes);
-            if (dbData.jobs?.length) setJobs(dbData.jobs);
-            if (dbData.invoices?.length) setInvoices(dbData.invoices);
+            if (Array.isArray(dbData.contacts)) setContacts(dbData.contacts);
+            if (Array.isArray(dbData.quotes)) setQuotes(dbData.quotes);
+            if (Array.isArray(dbData.jobs)) setJobs(dbData.jobs);
+            if (Array.isArray(dbData.invoices)) setInvoices(dbData.invoices);
             if (dbData.settings) setSettings(dbData.settings);
+          } else {
+            console.warn("API returned error or empty data:", dbData);
           }
         })
         .catch(err => {
-          console.warn("Could not fetch from DB, using defaults:", err);
+          console.warn("Could not fetch from DB, using fallback defaults:", err);
+          setContacts(initialContacts);
+          setQuotes(initialQuotes);
+          setJobs(initialJobs);
+          setInvoices(initialInvoices);
         })
         .finally(() => {
-          setHydrated(true);
+          setDataLoaded(true);
         });
     } catch (e) {
       console.warn("Init error:", e);
-      setHydrated(true);
+      setDataLoaded(true);
       setAuthHydrated(true);
     }
   }, []);
@@ -214,15 +237,23 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Contacts Actions
   const addContact = (contactData: Omit<Contact, "id" | "createdAt" | "whatsappLogs">): Contact => {
+    const randomSuffix = Math.random().toString(36).substring(2, 6);
     const newContact: Contact = {
       ...contactData,
-      id: `cnt-${Date.now().toString().slice(-4)}`,
+      id: `cnt-${Date.now()}-${randomSuffix}`,
       createdAt: new Date().toISOString(),
       whatsappLogs: [
         {
-          id: `wlog-${Date.now()}`,
-          date: new Date().toLocaleString(),
-          author: "PAKMEC",
+          id: `wlog-${Date.now()}-${randomSuffix}`,
+          date: new Date().toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true
+          }),
+          author: currentUser?.name || "PAKMEC",
           text: `Client registered in Multan database. Initial trade tags: ${contactData.tradeTags.join(", ")}`,
           type: "general"
         }
@@ -348,8 +379,9 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const addWhatsAppLog = (contactId: string, text: string, type: WhatsAppLog["type"] = "general") => {
+    const randomSuffix = Math.random().toString(36).substring(2, 6);
     const newLog: WhatsAppLog = {
-      id: `wlog-${Date.now()}`,
+      id: `wlog-${Date.now()}-${randomSuffix}`,
       date: new Date().toLocaleString("en-US", { 
         month: "short", 
         day: "numeric", 
@@ -358,7 +390,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         minute: "numeric", 
         hour12: true 
       }),
-      author: "PAKMEC",
+      author: currentUser?.name || "PAKMEC",
       text: text.trim(),
       type
     };
@@ -369,6 +401,47 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           ...c,
           whatsappLogs: [newLog, ...(c.whatsappLogs || [])]
         };
+        syncToDb("contacts", updated.id, updated, "upsert");
+        return updated;
+      }
+      return c;
+    }));
+  };
+
+  const updateWhatsAppLog = (contactId: string, logId: string, text: string, type: WhatsAppLog["type"] = "general") => {
+    setContacts(prev => prev.map(c => {
+      if (c.id === contactId) {
+        const updatedLogs = (c.whatsappLogs || []).map(l => {
+          if (l.id === logId) {
+            return {
+              ...l,
+              text: text.trim(),
+              type,
+              updatedAt: new Date().toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true
+              })
+            };
+          }
+          return l;
+        });
+        const updated = { ...c, whatsappLogs: updatedLogs };
+        syncToDb("contacts", updated.id, updated, "upsert");
+        return updated;
+      }
+      return c;
+    }));
+  };
+
+  const deleteWhatsAppLog = (contactId: string, logId: string) => {
+    setContacts(prev => prev.map(c => {
+      if (c.id === contactId) {
+        const updatedLogs = (c.whatsappLogs || []).filter(l => l.id !== logId);
+        const updated = { ...c, whatsappLogs: updatedLogs };
         syncToDb("contacts", updated.id, updated, "upsert");
         return updated;
       }
@@ -394,6 +467,65 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     );
 
     return newQuote;
+  };
+
+  const createQuoteWithNewContact = (
+    quoteData: Omit<Quote, "id" | "contactId" | "contactName" | "contactPhone" | "contactCompany">,
+    newContactData: { name: string; phone: string; company?: string; city?: string }
+  ): { quote: Quote; contact: Contact } => {
+    const randomSuffix = Math.random().toString(36).substring(2, 6);
+    const newContact: Contact = {
+      name: newContactData.name.trim(),
+      company: (newContactData.company || "").trim(),
+      phone: newContactData.phone.trim(),
+      email: "",
+      city: (newContactData.city || "Multan").trim(),
+      tradeTags: [quoteData.trade],
+      notes: "Client registered during quote creation.",
+      id: `cnt-${Date.now()}-${randomSuffix}`,
+      createdAt: new Date().toISOString(),
+      whatsappLogs: [
+        {
+          id: `wlog-${Date.now()}-${randomSuffix}`,
+          date: new Date().toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true
+          }),
+          author: currentUser?.name || "PAKMEC",
+          text: `Client registered in Multan database during quote creation. Initial trade: ${quoteData.trade}`,
+          type: "general"
+        }
+      ]
+    };
+
+    setContacts(prev => [newContact, ...prev]);
+    syncToDb("contacts", newContact.id, newContact, "upsert");
+
+    const count = quotes.length + 1;
+    const newQuote: Quote = {
+      ...quoteData,
+      contactId: newContact.id,
+      contactName: newContact.name,
+      contactPhone: newContact.phone,
+      contactCompany: newContact.company,
+      currency: "PKR",
+      id: `QT-2026-${count.toString().padStart(3, "0")}`
+    };
+
+    setQuotes(prev => [newQuote, ...prev]);
+    syncToDb("quotes", newQuote.id, newQuote, "upsert");
+
+    addWhatsAppLog(
+      newContact.id,
+      `Generated initial Quote ${newQuote.id}: "${newQuote.title}" for ${formatCurrency(newQuote.total)} (${newQuote.advancePercent}% advance = ${formatCurrency(newQuote.advanceRequired)}).`,
+      "quote"
+    );
+
+    return { quote: newQuote, contact: newContact };
   };
 
   const updateQuote = (updated: Quote) => {
@@ -443,61 +575,57 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           type: "note",
           url: "",
           notes: `Converted from Quote ${quote.id}. Total: ${formatCurrency(quote.total)}, Advance: ${formatCurrency(advanceAmount)}.`,
-          uploadedBy: "PAKMEC",
+          uploadedBy: currentUser?.name || "PAKMEC",
           uploadedAt: new Date().toLocaleString(),
           tag: "Quote Record"
         }
       ]
     };
 
-    updateQuote({
-      ...quote,
-      status: "approved",
-      convertedToJobId: jobId
-    });
-
     setJobs(prev => [newJob, ...prev]);
     syncToDb("jobs", newJob.id, newJob, "upsert");
 
-    // Generate corresponding invoice
+    // Update Quote status
+    const updatedQuote: Quote = {
+      ...quote,
+      status: "approved",
+      convertedToJobId: jobId
+    };
+    updateQuote(updatedQuote);
+
+    // Auto-generate invoice
     const invCount = invoices.length + 1;
+    const invId = `INV-2026-${invCount.toString().padStart(3, "0")}`;
+
     const newInvoice: Invoice = {
-      id: `INV-2026-${invCount.toString().padStart(3, "0")}`,
-      jobId: newJob.id,
+      id: invId,
+      jobId: jobId,
       quoteId: quote.id,
       contactId: quote.contactId,
       contactName: quote.contactName,
       contactPhone: quote.contactPhone,
       contactCompany: quote.contactCompany,
       date: new Date().toISOString().split("T")[0],
-      dueDate: deadline,
+      dueDate: deadline || quote.validUntil,
       currency: "PKR",
       totalAmount: quote.total,
       advanceDeducted: advanceAmount,
       balancePayable: balanceDue,
-      amountPaid: 0,
-      status: balanceDue <= 0 ? "paid" : "unpaid",
-      lineItems: [
-        {
-          description: `${quote.title} (Quote ${quote.id})`,
-          quantity: 1,
-          unitPrice: quote.total,
-          amount: quote.total
-        },
-        ...(advanceAmount > 0 ? [{
-          description: `Less: Advance Payment Received (${quote.advancePercent}%)`,
-          quantity: 1,
-          unitPrice: -advanceAmount,
-          amount: -advanceAmount
-        }] : [])
-      ],
-      payments: advanceReceived && advanceAmount > 0 ? [{
-        id: `pay-${Date.now()}`,
+      amountPaid: advanceAmount,
+      status: balanceDue === 0 ? "paid" : advanceAmount > 0 ? "partial" : "unpaid",
+      lineItems: quote.lineItems.map(item => ({
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        amount: item.amount
+      })),
+      payments: advanceAmount > 0 ? [{
+        id: `pay-adv-${Date.now()}`,
         date: new Date().toISOString().split("T")[0],
         amount: advanceAmount,
         method: "Bank Transfer",
         referenceNumber: `ADV-${quote.id}`,
-        receivedBy: "PAKMEC",
+        receivedBy: currentUser?.name || "PAKMEC",
         notes: `Initial advance deposit collected at job kickoff (${quote.advancePercent}%)`,
         type: "advance"
       }] : [],
@@ -567,7 +695,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...itemData,
       id: `ref-${Date.now()}`,
       uploadedAt: new Date().toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "numeric", hour12: true }),
-      uploadedBy: "PAKMEC",
+      uploadedBy: currentUser?.name || "PAKMEC",
     };
 
     setJobs(prev => prev.map(j => {
@@ -598,18 +726,15 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const recordJobAdvance = (jobId: string, amount: number, method: PaymentRecord["method"], refNo: string) => {
-    let updatedAdvancePaid = 0;
-    let updatedBalanceDue = 0;
-
     setJobs(prev => prev.map(j => {
       if (j.id === jobId) {
-        updatedAdvancePaid = j.advancePaid + amount;
-        updatedBalanceDue = Math.max(0, j.totalAmount - updatedAdvancePaid);
+        const newAdvance = j.advancePaid + amount;
+        const newBalance = Math.max(0, j.totalAmount - newAdvance);
         const updated: Job = {
           ...j,
-          advancePaid: updatedAdvancePaid,
-          balanceDue: updatedBalanceDue,
-          advanceStatus: updatedBalanceDue <= 0 ? "collected" : "partial"
+          advancePaid: newAdvance,
+          balanceDue: newBalance,
+          advanceStatus: newAdvance >= j.totalAmount ? "collected" : "partial"
         };
         syncToDb("jobs", updated.id, updated, "upsert");
         return updated;
@@ -617,54 +742,33 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return j;
     }));
 
-    // Bidirectionally synchronize the linked Invoice
-    setInvoices(prev => prev.map(inv => {
-      if (inv.jobId === jobId) {
-        const newAdvanceDeducted = (inv.advanceDeducted || 0) + amount;
-        const newBalancePayable = Math.max(0, inv.totalAmount - newAdvanceDeducted);
-        const advanceRecord: PaymentRecord = {
-          id: `pay-${Date.now()}`,
-          date: new Date().toISOString().split("T")[0],
-          amount,
-          method,
-          referenceNumber: refNo || `ADV-${jobId}`,
-          receivedBy: "PAKMEC",
-          notes: `Advance deposit recorded for Job ${jobId}`,
-          type: "advance"
-        };
-        const updatedPayments = [...inv.payments, advanceRecord];
-        const settlements = updatedPayments.filter(p => p.type !== "advance");
-        const settlementsPaid = settlements.reduce((sum, p) => sum + p.amount, 0);
-        const isPaid = (newBalancePayable - settlementsPaid) <= 0;
-
-        const updatedInv: Invoice = {
-          ...inv,
-          advanceDeducted: newAdvanceDeducted,
-          balancePayable: newBalancePayable,
-          payments: updatedPayments,
-          status: isPaid ? "paid" : (settlementsPaid > 0 ? "partial" : "unpaid")
-        };
-        syncToDb("invoices", updatedInv.id, updatedInv, "upsert");
-        return updatedInv;
-      }
-      return inv;
-    }));
+    // If an invoice is linked to this job, also record the advance payment on the invoice
+    const inv = invoices.find(i => i.jobId === jobId);
+    if (inv) {
+      recordInvoicePayment(inv.id, {
+        amount,
+        method,
+        referenceNumber: refNo || `ADV-${jobId}`,
+        notes: `Advance deposit recorded from Job Board (${method})`,
+        type: "advance"
+      });
+    }
 
     const job = jobs.find(j => j.id === jobId);
-    if (job) {
+    if (job && !inv) {
       addWhatsAppLog(
         job.contactId,
-        `Advance deposit of ${formatCurrency(amount)} collected for Job ${job.id} via ${method} (Ref: ${refNo || "N/A"}). Remaining balance: ${formatCurrency(updatedBalanceDue)}.`,
+        `Advance deposit of ${formatCurrency(amount)} recorded for Job ${job.id} via ${method} (Ref: ${refNo}).`,
         "payment"
       );
     }
   };
 
   // Invoices Actions
-  const createInvoice = (invData: Omit<Invoice, "id">): Invoice => {
+  const createInvoice = (invoiceData: Omit<Invoice, "id">): Invoice => {
     const count = invoices.length + 1;
     const newInvoice: Invoice = {
-      ...invData,
+      ...invoiceData,
       currency: "PKR",
       id: `INV-2026-${count.toString().padStart(3, "0")}`
     };
@@ -674,45 +778,34 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateInvoice = (updated: Invoice) => {
-    setInvoices(prev => prev.map(inv => inv.id === updated.id ? updated : inv));
+    setInvoices(prev => prev.map(i => i.id === updated.id ? updated : i));
     syncToDb("invoices", updated.id, updated, "upsert");
   };
 
   const deleteInvoice = (id: string) => {
-    setInvoices(prev => prev.filter(inv => inv.id !== id));
+    setInvoices(prev => prev.filter(i => i.id !== id));
     syncToDb("invoices", id, null, "delete");
   };
 
-  const recordInvoicePayment = (
-    invoiceId: string, 
-    paymentData: Omit<PaymentRecord, "id" | "date" | "receivedBy">
-  ) => {
+  const recordInvoicePayment = (invoiceId: string, paymentData: Omit<PaymentRecord, "id" | "date" | "receivedBy">) => {
     const newPayment: PaymentRecord = {
       ...paymentData,
       id: `pay-${Date.now()}`,
       date: new Date().toISOString().split("T")[0],
-      receivedBy: "PAKMEC",
-      type: "settlement"
+      receivedBy: currentUser?.name || "PAKMEC",
     };
-
-    let targetJobId: string | undefined;
-    let finalRemainingBalance = 0;
 
     setInvoices(prev => prev.map(inv => {
       if (inv.id === invoiceId) {
-        targetJobId = inv.jobId;
-        const newPayments = [...inv.payments, newPayment];
-        const settlements = newPayments.filter(p => p.type !== "advance" && (!p.notes || !p.notes.toLowerCase().includes("advance")));
-        const newAmountPaid = settlements.reduce((sum, p) => sum + p.amount, 0);
-        finalRemainingBalance = Math.max(0, inv.balancePayable - newAmountPaid);
-        const isPaid = finalRemainingBalance <= 0;
-        const status: Invoice["status"] = isPaid ? "paid" : newAmountPaid > 0 ? "partial" : "unpaid";
+        const newAmountPaid = inv.amountPaid + paymentData.amount;
+        const isFullyPaid = newAmountPaid >= inv.totalAmount;
+        const newStatus = isFullyPaid ? "paid" : newAmountPaid > 0 ? "partial" : inv.status;
 
-        const updated = {
+        const updated: Invoice = {
           ...inv,
-          payments: newPayments,
           amountPaid: newAmountPaid,
-          status
+          status: newStatus,
+          payments: [newPayment, ...(inv.payments || [])]
         };
         syncToDb("invoices", updated.id, updated, "upsert");
         return updated;
@@ -720,29 +813,26 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return inv;
     }));
 
-    // Bidirectionally synchronize the linked Job balanceDue
-    if (targetJobId) {
-      const jobIdToUpdate = targetJobId;
-      setJobs(prev => prev.map(j => {
-        if (j.id === jobIdToUpdate) {
-          const updatedJob: Job = {
-            ...j,
-            balanceDue: finalRemainingBalance
-          };
-          syncToDb("jobs", updatedJob.id, updatedJob, "upsert");
-          return updatedJob;
-        }
-        return j;
-      }));
-    }
-
-    const inv = invoices.find(i => i.id === invoiceId);
-    if (inv) {
+    const invoice = invoices.find(i => i.id === invoiceId);
+    if (invoice) {
       addWhatsAppLog(
-        inv.contactId,
-        `Settlement payment of ${formatCurrency(paymentData.amount)} received for Invoice ${inv.id} via ${paymentData.method} (Ref: ${paymentData.referenceNumber || "N/A"}). Remaining balance: ${formatCurrency(finalRemainingBalance)}.`,
+        invoice.contactId,
+        `Payment of ${formatCurrency(paymentData.amount)} received via ${paymentData.method} for Invoice ${invoice.id} (Ref: ${paymentData.referenceNumber}).`,
         "payment"
       );
+
+      // If associated with a job, update job balance
+      if (invoice.jobId) {
+        setJobs(prev => prev.map(j => {
+          if (j.id === invoice.jobId) {
+            const newBal = Math.max(0, j.balanceDue - paymentData.amount);
+            const updatedJob = { ...j, balanceDue: newBal };
+            syncToDb("jobs", updatedJob.id, updatedJob, "upsert");
+            return updatedJob;
+          }
+          return j;
+        }));
+      }
     }
   };
 
@@ -782,13 +872,45 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     syncToDb("settings", "main", newSettings, "upsert");
   };
 
-  const resetToDefaults = () => {
+  const purgeDemoData = async () => {
+    const DEMO_CONTACT_IDS = ["cnt-001", "cnt-002", "cnt-003", "cnt-004"];
+    const DEMO_QUOTE_IDS = ["QT-2026-001", "QT-2026-002", "QT-2026-003"];
+    const DEMO_JOB_IDS = ["JOB-2026-001", "JOB-2026-002", "JOB-2026-003"];
+    const DEMO_INVOICE_IDS = ["INV-2026-001", "INV-2026-002", "INV-2026-003"];
+
+    setContacts(prev => prev.filter(c => !DEMO_CONTACT_IDS.includes(c.id)));
+    setQuotes(prev => prev.filter(q => !DEMO_QUOTE_IDS.includes(q.id)));
+    setJobs(prev => prev.filter(j => !DEMO_JOB_IDS.includes(j.id)));
+    setInvoices(prev => prev.filter(i => !DEMO_INVOICE_IDS.includes(i.id)));
+
+    try {
+      await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "purge_demo" })
+      });
+    } catch (e) {
+      console.warn("Purge demo data API warning:", e);
+    }
+  };
+
+  const resetToDefaults = async () => {
     setContacts(initialContacts);
     setQuotes(initialQuotes);
     setJobs(initialJobs);
     setInvoices(initialInvoices);
     setSettings(initialSettings);
-    localStorage.clear();
+    localStorage.removeItem("pakmec_crm_user");
+    
+    try {
+      await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "reset" })
+      });
+    } catch (e) {
+      console.warn("Reset to defaults API warning:", e);
+    }
   };
 
   return (
@@ -801,6 +923,8 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         settings,
         searchQuery,
         theme,
+        dataLoaded,
+        isDemoDataPresent,
         setSearchQuery,
         toggleTheme,
         addContact,
@@ -809,7 +933,10 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         archiveContact,
         unarchiveContact,
         addWhatsAppLog,
+        updateWhatsAppLog,
+        deleteWhatsAppLog,
         createQuote,
+        createQuoteWithNewContact,
         updateQuote,
         deleteQuote,
         convertQuoteToJob,
@@ -827,6 +954,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         recordInvoicePayment,
         updateSettings,
         resetToDefaults,
+        purgeDemoData,
         formatCurrency,
         currentUser,
         currentRole,

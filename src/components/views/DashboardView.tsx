@@ -24,6 +24,7 @@ import {
 import { useCrm } from "@/context/CrmContext";
 import { JobStage, TradeType } from "@/types";
 import { CurrencyDisplay } from "@/components/ui/CurrencyDisplay";
+import { formatWhatsAppPhone } from "@/components/views/ContactsView";
 
 interface DashboardViewProps {
   onNavigateTab: (tab: string) => void;
@@ -51,17 +52,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const nonArchivedInvoices = invoices.filter(i => !i.isArchived);
   const nonArchivedContacts = contacts.filter(c => !c.isArchived);
 
-  // Total Cash Inflow = Production Advances Collected + Final Settlements Received
-  const totalAdvancesCollected = nonArchivedJobs.reduce((sum, j) => sum + (j.advanceStatus === "collected" ? j.advancePaid : 0), 0);
-  const totalSettlementsCollected = nonArchivedInvoices.reduce((sum, i) => sum + i.amountPaid, 0);
-  const totalRevenuePKR = totalAdvancesCollected + totalSettlementsCollected;
+  // Total Cash Inflow = Verified payments collected across non-archived invoices
+  const totalRevenuePKR = nonArchivedInvoices.reduce((sum, i) => sum + (i.amountPaid || 0), 0);
+  const totalAdvancesCollected = nonArchivedInvoices.reduce((sum, i) => sum + (i.advanceDeducted || 0), 0);
+  const totalSettlementsCollected = Math.max(0, totalRevenuePKR - totalAdvancesCollected);
 
   const activeJobs = nonArchivedJobs.filter(j => j.stage !== "delivered");
   const pendingAdvanceJobs = nonArchivedJobs.filter(j => j.advanceStatus === "pending");
   const urgentJobs = nonArchivedJobs.filter(j => (j.priority === "urgent" || j.priority === "high") && j.stage !== "delivered");
 
   // Outstanding Receivables across all active jobs
-  const totalPendingBalance = nonArchivedJobs.reduce((sum, j) => sum + j.balanceDue, 0);
+  const totalPendingBalance = nonArchivedJobs.reduce((sum, j) => sum + (j.balanceDue || 0), 0);
 
   // Trade volume breakdown
   const trades: { name: TradeType; count: number; color: string }[] = [
@@ -83,10 +84,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     { day: "Sun", count: 2, height: "25%" },
   ];
 
-  // Collect latest WhatsApp logs across contacts
+  // Collect latest WhatsApp logs across contacts safely
   const recentLogs = nonArchivedContacts
     .flatMap(c => (c.whatsappLogs || []).map(l => ({ ...l, contactName: c.name, contactPhone: c.phone, contactId: c.id })))
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .sort((a, b) => {
+      const timeA = new Date(a.date).getTime() || 0;
+      const timeB = new Date(b.date).getTime() || 0;
+      return timeB - timeA;
+    })
     .slice(0, 5);
 
   return (
@@ -186,7 +191,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     Financial Settlement Telemetry
                   </span>
                   <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-[#0c1c14] text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 font-bold">
-                    SQLite Verified
+                    Database Synced
                   </span>
                 </div>
                 <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-[#171b26] border border-slate-200 dark:border-[#242938] flex items-center justify-center text-emerald-600 dark:text-emerald-400">
@@ -486,7 +491,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <div className="flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400 pt-1.5 border-t border-slate-100 dark:border-zinc-800/50">
                     <span className="font-mono">By {log.author}</span>
                     <a
-                      href={`https://wa.me/${log.contactPhone.replace(/[^0-9]/g, "")}`}
+                      href={`https://wa.me/${formatWhatsAppPhone(log.contactPhone)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 font-mono font-semibold"
