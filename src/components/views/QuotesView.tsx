@@ -1395,9 +1395,38 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       ) : (
         /* Saved Quotes View */
         <div className="space-y-4">
+          {/* Mobile View Switcher Tab */}
+          <div className="lg:hidden flex items-center gap-2 p-1 rounded-xl bg-slate-100 dark:bg-[#12141c] border-2 border-slate-200 dark:border-zinc-800 text-xs no-print">
+            <button
+              type="button"
+              onClick={() => setQuotesMobileTab("list")}
+              className={`flex-1 py-2 px-3 rounded-lg transition-all font-bold min-h-[40px] flex items-center justify-center gap-1.5 touch-manipulation ${
+                quotesMobileTab === "list"
+                  ? "bg-[#fe7518] text-slate-950 font-black shadow-xs"
+                  : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white"
+              }`}
+            >
+              <Calculator className="w-4 h-4" />
+              <span>Quotes List ({filteredQuotes.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setQuotesMobileTab("preview")}
+              disabled={!selectedQuoteForPreview}
+              className={`flex-1 py-2 px-3 rounded-lg transition-all font-bold min-h-[40px] flex items-center justify-center gap-1.5 touch-manipulation disabled:opacity-40 ${
+                quotesMobileTab === "preview"
+                  ? "bg-[#fe7518] text-slate-950 font-black shadow-xs"
+                  : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white"
+              }`}
+            >
+              <Printer className="w-4 h-4" />
+              <span>Quotation Sheet</span>
+            </button>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Quotes List (4 Cols) */}
-            <div className="lg:col-span-4 space-y-3 no-print">
+            <div className={`lg:col-span-4 space-y-3 no-print ${quotesMobileTab === "preview" ? "hidden lg:block" : "block"}`}>
               {/* Search & Status Filters */}
               <div className="space-y-2.5">
                 <div className="relative">
@@ -1564,11 +1593,19 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             </div>
 
             {/* Branded Quotation Preview (8 Cols) */}
-            <div className="lg:col-span-8">
+            <div className={`lg:col-span-8 ${quotesMobileTab === "list" ? "hidden lg:block" : "block"}`}>
               {selectedQuoteForPreview ? (
                 <div className="space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print bg-white dark:bg-[#12141c] p-4 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => setQuotesMobileTab("list")}
+                        className="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-zinc-100 text-xs font-bold border border-slate-300 dark:border-zinc-700 btn-haptic"
+                      >
+                        <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+                        <span>Quotes List</span>
+                      </button>
                       <span className="text-xs text-slate-600 dark:text-zinc-400 font-bold">Previewing:</span>
                       <strong className="text-slate-950 dark:text-white font-mono text-sm">{selectedQuoteForPreview.id}</strong>
                     </div>
@@ -1618,7 +1655,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   {/* Isolated Printable Quotation */}
                   <div 
                     id="quotation-print-area"
-                    className="printable-document bg-white text-black p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-200 print-surface font-sans space-y-8 min-h-[750px]"
+                    className="printable-document bg-white text-black p-4 sm:p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-200 print-surface font-sans space-y-8 min-h-[750px] overflow-x-auto"
                   >
                     <div className="print-header flex items-start justify-between border-b-2 border-black pb-5 gap-4">
                       <div className="space-y-1">

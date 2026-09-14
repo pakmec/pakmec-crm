@@ -338,7 +338,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
               {/* Printable Invoice Document (with #invoice-print-area) */}
               <div 
                 id="invoice-print-area"
-                className="printable-document bg-white text-black p-8 sm:p-10 rounded-xl shadow-2xl border border-gray-200 print-surface font-sans space-y-8 min-h-[750px]"
+                className="printable-document bg-white text-black p-4 sm:p-8 sm:p-10 rounded-xl shadow-2xl border border-gray-200 print-surface font-sans space-y-8 min-h-[750px] overflow-x-auto"
               >
                 {/* Header */}
                 <div className="print-header flex items-start justify-between border-b-2 border-black pb-5 gap-4">
