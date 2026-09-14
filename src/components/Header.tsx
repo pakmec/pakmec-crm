@@ -3,7 +3,6 @@
 import React from "react";
 import { 
   Search, 
-  Calculator, 
   Clock, 
   Plus,
   Sun,
@@ -142,17 +141,6 @@ export const Header: React.FC<HeaderProps> = ({
             <Moon className="w-4 h-4 text-slate-700" />
           )}
         </button>
-
-        {/* Streamlined Primary Action Button */}
-        {permissions.canCreateQuotes && (
-          <button
-            onClick={onOpenNewQuote}
-            className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2 px-3.5 rounded-lg shadow-sm border border-[#e56208] btn-haptic"
-          >
-            <Calculator className="w-3.5 h-3.5" />
-            <span>Auto-Quote</span>
-          </button>
-        )}
       </div>
     </header>
   );

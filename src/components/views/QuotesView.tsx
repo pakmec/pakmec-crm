@@ -129,6 +129,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
   // Edit Quote Modal State
   const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
+  const [quoteToDelete, setQuoteToDelete] = useState<Quote | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editTrade, setEditTrade] = useState<TradeType>("CNC Machining");
   const [editLineItems, setEditLineItems] = useState<QuoteLineItem[]>([]);
@@ -576,6 +577,19 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
     setEditingQuote(null);
   };
 
+  const handleConfirmDeleteQuote = () => {
+    if (!quoteToDelete) return;
+    deleteQuote(quoteToDelete.id);
+    if (selectedQuoteForPreview?.id === quoteToDelete.id) {
+      const remaining = activeQuotes.filter(q => q.id !== quoteToDelete.id);
+      setSelectedQuoteForPreview(remaining[0] || null);
+    }
+    if (editingQuote?.id === quoteToDelete.id) {
+      setEditingQuote(null);
+    }
+    setQuoteToDelete(null);
+  };
+
   const handleOpenConvertModal = (quote: Quote) => {
     setConvertModalQuote(quote);
     setConvertDeadline(quote.validUntil);
@@ -605,31 +619,31 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto font-sans">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-5 no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-slate-200 dark:border-zinc-800 pb-5 no-print">
         <div>
           <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100 flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 dark:text-zinc-100 flex items-center gap-2">
               <Calculator className="w-5 h-5 text-[#fe7518]" />
               <span>Precision Auto-Quoter</span>
             </h1>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300">
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700">
               Multan Workshop (PKR)
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-400 mt-1 font-medium">
             Calculate instant manufacturing estimates for walk-in leads or registered clients.
           </p>
         </div>
 
         {/* View Switcher Tabs */}
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="w-full sm:w-auto bg-slate-100 dark:bg-[#161822] p-1 rounded-xl flex items-center gap-1 text-xs font-semibold">
+          <div className="w-full sm:w-auto bg-slate-100 dark:bg-[#161822] p-1.5 rounded-xl flex items-center gap-1.5 text-xs font-bold border-2 border-slate-200 dark:border-zinc-800">
             <button
               onClick={() => setActiveTab("generator")}
               className={`flex-1 sm:flex-initial px-4 py-2 rounded-lg transition-all ${
                 activeTab === "generator" 
-                  ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs" 
-                  : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                  ? "bg-[#fe7518] text-slate-950 font-black shadow-sm" 
+                  : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white"
               }`}
             >
               Quoter Generator
@@ -638,8 +652,8 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
               onClick={() => setActiveTab("list")}
               className={`flex-1 sm:flex-initial px-4 py-2 rounded-lg transition-all ${
                 activeTab === "list" 
-                  ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs" 
-                  : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                  ? "bg-[#fe7518] text-slate-950 font-black shadow-sm" 
+                  : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white"
               }`}
             >
               Saved Quotes ({activeQuotes.length})
@@ -653,22 +667,73 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           {/* Left Form: Step 1, 2, 3 */}
           <div className="lg:col-span-7 space-y-6">
             {/* Step 1: Select Manufacturing Domain */}
-            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
-              <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
-                <span className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2.5">
-                  <span className="w-6 h-6 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center text-xs font-black">1</span>
-                  <span>STEP 1: SELECT MANUFACTURING DOMAIN</span>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-300 dark:border-zinc-700 space-y-5 shadow-sm">
+              <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-zinc-800 pb-3.5">
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-xl bg-slate-950 text-white dark:bg-[#fe7518] dark:text-slate-950 flex items-center justify-center text-sm font-black shadow-xs ring-2 ring-slate-900/10 dark:ring-orange-500/20">
+                    1
+                  </span>
+                  <div>
+                    <h2 className="text-sm sm:text-base font-black tracking-wide text-slate-950 dark:text-white uppercase">
+                      STEP 1: SELECT MANUFACTURING DOMAIN
+                    </h2>
+                    <p className="text-xs text-slate-600 dark:text-zinc-400 font-medium">
+                      Choose trade to load instant Multan workshop engineering rates
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-black px-3 py-1 rounded-lg bg-orange-100 dark:bg-orange-950/70 text-orange-900 dark:text-orange-300 border-2 border-orange-300 dark:border-orange-700 uppercase tracking-wider shrink-0">
+                  PKR Engine
                 </span>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-orange-100 dark:bg-orange-950/60 text-orange-900 dark:text-orange-300 border border-orange-300 dark:border-orange-700">PKR Currency Engine</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
-                  { name: "3D Printing", icon: Layers, desc: "FDM & SLA Resin" },
-                  { name: "Laser Cutting", icon: Flame, desc: "Acrylic, MDF & Sheet" },
-                  { name: "CNC Machining", icon: Cpu, desc: "6061 Billet & Brass" },
-                  { name: "CAD Design", icon: Compass, desc: "SolidWorks & Drawings" },
-                  { name: "Industrial Fabrication", icon: Building2, desc: "Structural & Sheds" },
+                  { 
+                    name: "3D Printing", 
+                    icon: Layers, 
+                    desc: "FDM & SLA Resin",
+                    badge: "Additive",
+                    activeStyle: "bg-orange-50/90 dark:bg-orange-950/30 border-[#fe7518] ring-2 ring-[#fe7518]/40",
+                    activeIcon: "text-[#fe7518]",
+                    activeTitle: "text-[#fe7518]"
+                  },
+                  { 
+                    name: "Laser Cutting", 
+                    icon: Flame, 
+                    desc: "Acrylic, MDF & Sheet",
+                    badge: "Vector CNC",
+                    activeStyle: "bg-rose-50/90 dark:bg-rose-950/30 border-rose-500 ring-2 ring-rose-500/40",
+                    activeIcon: "text-rose-600 dark:text-rose-400",
+                    activeTitle: "text-rose-700 dark:text-rose-300"
+                  },
+                  { 
+                    name: "CNC Machining", 
+                    icon: Cpu, 
+                    desc: "6061 Billet & Brass",
+                    badge: "Subtractive",
+                    activeStyle: "bg-sky-50/90 dark:bg-sky-950/30 border-sky-500 ring-2 ring-sky-500/40",
+                    activeIcon: "text-sky-600 dark:text-sky-400",
+                    activeTitle: "text-sky-700 dark:text-sky-300"
+                  },
+                  { 
+                    name: "CAD Design", 
+                    icon: Compass, 
+                    desc: "SolidWorks & Drawings",
+                    badge: "Engineering",
+                    activeStyle: "bg-violet-50/90 dark:bg-violet-950/30 border-violet-500 ring-2 ring-violet-500/40",
+                    activeIcon: "text-violet-600 dark:text-violet-400",
+                    activeTitle: "text-violet-700 dark:text-violet-300"
+                  },
+                  { 
+                    name: "Industrial Fabrication", 
+                    icon: Building2, 
+                    desc: "Structural & Sheds",
+                    badge: "Heavy Fab",
+                    activeStyle: "bg-emerald-50/90 dark:bg-emerald-950/30 border-emerald-500 ring-2 ring-emerald-500/40",
+                    activeIcon: "text-emerald-600 dark:text-emerald-400",
+                    activeTitle: "text-emerald-700 dark:text-emerald-300"
+                  },
                 ].map((t) => {
                   const Icon = t.icon;
                   const isSelected = selectedTrade === t.name;
@@ -677,16 +742,33 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       key={t.name}
                       type="button"
                       onClick={() => setSelectedTrade(t.name as TradeType)}
-                      className={`p-3.5 rounded-xl border-2 text-left transition-all flex flex-col justify-between ${
+                      className={`p-4 rounded-xl border-2 text-left transition-all flex flex-col justify-between relative overflow-hidden ${
                         isSelected 
-                          ? "bg-orange-50/80 dark:bg-[#1f2433] border-[#fe7518] shadow-sm ring-2 ring-[#fe7518]/40" 
-                          : "bg-slate-50/60 dark:bg-[#161822] border-slate-300 dark:border-zinc-700 hover:border-slate-500 dark:hover:border-zinc-500 hover:bg-white dark:hover:bg-[#1a1d28]"
+                          ? `${t.activeStyle} shadow-sm` 
+                          : "bg-slate-50/70 dark:bg-[#151824] border-slate-300 dark:border-zinc-700 hover:border-slate-500 dark:hover:border-zinc-500 hover:bg-white dark:hover:bg-[#1a1d2d]"
                       }`}
                     >
-                      <Icon className={`w-6 h-6 mb-2.5 ${isSelected ? "text-[#fe7518]" : "text-slate-700 dark:text-zinc-300"}`} />
+                      <div className="flex items-center justify-between mb-3">
+                        <div className={`p-2 rounded-lg ${isSelected ? "bg-white dark:bg-[#12141c] shadow-xs" : "bg-white dark:bg-zinc-800"}`}>
+                          <Icon className={`w-5 h-5 ${isSelected ? t.activeIcon : "text-slate-700 dark:text-zinc-300"}`} />
+                        </div>
+                        {isSelected ? (
+                          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 shadow-xs">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400">
+                            {t.badge}
+                          </span>
+                        )}
+                      </div>
                       <div>
-                        <div className="text-sm font-extrabold text-slate-950 dark:text-white">{t.name}</div>
-                        <div className="text-xs font-semibold text-slate-600 dark:text-zinc-400 mt-0.5">{t.desc}</div>
+                        <div className={`text-sm font-black leading-tight ${isSelected ? t.activeTitle : "text-slate-950 dark:text-white"}`}>
+                          {t.name}
+                        </div>
+                        <div className="text-xs font-semibold text-slate-600 dark:text-zinc-400 mt-1">
+                          {t.desc}
+                        </div>
                       </div>
                     </button>
                   );
@@ -695,13 +777,24 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             </div>
 
             {/* Step 2: Technical Parameters */}
-            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
-              <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
-                <span className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2.5">
-                  <span className="w-6 h-6 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center text-xs font-black">2</span>
-                  <span>STEP 2: {selectedTrade.toUpperCase()} CALCULATION PARAMETERS</span>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-300 dark:border-zinc-700 space-y-5 shadow-sm">
+              <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-zinc-800 pb-3.5">
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-xl bg-slate-950 text-white dark:bg-[#fe7518] dark:text-slate-950 flex items-center justify-center text-sm font-black shadow-xs ring-2 ring-slate-900/10 dark:ring-orange-500/20">
+                    2
+                  </span>
+                  <div>
+                    <h2 className="text-sm sm:text-base font-black tracking-wide text-slate-950 dark:text-white uppercase">
+                      STEP 2: {selectedTrade.toUpperCase()} CALCULATION PARAMETERS
+                    </h2>
+                    <p className="text-xs text-slate-600 dark:text-zinc-400 font-medium">
+                      Configure stock envelope, machine run hours, and workshop finishing
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-black px-3 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-950/70 text-emerald-900 dark:text-emerald-300 border-2 border-emerald-300 dark:border-emerald-700 uppercase tracking-wider shrink-0">
+                  Live Rates
                 </span>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">All in PKR</span>
               </div>
 
               {/* 3D Printing Fields */}
@@ -963,22 +1056,31 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             </div>
 
             {/* Step 3: Client & Commercial Terms */}
-            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
-                <span className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2.5">
-                  <span className="w-6 h-6 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center text-xs font-black">3</span>
-                  <span>STEP 3: CLIENT & ADVANCE TERMS</span>
-                </span>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-300 dark:border-zinc-700 space-y-5 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-slate-200 dark:border-zinc-800 pb-3.5">
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-xl bg-slate-950 text-white dark:bg-[#fe7518] dark:text-slate-950 flex items-center justify-center text-sm font-black shadow-xs ring-2 ring-slate-900/10 dark:ring-orange-500/20">
+                    3
+                  </span>
+                  <div>
+                    <h2 className="text-sm sm:text-base font-black tracking-wide text-slate-950 dark:text-white uppercase">
+                      STEP 3: CLIENT & COMMERCIAL TERMS
+                    </h2>
+                    <p className="text-xs text-slate-600 dark:text-zinc-400 font-medium">
+                      Assign registered client or walk-in lead and configure deposit terms
+                    </p>
+                  </div>
+                </div>
                 
                 {/* Segmented Client Toggle */}
-                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#161822] border border-slate-300 dark:border-zinc-700 text-xs font-bold">
+                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#161822] border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold shrink-0">
                   <button
                     type="button"
                     onClick={() => setClientMode("existing")}
                     className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 ${
                       clientMode === "existing"
-                        ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950 shadow-sm font-bold"
-                        : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 font-semibold"
+                        ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950 shadow-sm font-black"
+                        : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 font-bold"
                     }`}
                   >
                     <Users className="w-4 h-4 text-[#fe7518]" />
@@ -989,12 +1091,12 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     onClick={() => setClientMode("walkin")}
                     className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 ${
                       clientMode === "walkin"
-                        ? "bg-[#fe7518] text-slate-950 shadow-sm font-bold"
-                        : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 font-semibold"
+                        ? "bg-[#fe7518] text-slate-950 shadow-sm font-black"
+                        : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 font-bold"
                     }`}
                   >
                     <UserPlus className="w-4 h-4" />
-                    <span>+ Walk-in / Direct Lead</span>
+                    <span>+ Walk-in Lead</span>
                   </button>
                 </div>
               </div>
@@ -1184,13 +1286,22 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
           {/* Right Live Estimate & Issue (Sticky 5 Cols) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white dark:bg-[#12141c] rounded-2xl border-2 border-slate-200 dark:border-zinc-800 p-6 space-y-5 sticky top-20 shadow-xs">
-              <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
-                <span className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center text-xs font-black">4</span>
-                  <span>STEP 4: LIVE ESTIMATE BREAKDOWN</span>
-                </span>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-orange-100 dark:bg-orange-950/60 text-orange-900 dark:text-orange-300 border border-orange-300 dark:border-orange-700">
+            <div className="bg-white dark:bg-[#12141c] rounded-2xl border-2 border-slate-300 dark:border-zinc-700 p-6 space-y-5 sticky top-20 shadow-md">
+              <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-zinc-800 pb-3.5">
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-xl bg-slate-950 text-white dark:bg-[#fe7518] dark:text-slate-950 flex items-center justify-center text-sm font-black shadow-xs ring-2 ring-slate-900/10 dark:ring-orange-500/20">
+                    4
+                  </span>
+                  <div>
+                    <h2 className="text-sm sm:text-base font-black tracking-wide text-slate-950 dark:text-white uppercase">
+                      STEP 4: LIVE ESTIMATE BREAKDOWN
+                    </h2>
+                    <p className="text-xs text-slate-600 dark:text-zinc-400 font-medium">
+                      Real-time automated line items & totals
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-orange-100 dark:bg-orange-950/70 text-orange-900 dark:text-orange-300 border-2 border-orange-300 dark:border-orange-700 uppercase tracking-wider shrink-0">
                   {lineItems.length} items
                 </span>
               </div>
@@ -1198,14 +1309,14 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
               {/* Itemized Table */}
               <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
                 {lineItems.map((item, idx) => (
-                  <div key={item.id || idx} className="p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-300 dark:border-zinc-700 space-y-1">
+                  <div key={item.id || idx} className="p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-700 space-y-1">
                     <div className="flex items-start justify-between gap-2 text-xs sm:text-sm">
                       <span className="text-slate-950 dark:text-zinc-100 font-bold leading-tight">{item.description}</span>
-                      <span className="font-extrabold text-slate-950 dark:text-white shrink-0 tabular-nums">
+                      <span className="font-black text-slate-950 dark:text-white shrink-0 tabular-nums">
                         {formatCurrency(item.amount)}
                       </span>
                     </div>
-                    <div className="text-xs text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 font-medium">
+                    <div className="text-xs text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 font-semibold">
                       <span>{item.quantity} {item.unit} @ {formatCurrency(item.unitPrice)}/{item.unit}</span>
                       <span className="text-[#fe7518] font-bold">{item.trade}</span>
                     </div>
@@ -1215,7 +1326,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
               {/* Price Summary Breakdown */}
               <div className="p-5 rounded-xl bg-slate-50 dark:bg-[#0c0d12] border-2 border-slate-200 dark:border-zinc-800 space-y-3 text-sm">
-                <div className="flex items-center justify-between text-slate-700 dark:text-zinc-300 font-semibold">
+                <div className="flex items-center justify-between text-slate-700 dark:text-zinc-300 font-bold">
                   <span>Subtotal Calculated:</span>
                   <CurrencyDisplay amount={subtotal} size="sm" />
                 </div>
@@ -1230,7 +1341,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   <CurrencyDisplay amount={total} size="lg" numberColor="text-[#fe7518]" />
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-[#151824] border-2 border-slate-300 dark:border-zinc-700 flex items-center justify-between text-xs sm:text-sm font-bold">
+                <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-[#151824] border-2 border-slate-300 dark:border-zinc-700 flex items-center justify-between text-xs sm:text-sm font-black">
                   <span className="text-slate-900 dark:text-zinc-100">Advance Deposit ({calculatedAdvancePercent}%):</span>
                   <CurrencyDisplay amount={advanceRequired} size="sm" numberColor="text-emerald-700 dark:text-emerald-400" />
                 </div>
@@ -1260,7 +1371,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
               <div className="space-y-3 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1">
                 {activeQuotes.length === 0 ? (
-                  <div className="p-6 text-center bg-white dark:bg-[#12141c] rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-2">
+                  <div className="p-6 text-center bg-white dark:bg-[#12141c] rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-2">
                     <FileText className="w-6 h-6 text-slate-400 mx-auto" />
                     <h3 className="text-xs font-bold text-slate-900 dark:text-zinc-100">No Quotations Generated</h3>
                     <p className="text-xs text-slate-500 dark:text-zinc-400">
@@ -1278,16 +1389,16 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                           setSelectedQuoteForPreview(q);
                           setQuotesMobileTab("preview");
                         }}
-                        className={`p-4 rounded-xl border transition-all cursor-pointer space-y-2 ${
+                        className={`p-4 rounded-xl border-2 transition-all cursor-pointer space-y-2.5 ${
                           isSelected 
-                            ? "bg-white dark:bg-[#1c202d] border-[#fe7518] shadow-xs ring-1 ring-[#fe7518]/40" 
-                            : "bg-white dark:bg-[#12141c] border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-[#161822]"
+                            ? "bg-white dark:bg-[#1c202d] border-[#fe7518] shadow-sm ring-2 ring-[#fe7518]/40" 
+                            : "bg-white dark:bg-[#12141c] border-slate-200 dark:border-zinc-800 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-[#161822]"
                         }`}
                       >
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold text-[#fe7518] font-mono">{q.id}</span>
+                          <span className="text-xs font-black text-[#fe7518] font-mono tracking-wider">{q.id}</span>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] uppercase font-semibold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                            <span className="text-[11px] uppercase font-bold px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
                               {q.status}
                             </span>
                             <button
@@ -1296,46 +1407,73 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                                 e.stopPropagation();
                                 handleOpenEditModal(q);
                               }}
-                              className="p-1 rounded text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                              className="p-1 rounded-lg text-slate-600 hover:text-slate-950 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
                               title="Edit Quotation"
+                              aria-label="Edit Quotation"
                             >
                               <Edit className="w-3.5 h-3.5 text-[#fe7518]" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setQuoteToDelete(q);
+                              }}
+                              className="p-1 rounded-lg text-rose-600 hover:text-rose-800 dark:text-rose-400 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                              title="Delete Quotation"
+                              aria-label="Delete Quotation"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         </div>
 
-                        <div className="text-sm font-bold text-slate-900 dark:text-zinc-100 truncate">
+                        <div className="text-sm font-black text-slate-950 dark:text-zinc-100 truncate">
                           {q.title}
                         </div>
 
-                        <div className="text-xs text-slate-600 dark:text-zinc-400 flex items-center justify-between font-medium">
+                        <div className="text-xs text-slate-700 dark:text-zinc-300 flex items-center justify-between font-bold">
                           <span>{q.contactName}</span>
                           <CurrencyDisplay amount={q.total} size="sm" color="orange" />
                         </div>
 
                         {q.convertedToJobId ? (
-                          <div className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 pt-1 border-t border-slate-100 dark:border-zinc-800 font-semibold">
+                          <div className="text-xs text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5 pt-1 border-t border-slate-200 dark:border-zinc-800 font-bold">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>Converted to {q.convertedToJobId}</span>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-zinc-800">
+                          <div className="flex items-center gap-2 pt-2 border-t border-slate-200 dark:border-zinc-800">
                             <button
+                              type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleOpenEditModal(q);
                               }}
-                              className="flex-1 py-1.5 px-2.5 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-200 text-xs font-semibold transition-all flex items-center justify-center gap-1"
+                              className="py-1.5 px-2.5 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-zinc-100 text-xs font-bold transition-all flex items-center justify-center gap-1 border border-slate-300 dark:border-zinc-700"
                             >
                               <Edit className="w-3.5 h-3.5 text-[#fe7518]" />
                               <span>Edit</span>
                             </button>
                             <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setQuoteToDelete(q);
+                              }}
+                              className="py-1.5 px-2 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 text-xs font-bold transition-all flex items-center justify-center gap-1 border border-rose-300 dark:border-rose-800"
+                              title="Delete Quotation"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>Delete</span>
+                            </button>
+                            <button
+                              type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleOpenConvertModal(q);
                               }}
-                              className="flex-1 py-1.5 px-2.5 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold transition-all flex items-center justify-center gap-1"
+                              className="flex-1 py-1.5 px-2.5 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-black transition-all flex items-center justify-center gap-1 shadow-xs"
                             >
                               <span>Start Job</span>
                               <ArrowRight className="w-3.5 h-3.5" />
@@ -1353,24 +1491,36 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             <div className="lg:col-span-8">
               {selectedQuoteForPreview ? (
                 <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print bg-white dark:bg-[#12141c] p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print bg-white dark:bg-[#12141c] p-4 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-500 dark:text-zinc-400">Previewing:</span>
-                      <strong className="text-slate-900 dark:text-white font-mono text-sm">{selectedQuoteForPreview.id}</strong>
+                      <span className="text-xs text-slate-600 dark:text-zinc-400 font-bold">Previewing:</span>
+                      <strong className="text-slate-950 dark:text-white font-mono text-sm">{selectedQuoteForPreview.id}</strong>
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap">
                       <button
+                        type="button"
                         onClick={() => handleOpenEditModal(selectedQuoteForPreview)}
-                        className="flex items-center gap-1.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-200 text-xs font-semibold py-2 px-3.5 rounded-xl btn-haptic"
+                        className="flex items-center gap-1.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-zinc-100 text-xs font-bold py-2 px-3.5 rounded-xl border border-slate-300 dark:border-zinc-700 btn-haptic"
                       >
                         <Edit className="w-3.5 h-3.5 text-[#fe7518]" />
                         <span>Edit Quote</span>
                       </button>
 
                       <button
+                        type="button"
+                        onClick={() => setQuoteToDelete(selectedQuoteForPreview)}
+                        className="flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 text-xs font-bold py-2 px-3.5 rounded-xl border-2 border-rose-300 dark:border-rose-800 btn-haptic"
+                        title="Delete Quotation"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Delete</span>
+                      </button>
+
+                      <button
+                        type="button"
                         onClick={handlePrint}
-                        className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2 px-4 rounded-xl shadow-xs border border-[#e56208] btn-haptic"
+                        className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-black py-2 px-4 rounded-xl shadow-xs border border-[#e56208] btn-haptic"
                       >
                         <Printer className="w-4 h-4" />
                         <span>Print Quotation</span>
@@ -1378,8 +1528,9 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
                       {!selectedQuoteForPreview.convertedToJobId && (
                         <button
+                          type="button"
                           onClick={() => handleOpenConvertModal(selectedQuoteForPreview)}
-                          className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 px-4 rounded-xl btn-haptic"
+                          className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black py-2 px-4 rounded-xl btn-haptic shadow-sm"
                         >
                           <CheckCircle2 className="w-4 h-4" />
                           <span>Start Production</span>
@@ -1536,7 +1687,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       {/* Edit Quotation Modal */}
       {editingQuote && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print overflow-y-auto">
-          <div className="bg-white dark:bg-[#12141c] border border-slate-300 dark:border-zinc-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8">
+          <div className="bg-white dark:bg-[#12141c] border-2 border-slate-300 dark:border-zinc-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8">
             <div className="border-b-2 border-slate-200 dark:border-zinc-800 pb-3 flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
@@ -1698,20 +1849,35 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
+              <div className="flex items-center justify-between gap-2 pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
                 <button
                   type="button"
-                  onClick={() => setEditingQuote(null)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold text-xs hover:bg-slate-200"
+                  onClick={() => {
+                    const q = editingQuote;
+                    setEditingQuote(null);
+                    setQuoteToDelete(q);
+                  }}
+                  className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/50 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 border-2 border-rose-300 dark:border-rose-800 font-bold text-xs btn-haptic"
                 >
-                  Cancel
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete Quote</span>
                 </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black text-xs shadow-xs btn-haptic"
-                >
-                  Save Changes to Quote
-                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditingQuote(null)}
+                    className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold text-xs hover:bg-slate-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black text-xs shadow-xs btn-haptic"
+                  >
+                    Save Changes to Quote
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -1785,6 +1951,48 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                 className="px-5 py-2.5 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black text-xs shadow-xs btn-haptic"
               >
                 Start Production Job
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Quote Confirmation Modal */}
+      {quoteToDelete && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print">
+          <div className="bg-white dark:bg-[#12141c] border-2 border-rose-300 dark:border-rose-900 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-black text-slate-950 dark:text-white">
+                  Delete Quotation {quoteToDelete.id}?
+                </h3>
+                <p className="text-xs font-semibold text-slate-600 dark:text-zinc-400">
+                  {quoteToDelete.contactName} • {formatCurrency(quoteToDelete.total)}
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs font-medium text-slate-700 dark:text-zinc-300 leading-relaxed bg-slate-50 dark:bg-[#181a24] p-3 rounded-xl border border-slate-200 dark:border-zinc-800">
+              This will permanently remove quotation <strong className="font-mono text-slate-950 dark:text-white">{quoteToDelete.id}</strong> ({quoteToDelete.title}). This action cannot be undone.
+            </p>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t-2 border-slate-200 dark:border-zinc-800">
+              <button
+                type="button"
+                onClick={() => setQuoteToDelete(null)}
+                className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 text-xs font-bold hover:bg-slate-200"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDeleteQuote}
+                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-sm btn-haptic"
+              >
+                Delete Quotation
               </button>
             </div>
           </div>

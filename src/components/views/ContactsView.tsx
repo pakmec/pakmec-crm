@@ -532,25 +532,54 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
               {permissions.canDeleteOrArchive && (
                 <>
                   {!activeContact.isArchived ? (
-                    <button
-                      onClick={() => {
-                        setActionTargetContact(activeContact);
-                        setConfirmAction("archive");
-                        setIsConfirmModalOpen(true);
-                      }}
-                      title="Archive Client"
-                      className="p-2 rounded-xl text-slate-700 hover:text-amber-700 dark:text-zinc-300 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors btn-haptic border-2 border-slate-300 dark:border-zinc-700"
-                    >
-                      <Archive className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          setActionTargetContact(activeContact);
+                          setConfirmAction("archive");
+                          setIsConfirmModalOpen(true);
+                        }}
+                        title="Archive Client"
+                        aria-label="Archive Client"
+                        className="p-2 rounded-xl text-slate-700 hover:text-amber-700 dark:text-zinc-300 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors btn-haptic border-2 border-slate-300 dark:border-zinc-700"
+                      >
+                        <Archive className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setActionTargetContact(activeContact);
+                          setConfirmAction("delete");
+                          setIsConfirmModalOpen(true);
+                        }}
+                        title="Delete Client"
+                        aria-label="Delete Client"
+                        className="p-2 rounded-xl text-rose-600 hover:text-rose-800 dark:text-rose-400 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors btn-haptic border-2 border-rose-300 dark:border-rose-800"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   ) : (
-                    <button
-                      onClick={() => unarchiveContact(activeContact.id)}
-                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow-sm btn-haptic"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5" />
-                      <span>Restore Client</span>
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => unarchiveContact(activeContact.id)}
+                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow-sm btn-haptic"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Restore Client</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setActionTargetContact(activeContact);
+                          setConfirmAction("delete");
+                          setIsConfirmModalOpen(true);
+                        }}
+                        title="Delete Client Permanently"
+                        aria-label="Delete Client Permanently"
+                        className="p-2 rounded-xl text-rose-600 hover:text-rose-800 dark:text-rose-400 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors btn-haptic border-2 border-rose-300 dark:border-rose-800"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   )}
                 </>
               )}
@@ -1002,20 +1031,41 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-zinc-800">
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-semibold"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-bold shadow-xs btn-haptic"
-                >
-                  Save Changes
-                </button>
+              <div className="flex items-center justify-between gap-2 pt-3 border-t border-slate-200 dark:border-zinc-800">
+                {permissions.canDeleteOrArchive && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const c = activeContact;
+                      setIsEditModalOpen(false);
+                      if (c) {
+                        setActionTargetContact(c);
+                        setConfirmAction("delete");
+                        setIsConfirmModalOpen(true);
+                      }
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-800 hover:bg-rose-100 font-bold text-xs btn-haptic"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete Client</span>
+                  </button>
+                )}
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-semibold"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-bold shadow-xs btn-haptic"
+                  >
+                    Save Changes
+                  </button>
+                </div>
               </div>
             </form>
           </div>

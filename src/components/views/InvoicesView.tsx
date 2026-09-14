@@ -9,7 +9,8 @@ import {
   Search, 
   Clock, 
   ExternalLink,
-  ChevronLeft
+  ChevronLeft,
+  Trash2
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useCrm } from "@/context/CrmContext";
@@ -22,7 +23,7 @@ interface InvoicesViewProps {
 }
 
 export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId }) => {
-  const { invoices, settings, recordInvoicePayment, formatCurrency } = useCrm();
+  const { invoices, settings, recordInvoicePayment, deleteInvoice, permissions, formatCurrency } = useCrm();
 
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(
     invoices.find(i => i.jobId === initialSelectedJobId)?.id || invoices[0]?.id || null
@@ -30,6 +31,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [mobileTab, setMobileTab] = useState<"list" | "preview">("list");
+  const [invoiceToDelete, setInvoiceToDelete] = useState<Invoice | null>(null);
 
   // Payment Recording Modal
   const [paymentModalInvoice, setPaymentModalInvoice] = useState<Invoice | null>(null);
@@ -224,9 +226,25 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-mono text-xs sm:text-sm font-bold text-[#fe7518]">{inv.id}</span>
-                      <span className={`text-xs capitalize font-semibold px-2.5 py-0.5 rounded-md border ${statusColors[inv.status]}`}>
-                        {inv.status}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-xs capitalize font-semibold px-2.5 py-0.5 rounded-md border ${statusColors[inv.status]}`}>
+                          {inv.status}
+                        </span>
+                        {permissions.canDeleteOrArchive && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setInvoiceToDelete(inv);
+                            }}
+                            className="p-1 rounded text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                            title="Delete Invoice"
+                            aria-label="Delete Invoice"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
                     </div>
 
                     <div className="text-sm sm:text-base font-bold text-[var(--foreground)] truncate font-sans">
@@ -285,6 +303,18 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
+                  {permissions.canDeleteOrArchive && (
+                    <button
+                      type="button"
+                      onClick={() => setInvoiceToDelete(selectedInvoice)}
+                      className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 text-xs font-bold py-2.5 px-3.5 min-h-[40px] rounded-lg border border-rose-300 dark:border-rose-800 btn-haptic"
+                      title="Delete Invoice"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete</span>
+                    </button>
+                  )}
+
                   <button
                     onClick={handlePrint}
                     className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2.5 px-4 min-h-[40px] rounded-lg shadow-sm border border-[#e56208] btn-haptic"
@@ -588,6 +618,55 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Invoice Confirmation Modal */}
+      {invoiceToDelete && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print">
+          <div className="bg-white dark:bg-[#12141c] border-2 border-rose-300 dark:border-rose-900 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-black text-slate-950 dark:text-white">
+                  Delete Invoice {invoiceToDelete.id}?
+                </h3>
+                <p className="text-xs font-semibold text-slate-600 dark:text-zinc-400">
+                  {invoiceToDelete.contactName} • {formatCurrency(invoiceToDelete.totalAmount)}
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs font-medium text-slate-700 dark:text-zinc-300 leading-relaxed bg-slate-50 dark:bg-[#181a24] p-3 rounded-xl border border-slate-200 dark:border-zinc-800">
+              This will permanently remove invoice <strong className="font-mono text-slate-950 dark:text-white">{invoiceToDelete.id}</strong> and its recorded payment transactions. This action cannot be undone.
+            </p>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t-2 border-slate-200 dark:border-zinc-800">
+              <button
+                type="button"
+                onClick={() => setInvoiceToDelete(null)}
+                className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 text-xs font-bold hover:bg-slate-200"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  deleteInvoice(invoiceToDelete.id);
+                  if (selectedInvoiceId === invoiceToDelete.id) {
+                    const remaining = activeInvoices.filter(i => i.id !== invoiceToDelete.id);
+                    setSelectedInvoiceId(remaining[0]?.id || null);
+                  }
+                  setInvoiceToDelete(null);
+                }}
+                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-sm btn-haptic"
+              >
+                Delete Invoice
+              </button>
+            </div>
           </div>
         </div>
       )}
