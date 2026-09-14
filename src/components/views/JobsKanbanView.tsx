@@ -510,6 +510,17 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] capitalize">
                     {activeJob.stage.replace("_", " ")}
                   </span>
+                  {permissions.canDeleteOrArchive && (
+                    <button
+                      type="button"
+                      onClick={() => setJobToDelete(activeJob)}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors btn-haptic"
+                      title="Delete Job"
+                      aria-label="Delete Job"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => setIsDesktopInspectorOpen(false)}

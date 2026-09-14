@@ -439,10 +439,28 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                         </span>
                       ))}
                     </div>
-                    <span className="text-xs text-emerald-800 dark:text-emerald-300 font-black flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 shrink-0">
-                      <MessageSquare className="w-3.5 h-3.5" />
-                      <span>{c.whatsappLogs?.length || 0}</span>
-                    </span>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="text-xs text-emerald-800 dark:text-emerald-300 font-black flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 shrink-0">
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        <span>{c.whatsappLogs?.length || 0}</span>
+                      </span>
+                      {permissions.canDeleteOrArchive && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActionTargetContact(c);
+                            setConfirmAction("delete");
+                            setIsConfirmModalOpen(true);
+                          }}
+                          className="p-1 rounded text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                          title="Delete Client"
+                          aria-label="Delete Client"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );

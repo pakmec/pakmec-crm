@@ -7,6 +7,7 @@ import {
   Users, 
   Calculator, 
   ChevronRight, 
+  Plus, 
   MessageSquare, 
   ArrowUpRight, 
   Boxes,
@@ -100,10 +101,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {permissions.canCreateQuotes && (
             <button
               onClick={onOpenNewQuote}
-              className="flex items-center justify-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2.5 px-5 min-h-[42px] rounded-xl shadow-sm border border-[#e56208] btn-haptic touch-manipulation"
+              className="flex items-center justify-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-black py-2.5 px-5 min-h-[42px] rounded-xl shadow-sm border border-[#e56208] btn-haptic touch-manipulation"
             >
-              <Calculator className="w-4 h-4" />
-              <span>+ Generate Auto-Quote</span>
+              <Plus className="w-4 h-4" />
+              <span>+ Create Quotation</span>
             </button>
           )}
         </div>
@@ -253,7 +254,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
             {activeJobs.length === 0 ? (
               <div className="p-8 text-center text-xs text-slate-500 dark:text-zinc-400">
-                No active jobs currently in production. Start by creating an Auto-Quote.
+                No active jobs currently in production. Start by creating a Quotation.
               </div>
             ) : (
               <div className="divide-y divide-slate-100 dark:divide-zinc-800/80">

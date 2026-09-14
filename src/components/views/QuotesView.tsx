@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { 
   Calculator, 
+  Search,
   Plus, 
   Printer, 
   CheckCircle2, 
@@ -49,10 +50,27 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
     formatCurrency 
   } = useCrm();
 
-  const [activeTab, setActiveTab] = useState<"generator" | "list">("generator");
+  const [activeTab, setActiveTab] = useState<"generator" | "list">(preselectedContactId ? "generator" : "list");
   const [quotesMobileTab, setQuotesMobileTab] = useState<"list" | "preview">("list");
+  const [quoteSearch, setQuoteSearch] = useState("");
+  const [quoteStatusFilter, setQuoteStatusFilter] = useState<"all" | "sent" | "approved" | "converted">("all");
   const activeQuotes = quotes.filter((q) => !q.isArchived);
   const activeContacts = contacts.filter((c) => !c.isArchived);
+
+  const filteredQuotes = activeQuotes.filter((q) => {
+    const matchesStatus = quoteStatusFilter === "all" || (quoteStatusFilter === "converted" ? Boolean(q.convertedToJobId) : q.status === quoteStatusFilter);
+    const searchLower = quoteSearch.toLowerCase().trim();
+    const matchesSearch = !searchLower || (
+      q.id.toLowerCase().includes(searchLower) ||
+      q.title.toLowerCase().includes(searchLower) ||
+      q.contactName.toLowerCase().includes(searchLower) ||
+      (q.contactCompany && q.contactCompany.toLowerCase().includes(searchLower)) ||
+      (q.contactPhone && q.contactPhone.includes(searchLower)) ||
+      q.trade.toLowerCase().includes(searchLower)
+    );
+    return matchesStatus && matchesSearch;
+  });
+
   const [selectedQuoteForPreview, setSelectedQuoteForPreview] = useState<Quote | null>(activeQuotes[0] || null);
 
   // Client Selection Mode: "existing" registered contact vs "walkin" direct lead
@@ -624,46 +642,60 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           <div className="flex items-center gap-2.5 flex-wrap">
             <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 dark:text-zinc-100 flex items-center gap-2">
               <Calculator className="w-5 h-5 text-[#fe7518]" />
-              <span>Precision Auto-Quoter</span>
+              <span>{activeTab === "list" ? "Quotations & Estimates" : "New Quotation"}</span>
             </h1>
             <span className="text-xs font-bold px-3 py-1 rounded-full bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700">
-              Multan Workshop (PKR)
+              {activeTab === "list" ? `${activeQuotes.length} Total Saved` : "Multan Workshop (PKR)"}
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-400 mt-1 font-medium">
-            Calculate instant manufacturing estimates for walk-in leads or registered clients.
+            {activeTab === "list" 
+              ? "Search, review, print, and convert saved quotations or issue a new custom order estimate." 
+              : "Select manufacturing specifications to calculate instant estimates for walk-in leads or registered clients."}
           </p>
         </div>
 
-        {/* View Switcher Tabs */}
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="w-full sm:w-auto bg-slate-100 dark:bg-[#161822] p-1.5 rounded-xl flex items-center gap-1.5 text-xs font-bold border-2 border-slate-200 dark:border-zinc-800">
+        {/* Action Controls */}
+        <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          {activeTab === "list" ? (
             <button
+              type="button"
               onClick={() => setActiveTab("generator")}
-              className={`flex-1 sm:flex-initial px-4 py-2 rounded-lg transition-all ${
-                activeTab === "generator" 
-                  ? "bg-[#fe7518] text-slate-950 font-black shadow-sm" 
-                  : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white"
-              }`}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs sm:text-sm font-black py-2.5 px-5 rounded-xl shadow-sm border border-[#e56208] btn-haptic touch-manipulation"
             >
-              Quoter Generator
+              <Plus className="w-4 h-4" />
+              <span>+ Create New Quotation</span>
             </button>
+          ) : (
             <button
+              type="button"
               onClick={() => setActiveTab("list")}
-              className={`flex-1 sm:flex-initial px-4 py-2 rounded-lg transition-all ${
-                activeTab === "list" 
-                  ? "bg-[#fe7518] text-slate-950 font-black shadow-sm" 
-                  : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white"
-              }`}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-900 dark:text-zinc-100 text-xs sm:text-sm font-bold py-2.5 px-4 rounded-xl border-2 border-slate-300 dark:border-zinc-700 btn-haptic touch-manipulation"
             >
-              Saved Quotes ({activeQuotes.length})
+              <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+              <span>← Back to Saved Quotes ({activeQuotes.length})</span>
             </button>
-          </div>
+          )}
         </div>
       </div>
 
       {activeTab === "generator" ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 no-print">
+        <div className="space-y-4 no-print">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-[#12141c] border-2 border-slate-200 dark:border-zinc-800">
+            <button
+              type="button"
+              onClick={() => setActiveTab("list")}
+              className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800 dark:text-zinc-200 hover:text-[#fe7518] dark:hover:text-[#fe7518] transition-colors btn-haptic"
+            >
+              <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+              <span>← Back to Saved Quotations ({activeQuotes.length})</span>
+            </button>
+            <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400">
+              Drafting New Custom Estimate
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Form: Step 1, 2, 3 */}
           <div className="lg:col-span-7 space-y-6">
             {/* Step 1: Select Manufacturing Domain */}
@@ -1359,27 +1391,71 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             </div>
           </div>
         </div>
+        </div>
       ) : (
         /* Saved Quotes View */
         <div className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Quotes List (4 Cols) */}
             <div className="lg:col-span-4 space-y-3 no-print">
-              <h2 className="text-xs font-bold text-slate-700 dark:text-zinc-300">
-                Saved Quotations ({activeQuotes.length})
-              </h2>
+              {/* Search & Status Filters */}
+              <div className="space-y-2.5">
+                <div className="relative">
+                  <Search className="w-4 h-4 text-slate-700 dark:text-zinc-300 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={quoteSearch}
+                    onChange={(e) => setQuoteSearch(e.target.value)}
+                    placeholder="Search quotes by ID, title, client…"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 placeholder-slate-500 dark:placeholder-zinc-400 pl-10 pr-3.5 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-bold shadow-xs"
+                  />
+                </div>
 
-              <div className="space-y-3 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1">
-                {activeQuotes.length === 0 ? (
+                {/* Filter Pills */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+                  {[
+                    { id: "all", label: `All (${activeQuotes.length})` },
+                    { id: "sent", label: "Sent" },
+                    { id: "approved", label: "Approved" },
+                    { id: "converted", label: "Converted" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setQuoteStatusFilter(tab.id as any)}
+                      className={`px-3 py-1.5 rounded-lg whitespace-nowrap shrink-0 font-bold transition-colors ${
+                        quoteStatusFilter === tab.id
+                          ? "bg-[#fe7518] text-slate-950 font-black shadow-xs"
+                          : "text-slate-800 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white bg-slate-200 dark:bg-[#161822] border border-slate-300 dark:border-zinc-700"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3 max-h-[calc(100vh-16rem)] overflow-y-auto pr-1">
+                {filteredQuotes.length === 0 ? (
                   <div className="p-6 text-center bg-white dark:bg-[#12141c] rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-2">
                     <FileText className="w-6 h-6 text-slate-400 mx-auto" />
-                    <h3 className="text-xs font-bold text-slate-900 dark:text-zinc-100">No Quotations Generated</h3>
+                    <h3 className="text-xs font-bold text-slate-900 dark:text-zinc-100">No Quotations Found</h3>
                     <p className="text-xs text-slate-500 dark:text-zinc-400">
-                      Configure trade parameters to generate instant estimates.
+                      {quoteSearch || quoteStatusFilter !== "all" 
+                        ? "No quotations match your current search or filter."
+                        : "Click '+ Create New Quotation' to generate instant estimates."}
                     </p>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("generator")}
+                      className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-black shadow-xs"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>+ Create Quotation</span>
+                    </button>
                   </div>
                 ) : (
-                  activeQuotes.map((q) => {
+                  filteredQuotes.map((q) => {
                     const isSelected = selectedQuoteForPreview?.id === q.id;
 
                     return (

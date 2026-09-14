@@ -57,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const allNavItems = [
     { id: "dashboard", label: "Overview", icon: LayoutDashboard, badge: null, roles: ["admin", "machinist", "sales"] as UserRole[] },
-    { id: "quotes", label: "Auto-Quoter", icon: Calculator, badge: pendingQuotesCount > 0 ? pendingQuotesCount : null, roles: ["admin", "sales"] as UserRole[] },
+    { id: "quotes", label: "Quotations", icon: Calculator, badge: pendingQuotesCount > 0 ? pendingQuotesCount : null, roles: ["admin", "sales"] as UserRole[] },
     { id: "jobs", label: "Production & Floor", icon: KanbanSquare, badge: activeJobsCount > 0 ? activeJobsCount : null, roles: ["admin", "machinist", "sales"] as UserRole[] },
     { id: "contacts", label: "Client Database", icon: Users, badge: null, roles: ["admin", "sales"] as UserRole[] },
     { id: "invoices", label: "Invoices & Ledger", icon: Receipt, badge: null, roles: ["admin", "sales"] as UserRole[] },
