@@ -702,7 +702,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-300 dark:border-zinc-700 space-y-5 shadow-sm">
               <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-zinc-800 pb-3.5">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl bg-slate-950 text-white dark:bg-[#fe7518] dark:text-slate-950 flex items-center justify-center text-sm font-black shadow-xs ring-2 ring-slate-900/10 dark:ring-orange-500/20">
+                  <span className="w-8 h-8 rounded-xl bg-[#fe7518] text-slate-950 flex items-center justify-center text-sm font-black shadow-sm ring-2 ring-[#fe7518]/30 shrink-0">
                     1
                   </span>
                   <div>
@@ -785,7 +785,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                           <Icon className={`w-5 h-5 ${isSelected ? t.activeIcon : "text-slate-700 dark:text-zinc-300"}`} />
                         </div>
                         {isSelected ? (
-                          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 shadow-xs">
+                          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#fe7518] text-slate-950 shadow-xs">
                             Active
                           </span>
                         ) : (
@@ -812,7 +812,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-300 dark:border-zinc-700 space-y-5 shadow-sm">
               <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-zinc-800 pb-3.5">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl bg-slate-950 text-white dark:bg-[#fe7518] dark:text-slate-950 flex items-center justify-center text-sm font-black shadow-xs ring-2 ring-slate-900/10 dark:ring-orange-500/20">
+                  <span className="w-8 h-8 rounded-xl bg-[#fe7518] text-slate-950 flex items-center justify-center text-sm font-black shadow-sm ring-2 ring-[#fe7518]/30 shrink-0">
                     2
                   </span>
                   <div>
@@ -1091,7 +1091,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-300 dark:border-zinc-700 space-y-5 shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-slate-200 dark:border-zinc-800 pb-3.5">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl bg-slate-950 text-white dark:bg-[#fe7518] dark:text-slate-950 flex items-center justify-center text-sm font-black shadow-xs ring-2 ring-slate-900/10 dark:ring-orange-500/20">
+                  <span className="w-8 h-8 rounded-xl bg-[#fe7518] text-slate-950 flex items-center justify-center text-sm font-black shadow-sm ring-2 ring-[#fe7518]/30 shrink-0">
                     3
                   </span>
                   <div>
@@ -1105,17 +1105,17 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                 </div>
                 
                 {/* Segmented Client Toggle */}
-                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#161822] border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold shrink-0">
+                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#161822] border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold">
                   <button
                     type="button"
                     onClick={() => setClientMode("existing")}
                     className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 ${
                       clientMode === "existing"
-                        ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950 shadow-sm font-black"
+                        ? "bg-[#fe7518] text-slate-950 shadow-sm font-black"
                         : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 font-bold"
                     }`}
                   >
-                    <Users className="w-4 h-4 text-[#fe7518]" />
+                    <Users className="w-4 h-4" />
                     <span>Registered Client</span>
                   </button>
                   <button
@@ -1200,7 +1200,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                         type="text"
                         value={walkinCompany}
                         onChange={(e) => setWalkinCompany(e.target.value)}
-                        placeholder="e.g. AeroDynamics Multan"
+                        placeholder="e.g. Nishat Mills"
                         className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base placeholder-slate-400 shadow-xs"
                       />
                     </div>
@@ -1224,7 +1224,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   <label className="block text-sm font-extrabold text-slate-950 dark:text-zinc-100">
                     Advance Deposit Terms
                   </label>
-                  <span className="text-xs font-bold px-3 py-1 rounded-md bg-slate-950 text-white dark:bg-zinc-800 dark:text-zinc-100">
+                  <span className="text-xs font-black px-3 py-1 rounded-md bg-emerald-100 text-emerald-900 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
                     {calculatedAdvancePercent}% Deposit Required
                   </span>
                 </div>
@@ -1321,7 +1321,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             <div className="bg-white dark:bg-[#12141c] rounded-2xl border-2 border-slate-300 dark:border-zinc-700 p-6 space-y-5 sticky top-20 shadow-md">
               <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-zinc-800 pb-3.5">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl bg-slate-950 text-white dark:bg-[#fe7518] dark:text-slate-950 flex items-center justify-center text-sm font-black shadow-xs ring-2 ring-slate-900/10 dark:ring-orange-500/20">
+                  <span className="w-8 h-8 rounded-xl bg-[#fe7518] text-slate-950 flex items-center justify-center text-sm font-black shadow-sm ring-2 ring-[#fe7518]/30 shrink-0">
                     4
                   </span>
                   <div>
