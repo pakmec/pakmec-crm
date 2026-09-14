@@ -48,8 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     toggleTheme, 
     currentUser, 
     currentRole, 
-    logout, 
-    switchRole 
+    logout 
   } = useCrm();
 
   const activeJobsCount = jobs.filter(j => !j.isArchived && j.stage !== "delivered").length;
@@ -233,9 +232,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       }`}>
         {/* User Badge & Sign Out */}
         <div className={`rounded-xl bg-white dark:bg-[#12141c] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between shadow-xs ${
-          isMobile ? "p-2.5" : "p-2"
+          isMobile ? "p-3" : "p-2.5"
         }`}>
-          <div className="min-w-0 flex items-center gap-2">
+          <div className="min-w-0 flex items-center gap-2.5">
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${
               currentRole === "admin" 
                 ? "bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/40" 
@@ -249,15 +248,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="text-xs font-bold text-slate-900 dark:text-zinc-100 truncate">
                 {currentUser?.name || (currentRole === "admin" ? "Yasir Aslam" : "Staff Member")}
               </div>
-              <div className="flex items-center gap-1 mt-0.5">
-                <span className={`text-[10px] capitalize px-1.5 py-0.2 rounded font-semibold ${
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className={`text-[10px] capitalize px-1.5 py-0.5 rounded font-bold ${
                   currentRole === "admin"
-                    ? "bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
+                    ? "bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
                     : currentRole === "machinist"
-                    ? "bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-300 dark:border-blue-700"
-                    : "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
+                    ? "bg-blue-100 dark:bg-blue-950/80 text-blue-900 dark:text-blue-300 border border-blue-300 dark:border-blue-700"
+                    : "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
                 }`}>
-                  {currentRole === "admin" ? "Admin" : currentRole === "machinist" ? "Machinist" : "Sales"}
+                  {currentRole === "admin" ? "👑 Admin" : currentRole === "machinist" ? "🛠️ Machinist" : "📋 Sales"}
+                </span>
+                <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono hidden xl:inline">
+                  {currentUser?.email?.split("@")[0] || "staff"}
                 </span>
               </div>
             </div>
@@ -268,56 +270,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             aria-label="Sign out of console"
             title="Sign out of PAKMEC console"
             className={`flex items-center justify-center rounded-lg text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic shrink-0 ${
-              isMobile ? "p-2 min-h-[36px] min-w-[36px]" : "p-1.5 min-h-[32px] min-w-[32px]"
+              isMobile ? "p-2 min-h-[38px] min-w-[38px]" : "p-1.5 min-h-[34px] min-w-[34px]"
             }`}
           >
             <LogOut className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Quick Role Switcher for Testing */}
-        <div className="grid grid-cols-3 gap-1 text-xs">
-          <button
-            type="button"
-            onClick={() => switchRole("admin")}
-            className={`rounded-lg text-center font-semibold transition-all ${
-              isMobile ? "py-1.5 px-1 min-h-[34px]" : "py-1 px-1 min-h-[30px]"
-            } ${
-              currentRole === "admin"
-                ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs"
-                : "bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800"
-            }`}
-            title="Switch to Admin role"
-          >
-            Admin
-          </button>
-          <button
-            type="button"
-            onClick={() => switchRole("machinist")}
-            className={`rounded-lg text-center font-semibold transition-all ${
-              isMobile ? "py-1.5 px-1 min-h-[34px]" : "py-1 px-1 min-h-[30px]"
-            } ${
-              currentRole === "machinist"
-                ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs"
-                : "bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800"
-            }`}
-            title="Switch to Machinist role"
-          >
-            Machinist
-          </button>
-          <button
-            type="button"
-            onClick={() => switchRole("sales")}
-            className={`rounded-lg text-center font-semibold transition-all ${
-              isMobile ? "py-1.5 px-1 min-h-[34px]" : "py-1 px-1 min-h-[30px]"
-            } ${
-              currentRole === "sales"
-                ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs"
-                : "bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800"
-            }`}
-            title="Switch to Sales role"
-          >
-            Sales
           </button>
         </div>
 

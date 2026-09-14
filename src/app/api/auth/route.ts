@@ -1,35 +1,31 @@
 import { NextResponse } from "next/server";
-import { verifyCredentials, getUserByRole, SEEDED_USERS } from "@/lib/auth";
-import { UserRole } from "@/types";
+import { verifyCredentials } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { action, email, password, role } = body;
-
-    // Quick demo switch
-    if (action === "switch-role" && role) {
-      const user = getUserByRole(role as UserRole);
-      return NextResponse.json({ success: true, user });
-    }
+    const { email, password } = body;
 
     if (!email || !password) {
-      return NextResponse.json({ error: "Please provide both email and password" }, { status: 400 });
+      return NextResponse.json({ error: "Please provide both staff email and password." }, { status: 400 });
     }
 
     const user = await verifyCredentials(email, password);
     if (!user) {
-      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid credentials. Please check your staff email and password." }, { status: 401 });
     }
 
     return NextResponse.json({ success: true, user });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message || "Internal authentication error." }, { status: 500 });
   }
 }
 
 export async function GET() {
-  // Return list of available demo profiles for easy testing
-  const demoUsers = SEEDED_USERS.map(({ passwordHash, ...u }) => u);
-  return NextResponse.json({ demoUsers });
+  return NextResponse.json({ 
+    service: "PAKMEC Precision Engineering Authentication Gateway",
+    status: "online",
+    rbac: "active"
+  });
 }
+
