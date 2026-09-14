@@ -106,24 +106,29 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
         </div>
 
         <div className="flex items-center gap-1.5 shrink-0 flex-wrap sm:flex-nowrap">
-          {["all", "unpaid", "partial", "paid"].map((status) => (
+          {[
+            { id: "all", label: "All Invoices" },
+            { id: "unpaid", label: "Unpaid" },
+            { id: "partial", label: "Partial" },
+            { id: "paid", label: "Paid" },
+          ].map((status) => (
             <button
-              key={status}
-              onClick={() => setFilterStatus(status)}
-              className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-mono uppercase transition-colors btn-haptic touch-manipulation ${
-                filterStatus === status 
-                  ? "bg-[#fe7518] text-slate-950 font-black" 
+              key={status.id}
+              onClick={() => setFilterStatus(status.id)}
+              className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-semibold transition-colors btn-haptic touch-manipulation ${
+                filterStatus === status.id 
+                  ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs" 
                   : "bg-[var(--surface-100)] text-[var(--muted)] hover:bg-[var(--surface-200)] border border-[var(--border)]"
               }`}
             >
-              {status}
+              {status.label}
             </button>
           ))}
         </div>
       </div>
 
       {/* Mobile View Switcher Tab */}
-      <div className="lg:hidden flex items-center gap-2 p-1 rounded-lg bg-[var(--surface-100)] border border-[var(--border)] font-mono text-xs no-print">
+      <div className="lg:hidden flex items-center gap-2 p-1 rounded-lg bg-[var(--surface-100)] border border-[var(--border)] text-xs no-print">
         <button
           type="button"
           onClick={() => setMobileTab("list")}
@@ -134,7 +139,7 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
           }`}
         >
           <Receipt className="w-4 h-4" />
-          <span>Invoices List ({filteredInvoices.length})</span>
+          <span>Invoices ({filteredInvoices.length})</span>
         </button>
         <button
           type="button"
@@ -219,26 +224,26 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-mono text-xs sm:text-sm font-bold text-[#fe7518]">{inv.id}</span>
-                      <span className={`text-xs font-mono uppercase px-2.5 py-0.5 rounded-md border ${statusColors[inv.status]}`}>
+                      <span className={`text-xs capitalize font-semibold px-2.5 py-0.5 rounded-md border ${statusColors[inv.status]}`}>
                         {inv.status}
                       </span>
                     </div>
 
-                    <div className="text-sm sm:text-base font-bold text-[var(--foreground)] truncate">
+                    <div className="text-sm sm:text-base font-bold text-[var(--foreground)] truncate font-sans">
                       {inv.contactName}
                     </div>
 
-                    <div className="text-xs text-[var(--muted)] flex items-center justify-between font-mono">
-                      <span>Ref: {inv.jobId || "Custom"}</span>
+                    <div className="text-xs text-[var(--muted)] flex items-center justify-between">
+                      <span>Ref: <span className="font-mono">{inv.jobId || "Custom"}</span></span>
                       <CurrencyDisplay amount={inv.totalAmount} size="sm" color="orange" />
                     </div>
 
                     {/* Advance Deducted Tag */}
-                    <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-mono">
-                      <span className="text-[var(--muted)] flex items-center gap-1">
+                    <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between text-xs">
+                      <span className="text-[var(--muted)] flex items-center gap-1 font-medium">
                         Adv: <CurrencyDisplay amount={inv.advanceDeducted} size="xs" />
                       </span>
-                      <span className={balanceRemaining > 0 ? "text-amber-800 dark:text-amber-400 font-bold flex items-center gap-1" : "text-emerald-700 dark:text-emerald-400 font-bold"}>
+                      <span className={balanceRemaining > 0 ? "text-amber-800 dark:text-amber-400 font-semibold flex items-center gap-1" : "text-emerald-700 dark:text-emerald-400 font-semibold"}>
                         {balanceRemaining > 0 ? (
                           <>
                             Due: <CurrencyDisplay amount={balanceRemaining} size="xs" color="amber" />

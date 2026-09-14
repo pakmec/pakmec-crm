@@ -227,13 +227,13 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-3 font-mono text-xs text-[var(--muted)]">
-          <span>Active Workshop Jobs: <strong className="text-[var(--foreground)]">{activeJobs.filter(j => j.stage !== "delivered").length}</strong></span>
+        <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-zinc-400 font-medium">
+          <span>Active Workshop Jobs: <strong className="text-slate-900 dark:text-zinc-100 tabular-nums">{activeJobs.filter(j => j.stage !== "delivered").length}</strong></span>
           {activeJob && !isDesktopInspectorOpen && (
             <button
               type="button"
               onClick={() => setIsDesktopInspectorOpen(true)}
-              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#1a1d27] hover:bg-slate-200 dark:hover:bg-[#232836] border border-slate-300 dark:border-[#2a3040] text-xs font-mono font-semibold text-slate-800 dark:text-zinc-200 btn-haptic shadow-xs transition-colors"
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#1a1d27] hover:bg-slate-200 dark:hover:bg-[#232836] border border-slate-300 dark:border-[#2a3040] text-xs font-semibold text-slate-800 dark:text-zinc-200 btn-haptic shadow-xs transition-colors"
             >
               <Pin className="w-3.5 h-3.5 text-[#fe7518]" />
               <span>Media Board ({activeJob.referenceItems?.length || 0})</span>
@@ -247,7 +247,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
         <button
           type="button"
           onClick={() => setMobileTab("kanban")}
-          className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold font-mono transition-all min-h-[40px] flex items-center justify-center gap-1.5 touch-manipulation ${
+          className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all min-h-[40px] flex items-center justify-center gap-1.5 touch-manipulation ${
             mobileTab === "kanban" 
               ? "bg-[#fe7518] text-slate-950 shadow-sm" 
               : "bg-[var(--surface-200)] text-[var(--muted)] hover:text-[var(--foreground)]"
@@ -259,7 +259,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
         <button
           type="button"
           onClick={() => setMobileTab("details")}
-          className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold font-mono transition-all min-h-[40px] flex items-center justify-center gap-1.5 touch-manipulation ${
+          className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all min-h-[40px] flex items-center justify-center gap-1.5 touch-manipulation ${
             mobileTab === "details" 
               ? "bg-[#fe7518] text-slate-950 shadow-sm" 
               : "bg-[var(--surface-200)] text-[var(--muted)] hover:text-[var(--foreground)]"
@@ -271,7 +271,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
       </div>
 
       {/* Main Split: Kanban Columns & Reference Pin Board */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden w-full">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden w-full font-sans">
         {/* Kanban Board Area */}
         <div className={`flex-1 min-w-0 bg-[var(--background)] p-3 sm:p-4 flex flex-col overflow-hidden ${
           mobileTab === "details" ? "hidden lg:flex" : "flex"
@@ -281,7 +281,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
             <button
               type="button"
               onClick={() => setSelectedMobileStage("all")}
-              className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-mono whitespace-nowrap transition-all touch-manipulation ${
+              className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-medium whitespace-nowrap transition-all touch-manipulation ${
                 selectedMobileStage === "all"
                   ? "bg-[#fe7518] text-slate-950 font-bold shadow-sm"
                   : "bg-[var(--surface-100)] text-[var(--muted)] hover:text-[var(--foreground)] border border-[var(--border)]"
@@ -297,14 +297,14 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                   key={col.stage}
                   type="button"
                   onClick={() => setSelectedMobileStage(col.stage)}
-                  className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-mono whitespace-nowrap transition-all flex items-center gap-1.5 touch-manipulation ${
+                  className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 touch-manipulation ${
                     isSelected
                       ? "bg-[#fe7518] text-slate-950 font-bold shadow-sm"
                       : "bg-[var(--surface-100)] text-[var(--muted)] hover:text-[var(--foreground)] border border-[var(--border)]"
                   }`}
                 >
                   <span>{col.label.split(" ")[0]}</span>
-                  <span className="text-[10px] opacity-80 font-bold">({count})</span>
+                  <span className="text-[10px] opacity-80 font-bold tabular-nums">({count})</span>
                 </button>
               );
             })}
@@ -326,7 +326,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                         {React.createElement(col.icon, { className: "w-4 h-4 text-[#fe7518] shrink-0" })}
                         <span className="text-xs font-bold text-[var(--foreground)] truncate">{col.label}</span>
                       </div>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] shrink-0 ml-1 font-bold">
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[var(--surface-200)] text-[var(--muted)] shrink-0 ml-1 tabular-nums">
                         {colJobs.length}
                       </span>
                     </div>
@@ -334,7 +334,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                   {/* Column Cards */}
                   <div className="p-3 space-y-3 flex-1 overflow-y-auto">
                     {colJobs.length === 0 ? (
-                      <div className="py-8 px-4 text-center text-xs text-[var(--muted)] font-mono border-2 border-dashed border-[var(--border)] rounded-xl">
+                      <div className="py-8 px-4 text-center text-xs text-[var(--muted)] border-2 border-dashed border-[var(--border)] rounded-xl font-medium">
                         No jobs currently in this stage
                       </div>
                     ) : (
@@ -367,11 +367,11 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                                 <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 text-[#fe7518]">
                                   {job.id}
                                 </span>
-                                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 truncate">
+                                <span className="text-xs font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 truncate">
                                   {job.trade}
                                 </span>
                               </div>
-                              <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full shrink-0 ${priorityColors[job.priority]}`}>
+                              <span className={`text-[10px] font-bold capitalize px-2 py-0.5 rounded-full shrink-0 ${priorityColors[job.priority]}`}>
                                 {job.priority}
                               </span>
                             </div>
@@ -484,12 +484,12 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                     <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
                     <span>Board</span>
                   </button>
-                  <span className="text-xs font-mono text-[#fe7518] font-bold">
-                    PIN BOARD • {activeJob.id}
+                  <span className="text-xs text-[#fe7518] font-bold">
+                    Media & Drawings • <span className="font-mono">{activeJob.id}</span>
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] uppercase">
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-[var(--surface-200)] text-[var(--muted)] capitalize">
                     {activeJob.stage.replace("_", " ")}
                   </span>
                   <button
@@ -504,50 +504,50 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                 </div>
               </div>
 
-              <h2 className="text-base font-bold text-[var(--foreground)] leading-tight">
+              <h2 className="text-base font-bold text-[var(--foreground)] leading-tight font-sans">
                 {activeJob.title}
               </h2>
 
               {permissions.canViewFinancials ? (
                 <>
-                  <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                  <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="p-2.5 rounded bg-[var(--surface-100)] border border-[var(--border)]">
-                      <span className="text-[var(--muted)] text-[10px] block mb-1">Advance Collected</span>
+                      <span className="text-[var(--muted)] text-xs block mb-1 font-medium">Advance Collected</span>
                       <CurrencyDisplay amount={activeJob.advancePaid} size="sm" color="green" />
                     </div>
                     <div className="p-2.5 rounded bg-[var(--surface-100)] border border-[var(--border)]">
-                      <span className="text-[var(--muted)] text-[10px] block mb-1">Remaining Due</span>
+                      <span className="text-[var(--muted)] text-xs block mb-1 font-medium">Remaining Due</span>
                       <CurrencyDisplay amount={activeJob.balanceDue} size="sm" color="amber" />
                     </div>
                   </div>
 
                   {/* Delivery Clearance & Cash Flow Status Banner */}
                   {activeJob.balanceDue === 0 ? (
-                    <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-[#0c1c14] border border-emerald-300 dark:border-emerald-700 text-emerald-950 dark:text-emerald-300 text-xs font-mono flex items-center gap-2">
+                    <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-[#0c1c14] border border-emerald-300 dark:border-emerald-700 text-emerald-950 dark:text-emerald-300 text-xs flex items-center gap-2">
                       <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                       <div>
                         <span className="font-bold block">100% Settled — Cleared for Delivery</span>
-                        <span className="text-[10px] text-emerald-800 dark:text-emerald-400">All dues collected. Cleared for TCS courier dispatch or client handover.</span>
+                        <span className="text-xs text-emerald-800 dark:text-emerald-400">All dues collected. Cleared for TCS courier dispatch or client handover.</span>
                       </div>
                     </div>
                   ) : (
-                    <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-[#1f1608] border border-amber-300 dark:border-amber-700 text-amber-950 dark:text-amber-300 text-xs font-mono flex items-center gap-2">
+                    <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-[#1f1608] border border-amber-300 dark:border-amber-700 text-amber-950 dark:text-amber-300 text-xs flex items-center gap-2">
                       <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                       <div>
                         <span className="font-bold block">Balance Due: {formatCurrency(activeJob.balanceDue)}</span>
-                        <span className="text-[10px] text-amber-800 dark:text-amber-400">Courier parcels require settlement before dispatch; local accounts settle on delivery.</span>
+                        <span className="text-xs text-amber-800 dark:text-amber-400">Courier parcels require settlement before dispatch; local accounts settle on delivery.</span>
                       </div>
                     </div>
                   )}
                 </>
               ) : (
-                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2.5 rounded bg-[var(--surface-100)] border border-[var(--border)]">
-                    <span className="text-[var(--muted)] text-[10px] block mb-1">Trade & Trade Domain</span>
+                    <span className="text-[var(--muted)] text-xs block mb-1 font-medium">Trade & Trade Domain</span>
                     <span className="font-bold text-slate-900 dark:text-zinc-100">{activeJob.trade}</span>
                   </div>
                   <div className="p-2.5 rounded bg-[var(--surface-100)] border border-[var(--border)]">
-                    <span className="text-[var(--muted)] text-[10px] block mb-1">Shop Floor Stage</span>
+                    <span className="text-[var(--muted)] text-xs block mb-1 font-medium">Shop Floor Stage</span>
                     <span className="font-bold text-blue-600 dark:text-blue-400 capitalize">{activeJob.stage.replace("_", " ")}</span>
                   </div>
                 </div>

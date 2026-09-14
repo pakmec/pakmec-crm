@@ -108,21 +108,21 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Telemetry Stats & Clean Action Area */}
       <div className="flex items-center gap-3">
         {/* Real-time Clock Telemetry (Multan PKT) */}
-        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#131620] border border-slate-300 dark:border-zinc-700 text-xs font-mono text-slate-800 dark:text-zinc-200 font-bold">
+        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#131620] border border-slate-300 dark:border-zinc-700 text-xs text-slate-800 dark:text-zinc-200 font-semibold">
           <Clock className="w-3.5 h-3.5 text-[#fe7518]" />
-          <span>Multan {time || "02:10 PM"}</span>
+          <span className="tabular-nums">Multan {time || "02:10 PM"}</span>
         </div>
 
         {/* Live Outstanding Advance & Balance (Hidden from Machinist) */}
         {permissions.canViewFinancials && (
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#131620] border border-slate-300 dark:border-zinc-700 text-xs font-bold">
-            <span className="text-slate-600 dark:text-zinc-400 text-[11px] uppercase tracking-wider font-mono">Receivables:</span>
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#131620] border border-slate-300 dark:border-zinc-700 text-xs font-semibold">
+            <span className="text-slate-600 dark:text-zinc-400 text-xs">Receivables:</span>
             <CurrencyDisplay amount={totalActiveBalance} size="sm" numberColor="text-[#fe7518]" />
           </div>
         )}
 
         {/* Active Role Badge */}
-        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#131620] border border-slate-300 dark:border-zinc-700 text-xs font-mono font-bold">
+        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#131620] border border-slate-300 dark:border-zinc-700 text-xs font-semibold">
           <span className={`w-2 h-2 rounded-full ${
             currentRole === "admin" ? "bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.6)]" : currentRole === "machinist" ? "bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.6)]" : "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"
           }`} />
@@ -147,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
         {permissions.canCreateQuotes && (
           <button
             onClick={onOpenNewQuote}
-            className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-black py-2 px-3.5 rounded-lg shadow-sm border border-[#e56208] btn-haptic"
+            className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2 px-3.5 rounded-lg shadow-sm border border-[#e56208] btn-haptic"
           >
             <Calculator className="w-3.5 h-3.5" />
             <span>Auto-Quote</span>

@@ -96,9 +96,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="inline-flex items-center gap-1.5 text-xs uppercase font-mono font-bold tracking-wider px-2.5 py-1 rounded-md bg-slate-900 text-white dark:bg-[#161922] dark:text-zinc-100 border border-slate-800 dark:border-[#2a3040] shadow-sm">
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-900 text-white dark:bg-[#161922] dark:text-zinc-100 border border-slate-800 dark:border-[#2a3040] shadow-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-[#fe7518]" />
-              MULTAN
+              Multan Hub
             </span>
             {isMobile && (
               <button
@@ -112,14 +112,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             )}
           </div>
         </div>
-        <div className="flex items-center justify-between text-xs text-slate-600 dark:text-zinc-400 font-mono">
+        <div className="flex items-center justify-between text-xs text-slate-600 dark:text-zinc-400 font-medium">
           <span className="flex items-center gap-1.5">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             Telemetry Synced
           </span>
           <span className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
             <Database className="w-3.5 h-3.5" />
-            <span>Multan Hub</span>
+            <span>Database Connected</span>
           </span>
         </div>
       </div>
@@ -132,7 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Wrench className="w-4 h-4 text-blue-500" />
               <span>Machinist Floor Mode</span>
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-mono">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-semibold">
               WIP Active
             </span>
           </div>
@@ -187,9 +187,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span>{item.label}</span>
               </div>
               {item.badge !== null && (
-                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${
+                <span className={`text-xs font-bold tabular-nums px-2 py-0.5 rounded-full ${
                   isActive 
-                    ? "bg-[#fe7518] text-slate-950 font-black" 
+                    ? "bg-[#fe7518] text-slate-950 font-bold" 
                     : "bg-slate-200 dark:bg-[#212631] text-slate-800 dark:text-zinc-200 group-hover:bg-slate-300 dark:group-hover:bg-[#2c3240]"
                 }`}>
                   {item.badge}
@@ -201,8 +201,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Currency & Active Trades Telemetry */}
         <div className={`px-2 ${isMobile ? "pt-4" : "pt-3"}`}>
-          <div className="pb-1.5 text-xs uppercase tracking-wider text-slate-500 dark:text-zinc-400 font-bold flex items-center justify-between">
-            <span>Manufacturing Rates</span>
+          <div className="pb-1.5 text-xs text-slate-500 dark:text-zinc-400 font-semibold flex items-center justify-between">
+            <span>Manufacturing Capabilities</span>
             <Flame className="w-3.5 h-3.5 text-[#fe7518]" />
           </div>
           <div className="flex flex-wrap gap-1">
@@ -215,7 +215,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             ].map(t => (
               <span 
                 key={t.label} 
-                className={`inline-flex items-center gap-1.5 text-xs font-mono rounded-md bg-slate-100 dark:bg-[#161923] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-[#272b38] font-bold ${
+                className={`inline-flex items-center gap-1.5 text-xs rounded-md bg-slate-100 dark:bg-[#161923] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-[#272b38] font-medium ${
                   isMobile ? "px-2 py-1" : "px-2 py-0.5"
                 }`}
               >
@@ -232,7 +232,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         isMobile ? "p-3 space-y-2.5" : "p-3 space-y-2"
       }`}>
         {/* User Badge & Sign Out */}
-        <div className={`rounded-xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between shadow-xs ${
+        <div className={`rounded-xl bg-white dark:bg-[#12141c] border border-slate-200 dark:border-[#1e232e] flex items-center justify-between shadow-xs ${
           isMobile ? "p-2.5" : "p-2"
         }`}>
           <div className="min-w-0 flex items-center gap-2">
@@ -250,14 +250,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {currentUser?.name || (currentRole === "admin" ? "Yasir Aslam" : "Staff Member")}
               </div>
               <div className="flex items-center gap-1 mt-0.5">
-                <span className={`text-[10px] font-mono uppercase px-1.5 py-0.2 rounded font-bold ${
+                <span className={`text-[10px] capitalize px-1.5 py-0.2 rounded font-semibold ${
                   currentRole === "admin"
                     ? "bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
                     : currentRole === "machinist"
                     ? "bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-300 dark:border-blue-700"
                     : "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
                 }`}>
-                  {currentRole === "admin" ? "👑 Admin" : currentRole === "machinist" ? "🛠️ Machinist" : "📋 Sales"}
+                  {currentRole === "admin" ? "Admin" : currentRole === "machinist" ? "Machinist" : "Sales"}
                 </span>
               </div>
             </div>
@@ -276,15 +276,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Quick Role Switcher for Testing */}
-        <div className="grid grid-cols-3 gap-1 text-xs font-mono">
+        <div className="grid grid-cols-3 gap-1 text-xs">
           <button
             type="button"
             onClick={() => switchRole("admin")}
-            className={`rounded-lg text-center font-bold transition-all ${
+            className={`rounded-lg text-center font-semibold transition-all ${
               isMobile ? "py-1.5 px-1 min-h-[34px]" : "py-1 px-1 min-h-[30px]"
             } ${
               currentRole === "admin"
-                ? "bg-[#fe7518] text-slate-950 font-black shadow-sm"
+                ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs"
                 : "bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800"
             }`}
             title="Switch to Admin role"
@@ -294,11 +294,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => switchRole("machinist")}
-            className={`rounded-lg text-center font-bold transition-all ${
+            className={`rounded-lg text-center font-semibold transition-all ${
               isMobile ? "py-1.5 px-1 min-h-[34px]" : "py-1 px-1 min-h-[30px]"
             } ${
               currentRole === "machinist"
-                ? "bg-blue-600 text-white font-black shadow-sm"
+                ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs"
                 : "bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800"
             }`}
             title="Switch to Machinist role"
@@ -308,11 +308,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => switchRole("sales")}
-            className={`rounded-lg text-center font-bold transition-all ${
+            className={`rounded-lg text-center font-semibold transition-all ${
               isMobile ? "py-1.5 px-1 min-h-[34px]" : "py-1 px-1 min-h-[30px]"
             } ${
               currentRole === "sales"
-                ? "bg-emerald-600 text-white font-black shadow-sm"
+                ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs"
                 : "bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800"
             }`}
             title="Switch to Sales role"
