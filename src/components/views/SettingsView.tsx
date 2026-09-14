@@ -164,57 +164,57 @@ export const SettingsView: React.FC = () => {
       <form onSubmit={handleSave} className="space-y-6">
         {/* Tab 1: Workshop Profile */}
         {activeTab === "profile" && (
-          <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
+          <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
+            <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
               <div>
-                <h2 className="text-base font-bold text-slate-900 dark:text-zinc-100">Workshop Information</h2>
-                <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Details printed on invoices, quotations, and client headers.</p>
+                <h2 className="text-base font-extrabold text-slate-950 dark:text-white">Workshop Information</h2>
+                <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 mt-0.5">Details printed on invoices, quotations, and client headers.</p>
               </div>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>Multan Verified</span>
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   Company Name
                 </label>
                 <input
                   type="text"
                   value={form.company.name}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, name: e.target.value } })}
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none text-sm font-medium transition-all"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm shadow-xs transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   City / Hub Location
                 </label>
                 <input
                   type="text"
                   value={form.company.city || "Multan"}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, city: e.target.value } })}
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none text-sm font-medium transition-all"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm shadow-xs transition-all"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   Workshop Physical Address
                 </label>
                 <input
                   type="text"
                   value={form.company.address}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, address: e.target.value } })}
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none text-sm font-medium transition-all"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm shadow-xs transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   Official WhatsApp Phone
                 </label>
                 <input
@@ -222,12 +222,12 @@ export const SettingsView: React.FC = () => {
                   value={form.company.whatsapp}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, whatsapp: e.target.value } })}
                   placeholder="+92 300 8472910"
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none text-sm font-medium transition-all"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm shadow-xs transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   Official Email Address
                 </label>
                 <input
@@ -235,7 +235,7 @@ export const SettingsView: React.FC = () => {
                   value={form.company.email}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, email: e.target.value } })}
                   placeholder="engineering@pakmec.com"
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none text-sm font-medium transition-all"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm shadow-xs transition-all"
                 />
               </div>
             </div>
@@ -244,15 +244,15 @@ export const SettingsView: React.FC = () => {
 
         {/* Tab 2: Banking & Payments */}
         {activeTab === "banking" && (
-          <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
-            <div className="border-b border-slate-100 dark:border-zinc-800 pb-3">
-              <h2 className="text-base font-bold text-slate-900 dark:text-zinc-100">Settlement & Payment Channels</h2>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Displayed on official invoices for advance deposits and balance settlements.</p>
+          <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
+            <div className="border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+              <h2 className="text-base font-extrabold text-slate-950 dark:text-white">Settlement & Payment Channels</h2>
+              <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 mt-0.5">Displayed on official invoices for advance deposits and balance settlements.</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   Bank Name
                 </label>
                 <input
@@ -260,12 +260,12 @@ export const SettingsView: React.FC = () => {
                   value={form.company.bankName}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, bankName: e.target.value } })}
                   placeholder="Meezan Bank Ltd"
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm font-medium"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   Bank Account Title
                 </label>
                 <input
@@ -273,12 +273,12 @@ export const SettingsView: React.FC = () => {
                   value={form.company.bankAccountTitle}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, bankAccountTitle: e.target.value } })}
                   placeholder="PAKMEC ENGINEERING SERVICES"
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm font-medium"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   Bank IBAN (24 Digits)
                 </label>
                 <input
@@ -286,12 +286,12 @@ export const SettingsView: React.FC = () => {
                   value={form.company.bankIban}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, bankIban: e.target.value } })}
                   placeholder="PK42MEZN0099340102938471"
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-mono text-sm font-bold tracking-wider"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none font-mono text-sm tracking-wider"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   JazzCash Merchant / Account #
                 </label>
                 <input
@@ -299,12 +299,12 @@ export const SettingsView: React.FC = () => {
                   value={form.company.jazzCashNumber}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, jazzCashNumber: e.target.value } })}
                   placeholder="0300-8472910"
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-mono text-sm font-bold"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none font-mono text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1.5">
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                   EasyPaisa Account #
                 </label>
                 <input
@@ -312,7 +312,7 @@ export const SettingsView: React.FC = () => {
                   value={form.company.easyPaisaNumber}
                   onChange={(e) => setForm({ ...form, company: { ...form.company, easyPaisaNumber: e.target.value } })}
                   placeholder="0300-8472910"
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-mono text-sm font-bold"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none font-mono text-sm"
                 />
               </div>
             </div>
@@ -323,97 +323,97 @@ export const SettingsView: React.FC = () => {
         {activeTab === "rates" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* CNC Machining Rates */}
-            <div className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-4">
-              <div className="flex items-center gap-2 border-b border-slate-100 dark:border-zinc-800 pb-3">
-                <Cpu className="w-4 h-4 text-[#fe7518]" />
-                <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">CNC Machining Rates (PKR)</h3>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs space-y-4">
+              <div className="flex items-center gap-2 border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+                <Cpu className="w-5 h-5 text-[#fe7518]" />
+                <h3 className="text-sm font-extrabold text-slate-950 dark:text-white">CNC Machining Rates (PKR)</h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Machine Rate (PKR/hr)
                   </label>
                   <input
                     type="number"
                     value={form.cnc.machineRatePerHour}
                     onChange={(e) => setForm({ ...form, cnc: { ...form.cnc, machineRatePerHour: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     CAM Programming Fee (PKR)
                   </label>
                   <input
                     type="number"
                     value={form.cnc.camProgrammingFee}
                     onChange={(e) => setForm({ ...form, cnc: { ...form.cnc, camProgrammingFee: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Al 6061-T6 (PKR/cm³)
                   </label>
                   <input
                     type="number"
                     value={form.cnc.aluminum6061PerCc}
                     onChange={(e) => setForm({ ...form, cnc: { ...form.cnc, aluminum6061PerCc: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Brass C360 (PKR/cm³)
                   </label>
                   <input
                     type="number"
                     value={form.cnc.brassPerCc}
                     onChange={(e) => setForm({ ...form, cnc: { ...form.cnc, brassPerCc: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
               </div>
             </div>
 
             {/* 3D Printing Rates */}
-            <div className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-4">
-              <div className="flex items-center gap-2 border-b border-slate-100 dark:border-zinc-800 pb-3">
-                <Layers className="w-4 h-4 text-blue-500" />
-                <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">3D Printing Rates (PKR)</h3>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs space-y-4">
+              <div className="flex items-center gap-2 border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+                <Layers className="w-5 h-5 text-blue-500" />
+                <h3 className="text-sm font-extrabold text-slate-950 dark:text-white">3D Printing Rates (PKR)</h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Machine Rate (PKR/hr)
                   </label>
                   <input
                     type="number"
                     value={form.printing.machineRatePerHour}
                     onChange={(e) => setForm({ ...form, printing: { ...form.printing, machineRatePerHour: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Setup Fee (PKR)
                   </label>
                   <input
                     type="number"
                     value={form.printing.setupFee}
                     onChange={(e) => setForm({ ...form, printing: { ...form.printing, setupFee: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     PLA (PKR/gram)
                   </label>
                   <input
@@ -421,12 +421,12 @@ export const SettingsView: React.FC = () => {
                     step="0.5"
                     value={form.printing.plaPerGram}
                     onChange={(e) => setForm({ ...form, printing: { ...form.printing, plaPerGram: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     SLA Resin (PKR/gram)
                   </label>
                   <input
@@ -434,46 +434,46 @@ export const SettingsView: React.FC = () => {
                     step="0.5"
                     value={form.printing.resinPerGram}
                     onChange={(e) => setForm({ ...form, printing: { ...form.printing, resinPerGram: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
               </div>
             </div>
 
             {/* Laser Cutting Rates */}
-            <div className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-4">
-              <div className="flex items-center gap-2 border-b border-slate-100 dark:border-zinc-800 pb-3">
-                <Flame className="w-4 h-4 text-amber-500" />
-                <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">Laser Cutting Rates (PKR)</h3>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs space-y-4">
+              <div className="flex items-center gap-2 border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+                <Flame className="w-5 h-5 text-amber-500" />
+                <h3 className="text-sm font-extrabold text-slate-950 dark:text-white">Laser Cutting Rates (PKR)</h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Cut Rate (PKR/meter)
                   </label>
                   <input
                     type="number"
                     value={form.laser.cutRatePerMeter}
                     onChange={(e) => setForm({ ...form, laser: { ...form.laser, cutRatePerMeter: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Pierce Cost (PKR/point)
                   </label>
                   <input
                     type="number"
                     value={form.laser.pierceCost}
                     onChange={(e) => setForm({ ...form, laser: { ...form.laser, pierceCost: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Acrylic 3mm (PKR/cm²)
                   </label>
                   <input
@@ -481,12 +481,12 @@ export const SettingsView: React.FC = () => {
                     step="0.1"
                     value={form.laser.acrylic3mmPerSqCm}
                     onChange={(e) => setForm({ ...form, laser: { ...form.laser, acrylic3mmPerSqCm: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Acrylic 5mm (PKR/cm²)
                   </label>
                   <input
@@ -494,41 +494,41 @@ export const SettingsView: React.FC = () => {
                     step="0.1"
                     value={form.laser.acrylic5mmPerSqCm}
                     onChange={(e) => setForm({ ...form, laser: { ...form.laser, acrylic5mmPerSqCm: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
               </div>
             </div>
 
             {/* CAD Design Rates */}
-            <div className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-4">
-              <div className="flex items-center gap-2 border-b border-slate-100 dark:border-zinc-800 pb-3">
-                <Compass className="w-4 h-4 text-emerald-500" />
-                <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">CAD Engineering Design (PKR)</h3>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs space-y-4">
+              <div className="flex items-center gap-2 border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+                <Compass className="w-5 h-5 text-emerald-500" />
+                <h3 className="text-sm font-extrabold text-slate-950 dark:text-white">CAD Engineering Design (PKR)</h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Base Hourly Rate (PKR)
                   </label>
                   <input
                     type="number"
                     value={form.cad.hourlyRatePkr}
                     onChange={(e) => setForm({ ...form, cad: { ...form.cad, hourlyRatePkr: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Extra Revision Fee (PKR)
                   </label>
                   <input
                     type="number"
                     value={form.cad.extraRevisionRate}
                     onChange={(e) => setForm({ ...form, cad: { ...form.cad, extraRevisionRate: Number(e.target.value) } })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
               </div>
@@ -538,65 +538,65 @@ export const SettingsView: React.FC = () => {
 
         {/* Tab 4: Database & Backups */}
         {activeTab === "database" && (
-          <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-6">
-            <div className="border-b border-slate-100 dark:border-zinc-800 pb-3">
-              <h2 className="text-base font-bold text-slate-900 dark:text-zinc-100">Database & System Management</h2>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Export complete CRM backups, manage demo mock clients, or reset defaults.</p>
+          <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs space-y-6">
+            <div className="border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+              <h2 className="text-base font-extrabold text-slate-950 dark:text-white">Database & System Management</h2>
+              <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 mt-0.5">Export complete CRM backups, manage demo mock clients, or reset defaults.</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-200 dark:border-zinc-800 space-y-3 flex flex-col justify-between">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div className="p-5 rounded-xl bg-slate-50 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800 space-y-4 flex flex-col justify-between">
                 <div>
-                  <div className="w-8 h-8 rounded-lg bg-orange-500/10 text-[#fe7518] flex items-center justify-center mb-2">
-                    <FolderDown className="w-4 h-4" />
+                  <div className="w-9 h-9 rounded-xl bg-orange-500/10 text-[#fe7518] flex items-center justify-center mb-2.5 border border-orange-500/20">
+                    <FolderDown className="w-5 h-5" />
                   </div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-zinc-100">Export Backup</h4>
-                  <p className="text-xs text-slate-600 dark:text-zinc-400 mt-1">Download complete JSON snapshot of all clients, jobs, quotes, and ledger.</p>
+                  <h4 className="text-sm font-extrabold text-slate-950 dark:text-white">Export Backup</h4>
+                  <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 mt-1">Download complete JSON snapshot of all clients, jobs, quotes, and ledger.</p>
                 </div>
                 <button
                   type="button"
                   onClick={handleExportData}
-                  className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-950 text-xs font-bold btn-haptic"
+                  className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-950 dark:bg-white text-white dark:text-slate-950 text-xs font-bold shadow-sm btn-haptic"
                 >
-                  <Download className="w-3.5 h-3.5" />
+                  <Download className="w-4 h-4" />
                   <span>Download Backup JSON</span>
                 </button>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-200 dark:border-zinc-800 space-y-3 flex flex-col justify-between">
+              <div className="p-5 rounded-xl bg-slate-50 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800 space-y-4 flex flex-col justify-between">
                 <div>
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center mb-2">
-                    <Sparkles className="w-4 h-4" />
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center mb-2.5 border border-amber-500/20">
+                    <Sparkles className="w-5 h-5" />
                   </div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-zinc-100">Clear Demo Mock Clients</h4>
-                  <p className="text-xs text-slate-600 dark:text-zinc-400 mt-1">Purge the 4 initial demo clients while preserving your real business data.</p>
+                  <h4 className="text-sm font-extrabold text-slate-950 dark:text-white">Clear Demo Mock Clients</h4>
+                  <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 mt-1">Purge the 4 initial demo clients while preserving your real business data.</p>
                 </div>
                 <button
                   type="button"
                   disabled={!isDemoDataPresent || isPurging}
                   onClick={handlePurgeDemo}
-                  className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-amber-600 hover:bg-amber-500 disabled:opacity-40 text-slate-950 text-xs font-bold btn-haptic"
+                  className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-slate-950 text-xs font-black shadow-sm btn-haptic"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Sparkles className="w-4 h-4" />
                   <span>{isPurging ? "Purging…" : isDemoDataPresent ? "Clear Demo Records" : "No Demo Data"}</span>
                 </button>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-200 dark:border-zinc-800 space-y-3 flex flex-col justify-between">
+              <div className="p-5 rounded-xl bg-slate-50 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800 space-y-4 flex flex-col justify-between">
                 <div>
-                  <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-600 flex items-center justify-center mb-2">
-                    <AlertTriangle className="w-4 h-4" />
+                  <div className="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center mb-2.5 border border-rose-500/20">
+                    <AlertTriangle className="w-5 h-5" />
                   </div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-zinc-100">Factory Reset</h4>
-                  <p className="text-xs text-slate-600 dark:text-zinc-400 mt-1">Revert all database records and trade pricing back to standard defaults.</p>
+                  <h4 className="text-sm font-extrabold text-slate-950 dark:text-white">Factory Reset</h4>
+                  <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 mt-1">Revert all database records and trade pricing back to standard defaults.</p>
                 </div>
                 <button
                   type="button"
                   disabled={isResetting}
                   onClick={handleReset}
-                  className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-slate-200 dark:bg-zinc-800 hover:bg-rose-100 dark:hover:bg-rose-950/40 text-slate-800 dark:text-zinc-200 hover:text-rose-900 dark:hover:text-rose-300 text-xs font-bold btn-haptic"
+                  className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-200 dark:bg-zinc-800 hover:bg-rose-100 dark:hover:bg-rose-950/40 text-slate-900 dark:text-zinc-100 hover:text-rose-900 dark:hover:text-rose-300 text-xs font-bold border border-slate-300 dark:border-zinc-700 btn-haptic"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <RotateCcw className="w-4 h-4" />
                   <span>{isResetting ? "Resetting…" : "Reset to Defaults"}</span>
                 </button>
               </div>
@@ -605,15 +605,15 @@ export const SettingsView: React.FC = () => {
         )}
 
         {/* Bottom Save Bar */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-zinc-800">
-          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
-            <Database className="w-3.5 h-3.5 text-[#fe7518]" />
+        <div className="flex items-center justify-between pt-5 border-t-2 border-slate-200 dark:border-zinc-800">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-zinc-400">
+            <Database className="w-4 h-4 text-[#fe7518]" />
             <span>Supabase Cloud PostgreSQL & SQLite Synced</span>
           </div>
 
           <button
             type="submit"
-            className="flex items-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-bold text-xs py-2.5 px-6 rounded-lg shadow-sm border border-[#e56208] btn-haptic"
+            className="flex items-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black text-xs py-3 px-6 rounded-xl shadow-md border-2 border-[#e56208] btn-haptic"
           >
             <Save className="w-4 h-4" />
             <span>Save Settings</span>

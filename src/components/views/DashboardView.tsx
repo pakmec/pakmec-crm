@@ -115,33 +115,33 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {permissions.canViewFinancials ? (
           <div 
             onClick={() => onNavigateTab("invoices")}
-            className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs hover:border-[#fe7518]/50 transition-all cursor-pointer group flex flex-col justify-between"
+            className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs hover:border-[#fe7518]/60 transition-all cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">Total Cash Inflow</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">Total Cash Inflow</span>
               <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                 <TrendingUp className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <CurrencyDisplay amount={totalRevenuePKR} size="xl" numberColor="text-slate-900 dark:text-zinc-100" />
-              <div className="text-xs text-slate-500 dark:text-zinc-400 mt-2 flex items-center justify-between">
+              <CurrencyDisplay amount={totalRevenuePKR} size="xl" numberColor="text-slate-950 dark:text-zinc-100" />
+              <div className="text-xs font-bold text-slate-700 dark:text-zinc-300 mt-2 flex items-center justify-between">
                 <span>Adv: {formatCurrency(totalAdvancesCollected)}</span>
                 <span>Settle: {formatCurrency(totalSettlementsCollected)}</span>
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
+          <div className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">Shop Floor Status</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">Shop Floor Status</span>
               <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                 <Wrench className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-slate-900 dark:text-zinc-100">100% Calibrated</div>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">5-Axis CNC, 150W Laser & SLA active</p>
+              <div className="text-2xl font-black text-slate-950 dark:text-zinc-100">100% Calibrated</div>
+              <p className="text-xs font-semibold text-slate-700 dark:text-zinc-300 mt-1">5-Axis CNC, 150W Laser & SLA active</p>
             </div>
           </div>
         )}
@@ -150,32 +150,32 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {permissions.canViewFinancials ? (
           <div 
             onClick={() => onNavigateTab("invoices")}
-            className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs hover:border-[#fe7518]/50 transition-all cursor-pointer group flex flex-col justify-between"
+            className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs hover:border-[#fe7518]/60 transition-all cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">Outstanding Receivables</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">Outstanding Receivables</span>
               <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                 <ShieldCheck className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <CurrencyDisplay amount={totalPendingBalance} size="xl" numberColor="text-amber-600 dark:text-amber-400" />
-              <div className="text-xs text-slate-500 dark:text-zinc-400 mt-2">
+              <CurrencyDisplay amount={totalPendingBalance} size="xl" numberColor="text-amber-700 dark:text-amber-400" />
+              <div className="text-xs font-bold text-slate-700 dark:text-zinc-300 mt-2">
                 {totalPendingBalance === 0 ? "All accounts fully settled" : `${nonArchivedJobs.filter(j => j.balanceDue > 0).length} jobs with pending balance`}
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
+          <div className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">Active Machining</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">Active Machining</span>
               <div className="w-8 h-8 rounded-xl bg-orange-500/10 text-[#fe7518] flex items-center justify-center">
                 <Flame className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-slate-900 dark:text-zinc-100">{activeJobs.length} Running</div>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">{urgentJobs.length} high priority runs</p>
+              <div className="text-2xl font-black text-slate-950 dark:text-zinc-100">{activeJobs.length} Running</div>
+              <p className="text-xs font-semibold text-slate-700 dark:text-zinc-300 mt-1">{urgentJobs.length} high priority runs</p>
             </div>
           </div>
         )}
@@ -183,21 +183,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 3: Active Workshop Jobs */}
         <div 
           onClick={() => onNavigateTab("jobs")}
-          className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs hover:border-[#fe7518]/50 transition-all cursor-pointer group flex flex-col justify-between"
+          className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs hover:border-[#fe7518]/60 transition-all cursor-pointer group flex flex-col justify-between"
         >
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">Active Workshop Jobs</span>
+            <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">Active Workshop Jobs</span>
             <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
               <KanbanSquare className="w-4 h-4" />
             </div>
           </div>
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-zinc-100">{activeJobs.length}</span>
-              <span className="text-xs text-slate-500 dark:text-zinc-400 font-medium">In Production</span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-zinc-100">{activeJobs.length}</span>
+              <span className="text-xs text-slate-700 dark:text-zinc-300 font-bold">In Production</span>
             </div>
-            <div className="text-xs text-[#fe7518] mt-2 font-medium flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#fe7518]" />
+            <div className="text-xs text-[#fe7518] mt-2 font-bold flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#fe7518]" />
               <span>{urgentJobs.length} prioritized run(s)</span>
             </div>
           </div>
@@ -206,20 +206,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 4: Client Accounts */}
         <div 
           onClick={() => onNavigateTab("contacts")}
-          className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs hover:border-[#fe7518]/50 transition-all cursor-pointer group flex flex-col justify-between"
+          className="bg-white dark:bg-[#12141c] p-5 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs hover:border-[#fe7518]/60 transition-all cursor-pointer group flex flex-col justify-between"
         >
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">Client Accounts</span>
+            <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">Client Accounts</span>
             <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-zinc-100">{nonArchivedContacts.length}</span>
-              <span className="text-xs text-slate-500 dark:text-zinc-400 font-medium">Registered Clients</span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-zinc-100">{nonArchivedContacts.length}</span>
+              <span className="text-xs text-slate-700 dark:text-zinc-300 font-bold">Registered Clients</span>
             </div>
-            <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-2 font-medium flex items-center gap-1.5">
+            <div className="text-xs text-emerald-700 dark:text-emerald-400 mt-2 font-bold flex items-center gap-1.5">
               <MessageSquare className="w-3.5 h-3.5" />
               <span>WhatsApp Synced</span>
             </div>

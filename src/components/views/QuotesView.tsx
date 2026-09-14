@@ -653,13 +653,13 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           {/* Left Form: Step 1, 2, 3 */}
           <div className="lg:col-span-7 space-y-6">
             {/* Step 1: Select Manufacturing Domain */}
-            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
-                <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900 flex items-center justify-center text-[11px] font-bold">1</span>
-                  <span>Select Manufacturing Domain</span>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+                <span className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2.5">
+                  <span className="w-6 h-6 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center text-xs font-black">1</span>
+                  <span>STEP 1: SELECT MANUFACTURING DOMAIN</span>
                 </span>
-                <span className="text-xs font-semibold text-[#fe7518]">PKR Currency Engine</span>
+                <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-orange-100 dark:bg-orange-950/60 text-orange-900 dark:text-orange-300 border border-orange-300 dark:border-orange-700">PKR Currency Engine</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -677,16 +677,16 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       key={t.name}
                       type="button"
                       onClick={() => setSelectedTrade(t.name as TradeType)}
-                      className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                      className={`p-3.5 rounded-xl border-2 text-left transition-all flex flex-col justify-between ${
                         isSelected 
-                          ? "bg-orange-50/60 dark:bg-[#1f2433] border-[#fe7518] shadow-xs ring-1 ring-[#fe7518]/30" 
-                          : "bg-white dark:bg-[#161822] border-slate-200 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700"
+                          ? "bg-orange-50/80 dark:bg-[#1f2433] border-[#fe7518] shadow-sm ring-2 ring-[#fe7518]/40" 
+                          : "bg-slate-50/60 dark:bg-[#161822] border-slate-300 dark:border-zinc-700 hover:border-slate-500 dark:hover:border-zinc-500 hover:bg-white dark:hover:bg-[#1a1d28]"
                       }`}
                     >
-                      <Icon className={`w-5 h-5 mb-2.5 ${isSelected ? "text-[#fe7518]" : "text-slate-500 dark:text-zinc-400"}`} />
+                      <Icon className={`w-6 h-6 mb-2.5 ${isSelected ? "text-[#fe7518]" : "text-slate-700 dark:text-zinc-300"}`} />
                       <div>
-                        <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-zinc-100">{t.name}</div>
-                        <div className="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">{t.desc}</div>
+                        <div className="text-sm font-extrabold text-slate-950 dark:text-white">{t.name}</div>
+                        <div className="text-xs font-semibold text-slate-600 dark:text-zinc-400 mt-0.5">{t.desc}</div>
                       </div>
                     </button>
                   );
@@ -695,24 +695,24 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             </div>
 
             {/* Step 2: Technical Parameters */}
-            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
-                <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900 flex items-center justify-center text-[11px] font-bold">2</span>
-                  <span>{selectedTrade} Parameters</span>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+                <span className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2.5">
+                  <span className="w-6 h-6 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center text-xs font-black">2</span>
+                  <span>STEP 2: {selectedTrade.toUpperCase()} CALCULATION PARAMETERS</span>
                 </span>
-                <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Live Auto-Pricing</span>
+                <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">All in PKR</span>
               </div>
 
               {/* 3D Printing Fields */}
               {selectedTrade === "3D Printing" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Filament / Resin Material</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Filament / Resin Material</label>
                     <select
                       value={printMaterial}
                       onChange={(e) => setPrintMaterial(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     >
                       <option value="PLA">PLA Standard (PKR 4.5/g)</option>
                       <option value="PETG">PETG High-Strength (PKR 6.5/g)</option>
@@ -723,46 +723,46 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Part Weight (Grams)</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Part Weight (Grams)</label>
                     <input
                       type="number"
                       min={1}
                       value={printWeightGrams}
                       onChange={(e) => setPrintWeightGrams(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Estimated Print Time (Hours)</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Estimated Print Time (Hours)</label>
                     <input
                       type="number"
                       min={0.5}
                       step={0.5}
                       value={printHours}
                       onChange={(e) => setPrintHours(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Infill Density (%)</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Infill Density (%)</label>
                     <input
                       type="number"
                       min={10}
                       max={100}
                       value={printInfill}
                       onChange={(e) => setPrintInfill(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Surface Post-Processing</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Surface Post-Processing</label>
                     <select
                       value={printFinish}
                       onChange={(e) => setPrintFinish(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     >
                       <option value="None">None (Standard Support Removal only)</option>
                       <option value="Sanding & Deburr">Sanding & Deburr (+PKR 400)</option>
@@ -775,13 +775,13 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
               {/* Laser Cutting Fields */}
               {selectedTrade === "Laser Cutting" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Sheet Substrate & Thickness</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Sheet Substrate & Thickness</label>
                     <select
                       value={laserMaterial}
                       onChange={(e) => setLaserMaterial(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     >
                       <option value="Acrylic 3mm Clear">Cast Acrylic 3mm Clear (PKR 0.7/cm²)</option>
                       <option value="Acrylic 5mm Cast">Cast Acrylic 5mm Frosted (PKR 1.2/cm²)</option>
@@ -791,35 +791,35 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Material Area (cm²)</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Material Area (cm²)</label>
                     <input
                       type="number"
                       min={10}
                       value={laserAreaSqCm}
                       onChange={(e) => setLaserAreaSqCm(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Cut Path Length (Meters)</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Cut Path Length (Meters)</label>
                     <input
                       type="number"
                       min={1}
                       value={laserCutMeters}
                       onChange={(e) => setLaserCutMeters(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Pierce / Lead-in Points</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Pierce / Lead-in Points</label>
                     <input
                       type="number"
                       min={1}
                       value={laserPierces}
                       onChange={(e) => setLaserPierces(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
                 </div>
@@ -827,13 +827,13 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
               {/* CNC Machining Fields */}
               {selectedTrade === "CNC Machining" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Billet Alloy / Stock</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Billet Alloy / Stock</label>
                     <select
                       value={cncMetal}
                       onChange={(e) => setCncMetal(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     >
                       <option value="Aluminum 6061-T6">Aluminum 6061-T6 (PKR 20/cm³)</option>
                       <option value="Brass C360">Brass C360 Free-Cutting (PKR 42/cm³)</option>
@@ -843,40 +843,40 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Stock Envelope Volume (cm³ / cc)</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Stock Envelope Volume (cm³ / cc)</label>
                     <input
                       type="number"
                       min={10}
                       value={cncVolumeCc}
                       onChange={(e) => setCncVolumeCc(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Machine Run Time (Hours)</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Machine Run Time (Hours)</label>
                     <input
                       type="number"
                       min={0.5}
                       step={0.5}
                       value={cncMachiningHours}
                       onChange={(e) => setCncMachiningHours(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Fixtures & Setup Count</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Fixtures & Setup Count</label>
                     <input
                       type="number"
                       min={1}
                       value={cncFixtures}
                       onChange={(e) => setCncFixtures(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
-                  <div className="sm:col-span-2 flex items-center gap-2 pt-1">
+                  <div className="sm:col-span-2 flex items-center gap-2.5 pt-2">
                     <input
                       type="checkbox"
                       id="camCheck"
@@ -884,7 +884,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       onChange={(e) => setCncCamProgramming(e.target.checked)}
                       className="w-4 h-4 accent-[#fe7518] rounded cursor-pointer"
                     />
-                    <label htmlFor="camCheck" className="text-slate-800 dark:text-zinc-200 font-semibold cursor-pointer text-xs">
+                    <label htmlFor="camCheck" className="text-slate-950 dark:text-zinc-100 font-bold cursor-pointer text-sm">
                       Include Mastercam Toolpath Programming & Verification (+PKR {settings.cnc.camProgrammingFee})
                     </label>
                   </div>
@@ -893,13 +893,13 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
               {/* CAD Design Fields */}
               {selectedTrade === "CAD Design" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Project Complexity</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Project Complexity</label>
                     <select
                       value={cadComplexity}
                       onChange={(e) => setCadComplexity(e.target.value as any)}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     >
                       <option value="Simple">Simple (Basic bracket or 2D profile - PKR {settings.cad.hourlyRatePkr}/hr)</option>
                       <option value="Medium">Medium (Multi-component assembly - PKR {Math.round(settings.cad.hourlyRatePkr * 1.35)}/hr)</option>
@@ -908,25 +908,25 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Estimated Engineering Hours</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Estimated Engineering Hours</label>
                     <input
                       type="number"
                       min={1}
                       value={cadHours}
                       onChange={(e) => setCadHours(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Included Revision Cycles</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Included Revision Cycles</label>
                     <input
                       type="number"
                       min={1}
                       max={5}
                       value={cadRevisions}
                       onChange={(e) => setCadRevisions(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
                 </div>
@@ -934,13 +934,13 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
               {/* Fabrication Fields */}
               {selectedTrade === "Industrial Fabrication" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Structure Grade</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Structure Grade</label>
                     <select
                       value={constStructureType}
                       onChange={(e) => setConstStructureType(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     >
                       <option value="Industrial Shed">Industrial Shed Steel Truss (PKR 2,300/sqft)</option>
                       <option value="Grey Structure">Heavy Commercial Grey Structure (PKR 1,850/sqft)</option>
@@ -949,13 +949,13 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Total Covered Area (Sq.Ft)</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Total Covered Area (Sq.Ft)</label>
                     <input
                       type="number"
                       min={100}
                       value={constAreaSqFt}
                       onChange={(e) => setConstAreaSqFt(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
                 </div>
@@ -963,50 +963,50 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
             </div>
 
             {/* Step 3: Client & Commercial Terms */}
-            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
-                <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900 flex items-center justify-center text-[11px] font-bold">3</span>
-                  <span>Client & Deposit Terms</span>
+            <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-4 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+                <span className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2.5">
+                  <span className="w-6 h-6 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center text-xs font-black">3</span>
+                  <span>STEP 3: CLIENT & ADVANCE TERMS</span>
                 </span>
                 
                 {/* Segmented Client Toggle */}
-                <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 dark:bg-[#161822] text-xs font-semibold">
+                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#161822] border border-slate-300 dark:border-zinc-700 text-xs font-bold">
                   <button
                     type="button"
                     onClick={() => setClientMode("existing")}
-                    className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 ${
                       clientMode === "existing"
-                        ? "bg-white dark:bg-[#202534] text-slate-900 dark:text-white shadow-xs font-bold"
-                        : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                        ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950 shadow-sm font-bold"
+                        : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 font-semibold"
                     }`}
                   >
-                    <Users className="w-3.5 h-3.5 text-[#fe7518]" />
+                    <Users className="w-4 h-4 text-[#fe7518]" />
                     <span>Registered Client</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setClientMode("walkin")}
-                    className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 ${
                       clientMode === "walkin"
-                        ? "bg-[#fe7518] text-slate-950 shadow-xs font-bold"
-                        : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                        ? "bg-[#fe7518] text-slate-950 shadow-sm font-bold"
+                        : "text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 font-semibold"
                     }`}
                   >
-                    <UserPlus className="w-3.5 h-3.5" />
-                    <span>+ Walk-in Lead</span>
+                    <UserPlus className="w-4 h-4" />
+                    <span>+ Walk-in / Direct Lead</span>
                   </button>
                 </div>
               </div>
 
               {clientMode === "existing" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Target Client *</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Target Client (Multan Database) *</label>
                     <select
                       value={selectedContactId}
                       onChange={(e) => setSelectedContactId(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-medium"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     >
                       {activeContacts.length === 0 ? (
                         <option value="">No registered clients. Switch to Walk-in Lead mode.</option>
@@ -1021,63 +1021,63 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Quotation Title / Ref</label>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Quotation Title / Ref</label>
                     <input
                       type="text"
                       value={quoteTitle}
                       onChange={(e) => setQuoteTitle(e.target.value)}
                       placeholder="e.g. 50x Drone Motor Mounts CNC 6061"
-                      className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-medium"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base placeholder-slate-400 dark:placeholder-zinc-500 shadow-xs"
                     />
                   </div>
                 </div>
               ) : (
-                <div className="space-y-3 p-4 rounded-xl bg-orange-50/40 dark:bg-[#181a24] border border-orange-200 dark:border-[#2c3244]">
-                  <div className="text-xs font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <div className="space-y-4 p-5 rounded-xl bg-orange-50/60 dark:bg-[#181a24] border-2 border-orange-300 dark:border-[#2c3244]">
+                  <div className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2">
                     <UserPlus className="w-4 h-4 text-[#fe7518]" />
                     <span>Instant Direct Client Registration</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Client Full Name *</label>
+                      <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Client Full Name *</label>
                       <input
                         type="text"
                         required
                         value={walkinName}
                         onChange={(e) => setWalkinName(e.target.value)}
                         placeholder="e.g. Tariq Mahmood"
-                        className="w-full bg-white dark:bg-[#12141c] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-medium"
+                        className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base placeholder-slate-400 shadow-xs"
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">WhatsApp Phone *</label>
+                      <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">WhatsApp Phone *</label>
                       <input
                         type="text"
                         required
                         value={walkinPhone}
                         onChange={(e) => setWalkinPhone(e.target.value)}
                         placeholder="e.g. 0300 1234567"
-                        className="w-full bg-white dark:bg-[#12141c] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-medium"
+                        className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base placeholder-slate-400 shadow-xs"
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Company (Optional)</label>
+                      <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Company (Optional)</label>
                       <input
                         type="text"
                         value={walkinCompany}
                         onChange={(e) => setWalkinCompany(e.target.value)}
                         placeholder="e.g. AeroDynamics Multan"
-                        className="w-full bg-white dark:bg-[#12141c] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm"
+                        className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base placeholder-slate-400 shadow-xs"
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">City</label>
+                      <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">City</label>
                       <input
                         type="text"
                         value={walkinCity}
                         onChange={(e) => setWalkinCity(e.target.value)}
                         placeholder="Multan"
-                        className="w-full bg-white dark:bg-[#12141c] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm"
+                        className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base placeholder-slate-400 shadow-xs"
                       />
                     </div>
                   </div>
@@ -1085,19 +1085,19 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
               )}
 
               {/* Advance Deposit Presets + Custom Amount */}
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-200 dark:border-zinc-800 space-y-3">
+              <div className="p-5 rounded-xl bg-slate-50 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800 space-y-3.5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <label className="block text-xs font-bold text-slate-800 dark:text-zinc-200">
+                  <label className="block text-sm font-extrabold text-slate-950 dark:text-zinc-100">
                     Advance Deposit Terms
                   </label>
-                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-md bg-slate-900 text-white dark:bg-zinc-800 dark:text-zinc-200">
+                  <span className="text-xs font-bold px-3 py-1 rounded-md bg-slate-950 text-white dark:bg-zinc-800 dark:text-zinc-100">
                     {calculatedAdvancePercent}% Deposit Required
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                   <div className="sm:col-span-6 relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold text-slate-500">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-xs font-bold text-slate-600 dark:text-zinc-400">
                       PKR
                     </div>
                     <input
@@ -1112,7 +1112,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                         const val = e.target.value;
                         setCustomAdvancePkr(val === "" ? null : Number(val));
                       }}
-                      className="w-full pl-12 pr-3 py-2 bg-white dark:bg-[#12141c] text-slate-900 dark:text-zinc-100 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold text-sm"
+                      className="w-full pl-12 pr-3.5 py-2.5 bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-bold rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
@@ -1136,10 +1136,10 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                             setIsManualAdvance(false);
                             setCustomAdvancePkr(Math.round(total * (item.pct / 100)));
                           }}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                          className={`px-3.5 py-2 rounded-lg text-xs font-extrabold transition-all ${
                             isCurrent
-                              ? "bg-[#fe7518] text-slate-950 shadow-xs"
-                              : "bg-white dark:bg-[#141620] text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-800 hover:border-slate-400"
+                              ? "bg-[#fe7518] text-slate-950 shadow-xs ring-2 ring-[#fe7518]/50"
+                              : "bg-white dark:bg-[#141620] text-slate-800 dark:text-zinc-200 border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-500"
                           }`}
                         >
                           {item.label}
@@ -1149,33 +1149,33 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between text-xs text-slate-600 dark:text-zinc-400 pt-2 border-t border-slate-200 dark:border-zinc-800">
-                  <span>Advance: <strong className="text-slate-900 dark:text-white font-bold">{formatCurrency(advanceRequired)}</strong></span>
-                  <span>Balance Due: <strong className="text-slate-900 dark:text-white font-bold">{formatCurrency(balanceDue)}</strong></span>
+                <div className="flex flex-wrap items-center justify-between text-xs sm:text-sm text-slate-700 dark:text-zinc-300 pt-2.5 border-t border-slate-200 dark:border-zinc-800 font-semibold">
+                  <span>Advance: <strong className="text-emerald-700 dark:text-emerald-400 font-bold">{formatCurrency(advanceRequired)}</strong></span>
+                  <span>Balance Due: <strong className="text-amber-800 dark:text-amber-400 font-bold">{formatCurrency(balanceDue)}</strong></span>
                 </div>
               </div>
 
               {/* Discount & Validity */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Discount Amount (PKR)</label>
+                  <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Discount Amount (PKR)</label>
                   <input
                     type="number"
                     min={0}
                     value={discount}
                     onChange={(e) => setDiscount(Number(e.target.value))}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">Validity (Days)</label>
+                  <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Validity (Days)</label>
                   <input
                     type="number"
                     min={1}
                     value={validDays}
                     onChange={(e) => setValidDays(Math.max(1, Number(e.target.value)))}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs sm:text-sm font-semibold"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                   />
                 </div>
               </div>
@@ -1184,10 +1184,13 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
           {/* Right Live Estimate & Issue (Sticky 5 Cols) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white dark:bg-[#12141c] rounded-2xl border border-slate-200 dark:border-zinc-800 p-6 space-y-5 sticky top-20 shadow-xs">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
-                <h3 className="text-base font-bold text-slate-900 dark:text-zinc-100">Quotation Breakdown</h3>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-orange-50 dark:bg-orange-950/40 text-[#fe7518]">
+            <div className="bg-white dark:bg-[#12141c] rounded-2xl border-2 border-slate-200 dark:border-zinc-800 p-6 space-y-5 sticky top-20 shadow-xs">
+              <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
+                <span className="text-sm font-extrabold text-slate-950 dark:text-white flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center text-xs font-black">4</span>
+                  <span>STEP 4: LIVE ESTIMATE BREAKDOWN</span>
+                </span>
+                <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-orange-100 dark:bg-orange-950/60 text-orange-900 dark:text-orange-300 border border-orange-300 dark:border-orange-700">
                   {lineItems.length} items
                 </span>
               </div>
@@ -1195,41 +1198,41 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
               {/* Itemized Table */}
               <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
                 {lineItems.map((item, idx) => (
-                  <div key={item.id || idx} className="p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-200 dark:border-zinc-800 space-y-1">
-                    <div className="flex items-start justify-between gap-2 text-xs">
-                      <span className="text-slate-800 dark:text-zinc-200 font-medium leading-tight">{item.description}</span>
-                      <span className="font-bold text-slate-900 dark:text-white shrink-0">
+                  <div key={item.id || idx} className="p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-300 dark:border-zinc-700 space-y-1">
+                    <div className="flex items-start justify-between gap-2 text-xs sm:text-sm">
+                      <span className="text-slate-950 dark:text-zinc-100 font-bold leading-tight">{item.description}</span>
+                      <span className="font-extrabold text-slate-950 dark:text-white shrink-0 tabular-nums">
                         {formatCurrency(item.amount)}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-500 dark:text-zinc-400 flex items-center justify-between pt-1">
+                    <div className="text-xs text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 font-medium">
                       <span>{item.quantity} {item.unit} @ {formatCurrency(item.unitPrice)}/{item.unit}</span>
-                      <span className="text-[#fe7518] font-semibold">{item.trade}</span>
+                      <span className="text-[#fe7518] font-bold">{item.trade}</span>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Price Summary Breakdown */}
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#0c0d12] border border-slate-200 dark:border-zinc-800 space-y-2.5 text-xs">
-                <div className="flex items-center justify-between text-slate-600 dark:text-zinc-400">
+              <div className="p-5 rounded-xl bg-slate-50 dark:bg-[#0c0d12] border-2 border-slate-200 dark:border-zinc-800 space-y-3 text-sm">
+                <div className="flex items-center justify-between text-slate-700 dark:text-zinc-300 font-semibold">
                   <span>Subtotal Calculated:</span>
                   <CurrencyDisplay amount={subtotal} size="sm" />
                 </div>
                 {discount > 0 && (
-                  <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <div className="flex items-center justify-between text-emerald-800 dark:text-emerald-400 font-bold">
                     <span>Discount Applied:</span>
-                    <CurrencyDisplay amount={-discount} size="sm" numberColor="text-emerald-600 dark:text-emerald-400" />
+                    <CurrencyDisplay amount={-discount} size="sm" numberColor="text-emerald-700 dark:text-emerald-400" />
                   </div>
                 )}
-                <div className="flex items-center justify-between text-base font-bold text-slate-900 dark:text-white pt-2.5 border-t border-slate-200 dark:border-zinc-800">
-                  <span className="text-[#fe7518]">Total:</span>
+                <div className="flex items-center justify-between text-lg font-black text-slate-950 dark:text-white pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
+                  <span className="text-[#fe7518]">Total Quotation:</span>
                   <CurrencyDisplay amount={total} size="lg" numberColor="text-[#fe7518]" />
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-100 dark:bg-[#151824] border border-slate-200 dark:border-zinc-700 flex items-center justify-between text-xs font-semibold">
-                  <span>Advance Due ({calculatedAdvancePercent}%):</span>
-                  <CurrencyDisplay amount={advanceRequired} size="sm" numberColor="text-emerald-600 dark:text-emerald-400" />
+                <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-[#151824] border-2 border-slate-300 dark:border-zinc-700 flex items-center justify-between text-xs sm:text-sm font-bold">
+                  <span className="text-slate-900 dark:text-zinc-100">Advance Deposit ({calculatedAdvancePercent}%):</span>
+                  <CurrencyDisplay amount={advanceRequired} size="sm" numberColor="text-emerald-700 dark:text-emerald-400" />
                 </div>
               </div>
 
@@ -1237,7 +1240,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
               <button
                 type="button"
                 onClick={handleCreateQuote}
-                className="w-full flex items-center justify-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 py-3 px-4 rounded-xl font-bold text-sm shadow-sm border border-[#e56208] btn-haptic"
+                className="w-full flex items-center justify-center gap-2 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 py-3.5 px-4 rounded-xl font-black text-sm shadow-md border-2 border-[#e56208] btn-haptic"
               >
                 <FileText className="w-4 h-4" />
                 <span>Save & Issue Quotation</span>
@@ -1534,43 +1537,43 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       {editingQuote && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print overflow-y-auto">
           <div className="bg-white dark:bg-[#12141c] border border-slate-300 dark:border-zinc-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8">
-            <div className="border-b border-slate-200 dark:border-zinc-800 pb-3 flex items-center justify-between">
+            <div className="border-b-2 border-slate-200 dark:border-zinc-800 pb-3 flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <Edit className="w-4 h-4 text-[#fe7518]" />
+                <h3 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
+                  <Edit className="w-5 h-5 text-[#fe7518]" />
                   <span>Edit Quotation ({editingQuote.id})</span>
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+                <p className="text-xs font-semibold text-slate-700 dark:text-zinc-300 mt-0.5">
                   Modify line items, quantities, rates, discounts, or terms.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setEditingQuote(null)}
-                className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
+                className="text-slate-500 hover:text-slate-950 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveEditedQuote} className="space-y-4 text-xs">
+            <form onSubmit={handleSaveEditedQuote} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Quotation Title</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Quotation Title</label>
                   <input
                     type="text"
                     required
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-white px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm font-medium"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-white px-3 py-2 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm font-bold shadow-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Manufacturing Trade</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Manufacturing Trade</label>
                   <select
                     value={editTrade}
                     onChange={(e) => setEditTrade(e.target.value as TradeType)}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-white px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-white px-3 py-2 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm font-bold shadow-xs"
                   >
                     <option value="CNC Machining">CNC Machining</option>
                     <option value="3D Printing">3D Printing</option>
@@ -1584,27 +1587,27 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
               {/* Line Items Editor */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-xs font-bold text-slate-800 dark:text-zinc-200">Line Items & Rates</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100">Line Items & Rates</label>
                   <button
                     type="button"
                     onClick={handleAddEditLineItem}
                     className="flex items-center gap-1 text-xs font-bold text-[#fe7518] hover:underline"
                   >
                     <Plus className="w-3.5 h-3.5" />
-                    <span>Add Item</span>
+                    <span>+ Add Item</span>
                   </button>
                 </div>
 
                 <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                   {editLineItems.map((item, idx) => (
-                    <div key={item.id || idx} className="p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-200 dark:border-zinc-800 space-y-2">
+                    <div key={item.id || idx} className="p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800 space-y-2">
                       <div className="flex items-center gap-2">
                         <input
                           type="text"
                           value={item.description}
                           placeholder="Item Description"
                           onChange={(e) => handleUpdateEditLineItem(idx, "description", e.target.value)}
-                          className="flex-1 bg-white dark:bg-[#12141c] text-slate-900 dark:text-white px-3 py-1.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs"
+                          className="flex-1 bg-white dark:bg-[#12141c] text-slate-950 dark:text-white px-3 py-1.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs font-semibold"
                         />
                         <button
                           type="button"
@@ -1618,38 +1621,38 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
                       <div className="grid grid-cols-3 gap-2">
                         <div>
-                          <label className="block text-[10px] font-semibold text-slate-500">Qty & Unit</label>
+                          <label className="block text-[11px] font-bold text-slate-900 dark:text-zinc-200">Qty & Unit</label>
                           <div className="flex items-center gap-1">
                             <input
                               type="number"
                               min={1}
                               value={item.quantity}
                               onChange={(e) => handleUpdateEditLineItem(idx, "quantity", Number(e.target.value))}
-                              className="w-16 bg-white dark:bg-[#12141c] text-slate-900 dark:text-white p-1 rounded border border-slate-300 dark:border-zinc-700 text-xs font-semibold"
+                              className="w-16 bg-white dark:bg-[#12141c] text-slate-950 dark:text-white p-1.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
                             />
                             <input
                               type="text"
                               value={item.unit}
                               onChange={(e) => handleUpdateEditLineItem(idx, "unit", e.target.value)}
-                              className="w-14 bg-white dark:bg-[#12141c] text-slate-900 dark:text-white p-1 rounded border border-slate-300 dark:border-zinc-700 text-xs"
+                              className="w-14 bg-white dark:bg-[#12141c] text-slate-950 dark:text-white p-1.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
                             />
                           </div>
                         </div>
 
                         <div>
-                          <label className="block text-[10px] font-semibold text-slate-500">Rate (PKR)</label>
+                          <label className="block text-[11px] font-bold text-slate-900 dark:text-zinc-200">Rate (PKR)</label>
                           <input
                             type="number"
                             min={0}
                             value={item.unitPrice}
                             onChange={(e) => handleUpdateEditLineItem(idx, "unitPrice", Number(e.target.value))}
-                            className="w-full bg-white dark:bg-[#12141c] text-slate-900 dark:text-white p-1 rounded border border-slate-300 dark:border-zinc-700 text-xs font-semibold"
+                            className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-white p-1.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-[10px] font-semibold text-slate-500">Amount (PKR)</label>
-                          <div className="p-1 bg-slate-100 dark:bg-[#12141c] rounded text-xs font-bold text-slate-900 dark:text-zinc-100 text-right">
+                          <label className="block text-[11px] font-bold text-slate-900 dark:text-zinc-200">Amount (PKR)</label>
+                          <div className="p-1.5 bg-slate-100 dark:bg-[#12141c] rounded-lg text-xs font-black text-slate-950 dark:text-zinc-100 text-right">
                             {formatCurrency(item.amount)}
                           </div>
                         </div>
@@ -1660,52 +1663,52 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
               </div>
 
               {/* Discount & Advance % */}
-              <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-200 dark:border-zinc-800">
+              <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Discount (PKR)</label>
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-200 mb-1">Discount (PKR)</label>
                   <input
                     type="number"
                     min={0}
                     value={editDiscount}
                     onChange={(e) => setEditDiscount(Number(e.target.value))}
-                    className="w-full bg-white dark:bg-[#12141c] text-slate-900 dark:text-white p-1.5 rounded-lg border border-slate-300 dark:border-zinc-700 text-xs font-semibold"
+                    className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-white p-2 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Advance Deposit (%)</label>
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-200 mb-1">Advance Deposit (%)</label>
                   <input
                     type="number"
                     min={0}
                     max={100}
                     value={editAdvancePercent}
                     onChange={(e) => setEditAdvancePercent(Number(e.target.value))}
-                    className="w-full bg-white dark:bg-[#12141c] text-slate-900 dark:text-white p-1.5 rounded-lg border border-slate-300 dark:border-zinc-700 text-xs font-semibold"
+                    className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-white p-2 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
                   />
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-100 dark:bg-[#0c0d12] border border-slate-200 dark:border-zinc-800 flex items-center justify-between text-xs">
+              <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-[#0c0d12] border-2 border-slate-300 dark:border-zinc-800 flex items-center justify-between text-xs sm:text-sm">
                 <div>
-                  <span className="text-slate-500">Total: </span>
-                  <strong className="text-[#fe7518] text-sm">{formatCurrency(editTotal)}</strong>
+                  <span className="text-slate-700 dark:text-zinc-300 font-bold">Total: </span>
+                  <strong className="text-[#fe7518] text-base font-black ml-1">{formatCurrency(editTotal)}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-500">Advance: </span>
-                  <strong className="text-emerald-600 dark:text-emerald-400">{formatCurrency(editAdvanceRequired)}</strong>
+                  <span className="text-slate-700 dark:text-zinc-300 font-bold">Advance Required: </span>
+                  <strong className="text-emerald-700 dark:text-emerald-400 text-base font-black ml-1">{formatCurrency(editAdvanceRequired)}</strong>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-zinc-800">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setEditingQuote(null)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-semibold"
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold text-xs hover:bg-slate-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-bold shadow-xs btn-haptic"
+                  className="px-5 py-2.5 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black text-xs shadow-xs btn-haptic"
                 >
                   Save Changes to Quote
                 </button>
@@ -1718,67 +1721,68 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       {/* Convert to Job Modal */}
       {convertModalQuote && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print">
-          <div className="bg-white dark:bg-[#12141c] border border-slate-300 dark:border-zinc-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="border-b border-slate-200 dark:border-zinc-800 pb-3">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <div className="bg-white dark:bg-[#12141c] border-2 border-slate-300 dark:border-zinc-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="border-b-2 border-slate-200 dark:border-zinc-800 pb-3">
+              <h3 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-[#fe7518]" />
                 <span>Approve Quote & Start Production</span>
               </h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+              <p className="text-xs font-semibold text-slate-700 dark:text-zinc-300 mt-0.5">
                 Converts {convertModalQuote.id} into an active Job on the Kanban board.
               </p>
             </div>
 
-            <div className="space-y-3.5 text-xs">
-              <div className="p-3 bg-slate-50 dark:bg-[#181a24] rounded-xl border border-slate-200 dark:border-zinc-800 space-y-1">
-                <div className="text-slate-900 dark:text-white font-bold text-sm">{convertModalQuote.title}</div>
-                <div className="text-[#fe7518] font-semibold">Client: {convertModalQuote.contactName}</div>
-                <div className="text-slate-600 dark:text-zinc-400">
-                  Total: {formatCurrency(convertModalQuote.total)} | Advance: {formatCurrency(convertModalQuote.advanceRequired)}
+            <div className="space-y-4 text-xs">
+              <div className="p-3.5 bg-slate-50 dark:bg-[#181a24] rounded-xl border-2 border-slate-200 dark:border-zinc-800 space-y-1.5">
+                <div className="text-slate-950 dark:text-white font-black text-sm">{convertModalQuote.title}</div>
+                <div className="text-[#fe7518] font-bold text-xs">Client: {convertModalQuote.contactName}</div>
+                <div className="text-slate-800 dark:text-zinc-200 font-bold text-xs flex items-center justify-between pt-1 border-t border-slate-200 dark:border-zinc-700">
+                  <span>Total: {formatCurrency(convertModalQuote.total)}</span>
+                  <span className="text-emerald-700 dark:text-emerald-400">Advance: {formatCurrency(convertModalQuote.advanceRequired)}</span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Target Completion Deadline</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Target Completion Deadline</label>
                 <input
                   type="date"
                   value={convertDeadline}
                   onChange={(e) => setConvertDeadline(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-white p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-semibold text-xs"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-white p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-bold text-sm shadow-xs"
                 />
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#181b24] border border-slate-200 dark:border-zinc-800 flex items-center gap-3">
+              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#181b24] border-2 border-slate-300 dark:border-zinc-800 flex items-start gap-3">
                 <input
                   type="checkbox"
                   id="advanceRec"
                   checked={convertAdvanceReceived}
                   onChange={(e) => setConvertAdvanceReceived(e.target.checked)}
-                  className="w-4 h-4 accent-[#fe7518] rounded cursor-pointer"
+                  className="w-5 h-5 accent-[#fe7518] rounded cursor-pointer mt-0.5"
                 />
                 <label htmlFor="advanceRec" className="cursor-pointer">
-                  <span className="text-slate-900 dark:text-white font-bold block">
+                  <span className="text-slate-950 dark:text-white font-extrabold text-sm block">
                     Advance Deposit of {formatCurrency(convertModalQuote.advanceRequired)} Received
                   </span>
-                  <span className="text-[11px] text-slate-500 dark:text-zinc-400 block">
+                  <span className="text-xs font-semibold text-slate-700 dark:text-zinc-300 block mt-0.5">
                     Marks deposit as collected and deducts from final invoice balance
                   </span>
                 </label>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-zinc-800">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
               <button
                 type="button"
                 onClick={() => setConvertModalQuote(null)}
-                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 text-xs font-semibold"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 text-xs font-bold hover:bg-slate-200"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleConfirmConvert}
-                className="px-4 py-2 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-bold text-xs shadow-xs btn-haptic"
+                className="px-5 py-2.5 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black text-xs shadow-xs btn-haptic"
               >
                 Start Production Job
               </button>

@@ -329,45 +329,43 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                 Clear Demo Data
               </button>
             </div>
-          )}
-
-          <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          )}          <div className="relative">
+            <Search className="w-4 h-4 text-slate-700 dark:text-zinc-300 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
               placeholder="Search by name, company, city, phone…"
-              className="w-full bg-slate-100 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 placeholder-slate-400 pl-9 pr-3.5 py-2 rounded-lg border border-slate-200 dark:border-zinc-800 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none text-xs font-medium"
+              className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 placeholder-slate-500 dark:placeholder-zinc-400 pl-10 pr-3.5 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none text-xs sm:text-sm font-bold shadow-xs"
             />
           </div>
 
           {/* Status Filter (Active vs Archived) */}
-          <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-100 dark:bg-[#161822] text-xs font-semibold">
+          <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-200 dark:bg-[#161822] text-xs font-bold border border-slate-300 dark:border-zinc-700">
             <button
               type="button"
               data-testid="tab-active-contacts"
               onClick={() => setStatusTab("active")}
-              className={`py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+              className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                 statusTab === "active"
-                  ? "bg-white dark:bg-[#202534] text-slate-900 dark:text-zinc-100 shadow-xs font-bold"
-                  : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
+                  ? "bg-white dark:bg-[#202534] text-slate-950 dark:text-zinc-100 shadow-sm font-black"
+                  : "text-slate-700 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-zinc-200 font-bold"
               }`}
             >
-              <Users className="w-3.5 h-3.5 text-[#fe7518]" />
+              <Users className="w-4 h-4 text-[#fe7518]" />
               <span>Active ({activeContactsCount})</span>
             </button>
             <button
               type="button"
               data-testid="tab-archived-contacts"
               onClick={() => setStatusTab("archived")}
-              className={`py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+              className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                 statusTab === "archived"
-                  ? "bg-white dark:bg-[#202534] text-slate-900 dark:text-zinc-100 shadow-xs font-bold"
-                  : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200"
+                  ? "bg-white dark:bg-[#202534] text-slate-950 dark:text-zinc-100 shadow-sm font-black"
+                  : "text-slate-700 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-zinc-200 font-bold"
               }`}
             >
-              <Archive className="w-3.5 h-3.5 text-amber-500" />
+              <Archive className="w-4 h-4 text-amber-500" />
               <span>Archived ({archivedContactsCount})</span>
             </button>
           </div>
@@ -378,10 +376,10 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
               <button
                 key={t}
                 onClick={() => setFilterTrade(t)}
-                className={`px-3 py-1 rounded-lg whitespace-nowrap shrink-0 font-semibold transition-colors ${
+                className={`px-3 py-1.5 rounded-lg whitespace-nowrap shrink-0 font-bold transition-colors ${
                   filterTrade === t 
-                    ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs" 
-                    : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-[#161822]"
+                    ? "bg-[#fe7518] text-slate-950 font-black shadow-xs" 
+                    : "text-slate-800 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white bg-slate-200 dark:bg-[#161822] border border-slate-300 dark:border-zinc-700"
                 }`}
               >
                 {t === "all" ? "All Trades" : t}
@@ -393,10 +391,10 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
         {/* Contacts List */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {filteredContacts.length === 0 ? (
-            <div className="p-6 text-center space-y-2 bg-white dark:bg-[#12141c] rounded-2xl border border-slate-200 dark:border-zinc-800">
+            <div className="p-6 text-center space-y-2 bg-white dark:bg-[#12141c] rounded-2xl border-2 border-slate-200 dark:border-zinc-800">
               <Users className="w-6 h-6 text-slate-400 mx-auto" />
-              <h3 className="text-xs font-bold text-slate-900 dark:text-zinc-100">No Clients Found</h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">
+              <h3 className="text-sm font-black text-slate-950 dark:text-zinc-100">No Clients Found</h3>
+              <p className="text-xs font-medium text-slate-600 dark:text-zinc-400">
                 Register a client account or adjust search filter.
               </p>
             </div>
@@ -411,37 +409,37 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                     setSelectedContactId(c.id);
                     setShowMobileDetail(true);
                   }}
-                  className={`p-3.5 rounded-xl cursor-pointer transition-all border text-left space-y-1.5 ${
+                  className={`p-3.5 rounded-xl cursor-pointer transition-all border-2 text-left space-y-1.5 ${
                     isSelected 
-                      ? "bg-white dark:bg-[#181c28] border-[#fe7518] shadow-xs ring-1 ring-[#fe7518]/30" 
-                      : "bg-white dark:bg-[#12141c] border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-[#161924]"
+                      ? "bg-white dark:bg-[#181c28] border-[#fe7518] shadow-sm ring-2 ring-[#fe7518]/30" 
+                      : "bg-white dark:bg-[#12141c] border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-bold text-sm text-slate-900 dark:text-zinc-100 truncate">
+                    <span className="font-black text-sm text-slate-950 dark:text-zinc-100 truncate">
                       {c.name}
                     </span>
-                    <span className="text-[11px] px-2 py-0.5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 shrink-0 font-medium">
+                    <span className="text-xs px-2.5 py-0.5 rounded-md bg-slate-200 dark:bg-zinc-700 text-slate-950 dark:text-zinc-100 shrink-0 font-bold border border-slate-300 dark:border-zinc-600">
                       {c.city}
                     </span>
                   </div>
 
                   {c.company && (
-                    <div className="text-xs text-slate-600 dark:text-zinc-400 truncate flex items-center gap-1.5">
+                    <div className="text-xs font-semibold text-slate-700 dark:text-zinc-300 truncate flex items-center gap-1.5">
                       <Building2 className="w-3.5 h-3.5 text-[#fe7518] shrink-0" />
                       <span>{c.company}</span>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 dark:border-zinc-800">
+                  <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-200 dark:border-zinc-800">
                     <div className="flex flex-wrap gap-1">
                       {(c.tradeTags || []).slice(0, 2).map((tag) => (
-                        <span key={tag} className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300">
+                        <span key={tag} className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700">
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <span className="text-xs text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 shrink-0">
+                    <span className="text-xs text-emerald-800 dark:text-emerald-300 font-black flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 shrink-0">
                       <MessageSquare className="w-3.5 h-3.5" />
                       <span>{c.whatsappLogs?.length || 0}</span>
                     </span>
@@ -453,52 +451,60 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
         </div>
       </div>
 
-      {/* Right Column: Contact Details, WhatsApp Log & Timeline */}
+      {/* RIGHT PANE: Contact Overview & WhatsApp Log Stream */}
       {activeContact ? (
-        <div className={`flex-1 bg-white dark:bg-[#090a0f] flex flex-col overflow-y-auto ${
-          !showMobileDetail ? "hidden lg:flex" : "flex"
-        }`}>
-          {/* Profile Header */}
-          <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-zinc-800 bg-white dark:bg-[#12141c] flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => setShowMobileDetail(false)}
-                  className="lg:hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 text-xs font-semibold btn-haptic mr-1"
-                >
-                  <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
-                  <span>Clients</span>
-                </button>
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-zinc-100">{activeContact.name}</h1>
-                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300">
-                  {activeContact.id}
-                </span>
-              </div>
-              <div className="flex items-center gap-4 text-xs text-slate-600 dark:text-zinc-400 flex-wrap font-medium">
-                {activeContact.company && (
-                  <span className="flex items-center gap-1 text-slate-900 dark:text-zinc-100 font-semibold">
-                    <Building2 className="w-3.5 h-3.5 text-[#fe7518]" />
-                    {activeContact.company}
+        <div className={`flex-1 flex flex-col overflow-y-auto bg-white dark:bg-[#0f1118] ${showMobileDetail ? "flex" : "hidden md:flex"}`}>
+          {/* Contact Header */}
+          <div className="p-4 sm:p-6 border-b-2 border-slate-200 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#12141c]">
+            <div className="flex items-start gap-3">
+              <button
+                type="button"
+                onClick={() => setShowMobileDetail(false)}
+                className="md:hidden p-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700 font-bold"
+              >
+                <ChevronLeft className="w-4 h-4 text-[#fe7518]" />
+              </button>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight">
+                    {activeContact.name}
+                  </h1>
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700">
+                    {activeContact.id}
                   </span>
-                )}
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5" />
-                  {activeContact.city}
-                </span>
-                <span className="flex items-center gap-1 font-mono">
-                  <Phone className="w-3.5 h-3.5" />
-                  {activeContact.phone}
-                </span>
+                  {activeContact.isArchived && (
+                    <span className="text-xs font-black uppercase px-2.5 py-0.5 rounded bg-rose-100 text-rose-900 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-300">
+                      Archived
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3 text-xs font-bold text-slate-700 dark:text-zinc-300 flex-wrap">
+                  {activeContact.company && (
+                    <span className="flex items-center gap-1 font-extrabold text-slate-950 dark:text-zinc-100">
+                      <Building2 className="w-3.5 h-3.5 text-[#fe7518]" />
+                      <span>{activeContact.company}</span>
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-slate-600 dark:text-zinc-400" />
+                    <span>{activeContact.city}</span>
+                  </span>
+                  <span className="flex items-center gap-1 font-mono">
+                    <Phone className="w-3.5 h-3.5 text-slate-600 dark:text-zinc-400" />
+                    <span>{activeContact.phone}</span>
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Streamlined Actions */}
-            <div className="flex items-center gap-2.5 flex-wrap">
+            {/* Actions Bar */}
+            <div className="flex items-center gap-2 flex-wrap">
               {!activeContact.isArchived && onOpenNewQuoteForContact && permissions.canCreateQuotes && (
                 <button
                   onClick={() => onOpenNewQuoteForContact(activeContact.id)}
-                  className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm border border-[#e56208] btn-haptic"
+                  className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-black py-2.5 px-4 rounded-xl shadow-sm border border-[#e56208] btn-haptic"
                 >
                   <FilePlus className="w-4 h-4" />
                   <span>+ Create Quote</span>
@@ -509,19 +515,17 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                 href={`https://wa.me/${formatWhatsAppPhone(activeContact.phone)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#075E54] dark:text-[#25D366] font-bold text-xs py-2.5 px-3.5 rounded-xl transition-all btn-haptic border border-[#25D366]/30"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow-sm btn-haptic"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>WhatsApp</span>
-                <ExternalLink className="w-3 h-3" />
+                <span>WhatsApp ({activeContact.phone})</span>
               </a>
 
               <button
                 onClick={() => handleOpenEditModal(activeContact)}
-                className="flex items-center gap-1.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700 text-xs font-semibold py-2.5 px-3 rounded-xl btn-haptic"
-                title="Edit Client Profile"
+                className="flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-900 dark:text-zinc-100 text-xs font-bold border-2 border-slate-300 dark:border-zinc-700 btn-haptic"
               >
-                <Edit className="w-3.5 h-3.5 text-[#fe7518]" />
+                <Edit className="w-3.5 h-3.5" />
                 <span>Edit</span>
               </button>
 
@@ -534,18 +538,18 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                         setConfirmAction("archive");
                         setIsConfirmModalOpen(true);
                       }}
-                      className="p-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-slate-600 hover:text-amber-700 dark:text-zinc-400 dark:hover:text-amber-300 border border-slate-300 dark:border-zinc-700 transition-colors btn-haptic"
                       title="Archive Client"
+                      className="p-2 rounded-xl text-slate-700 hover:text-amber-700 dark:text-zinc-300 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors btn-haptic border-2 border-slate-300 dark:border-zinc-700"
                     >
                       <Archive className="w-4 h-4" />
                     </button>
                   ) : (
                     <button
                       onClick={() => unarchiveContact(activeContact.id)}
-                      className="flex items-center gap-1 px-3 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-xs btn-haptic"
+                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow-sm btn-haptic"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
-                      <span>Restore</span>
+                      <span>Restore Client</span>
                     </button>
                   )}
                 </>
@@ -554,29 +558,29 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
           </div>
 
           {/* Metric Strip */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-4 sm:p-6 border-b border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-[#0c0e14]">
-            <div className="bg-white dark:bg-[#12141c] p-4 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-xs">
-              <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400 block mb-1">Total Invoiced</span>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-4 sm:p-6 border-b-2 border-slate-200 dark:border-zinc-800 bg-slate-100/70 dark:bg-[#0c0e14]">
+            <div className="bg-white dark:bg-[#12141c] p-4 rounded-xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs">
+              <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 block mb-1">Total Invoiced</span>
               <CurrencyDisplay amount={totalSpentPKR} size="md" />
             </div>
 
-            <div className="bg-white dark:bg-[#12141c] p-4 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-xs">
-              <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400 block mb-1">Outstanding Balance</span>
+            <div className="bg-white dark:bg-[#12141c] p-4 rounded-xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs">
+              <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 block mb-1">Outstanding Balance</span>
               <CurrencyDisplay amount={pendingDuePKR} size="md" color={pendingDuePKR > 0 ? "amber" : "green"} />
             </div>
 
-            <div className="bg-white dark:bg-[#12141c] p-4 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-xs">
-              <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400 block mb-1">Production Jobs</span>
-              <div className="text-base sm:text-lg font-bold text-slate-900 dark:text-zinc-100">
+            <div className="bg-white dark:bg-[#12141c] p-4 rounded-xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs">
+              <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 block mb-1">Production Jobs</span>
+              <div className="text-base sm:text-lg font-black text-slate-950 dark:text-zinc-100">
                 {contactJobs.length} Jobs
               </div>
             </div>
 
-            <div className="bg-white dark:bg-[#12141c] p-4 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-xs">
-              <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400 block mb-1">Trade Domains</span>
+            <div className="bg-white dark:bg-[#12141c] p-4 rounded-xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs">
+              <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 block mb-1">Trade Domains</span>
               <div className="flex flex-wrap gap-1 mt-0.5">
                 {(activeContact.tradeTags || []).map((t) => (
-                  <span key={t} className="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300">
+                  <span key={t} className="text-xs font-bold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700">
                     {t}
                   </span>
                 ))}
@@ -587,29 +591,29 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
           {/* WhatsApp Conversation Timeline & Entry Form */}
           <div className="p-4 sm:p-6 flex-1 space-y-6">
             <div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-emerald-500" />
+              <h2 className="text-base font-black text-slate-950 dark:text-zinc-100 flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>WhatsApp Conversation Notes</span>
               </h2>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+              <p className="text-xs font-semibold text-slate-700 dark:text-zinc-300 mt-0.5">
                 Record client inquiries, quotations sent, advance confirmations, and delivery updates.
               </p>
             </div>
 
             {/* Note Composer */}
-            <form onSubmit={handleAddLog} className="bg-white dark:bg-[#12141c] p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-3.5 shadow-xs">
+            <form onSubmit={handleAddLog} className="bg-white dark:bg-[#12141c] p-4 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 space-y-3.5 shadow-xs">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-semibold text-slate-700 dark:text-zinc-300">Category:</span>
+                <span className="text-xs font-bold text-slate-900 dark:text-zinc-200">Category:</span>
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {(["general", "inquiry", "quote", "payment", "delivery"] as const).map((t) => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setLogType(t)}
-                      className={`text-xs font-semibold capitalize px-3 py-1 rounded-lg transition-colors ${
+                      className={`text-xs font-bold capitalize px-3 py-1.5 rounded-lg transition-colors ${
                         logType === t 
-                          ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs" 
-                          : "bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-700"
+                          ? "bg-[#fe7518] text-slate-950 font-black shadow-xs" 
+                          : "bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-700 border border-slate-300 dark:border-zinc-700"
                       }`}
                     >
                       {t}
@@ -623,19 +627,19 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                 value={newLogText}
                 onChange={(e) => setNewLogText(e.target.value)}
                 placeholder="Type or paste client WhatsApp message summary…"
-                className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 placeholder-slate-400 p-3.5 rounded-xl border border-slate-200 dark:border-zinc-800 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none resize-none leading-relaxed text-xs sm:text-sm"
+                className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 placeholder-slate-500 dark:placeholder-zinc-400 p-3.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] focus:bg-white dark:focus:bg-zinc-900 outline-none resize-none leading-relaxed text-xs sm:text-sm font-semibold"
               />
 
               <div className="flex items-center justify-between pt-1">
-                <span className="text-xs text-slate-500 dark:text-zinc-400 font-medium">
+                <span className="text-xs text-slate-700 dark:text-zinc-300 font-bold">
                   Saves directly into database
                 </span>
                 <button
                   type="submit"
                   disabled={!newLogText.trim()}
-                  className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] disabled:opacity-40 text-slate-950 text-xs font-bold py-2 px-4 rounded-xl btn-haptic shadow-xs"
+                  className="flex items-center gap-1.5 bg-[#fe7518] hover:bg-[#e56208] disabled:opacity-40 text-slate-950 text-xs font-black py-2.5 px-4 rounded-xl btn-haptic shadow-sm"
                 >
-                  <Send className="w-3.5 h-3.5" />
+                  <Send className="w-4 h-4" />
                   <span>Log Note</span>
                 </button>
               </div>
@@ -786,82 +790,82 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
       {/* Add Client Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#12141c] border border-slate-300 dark:border-zinc-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 dark:border-zinc-800 pb-3">
-              <h3 className="text-base font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
-                <Users className="w-4 h-4 text-[#fe7518]" />
+          <div className="bg-white dark:bg-[#12141c] border-2 border-slate-300 dark:border-zinc-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-zinc-800 pb-3">
+              <h3 className="text-base font-extrabold text-slate-950 dark:text-white flex items-center gap-2">
+                <Users className="w-5 h-5 text-[#fe7518]" />
                 <span>Register Client</span>
               </h3>
               <button 
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-slate-900 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
+                className="text-slate-500 hover:text-slate-950 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateContact} className="space-y-3.5 text-xs">
+            <form onSubmit={handleCreateContact} className="space-y-4 text-xs">
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Full Name *</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Full Name *</label>
                 <input
                   type="text"
                   required
                   value={newContact.name}
                   onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
                   placeholder="e.g. Tariq Mahmood"
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Company / Workshop</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Company / Workshop</label>
                   <input
                     type="text"
                     value={newContact.company}
                     onChange={(e) => setNewContact({ ...newContact, company: e.target.value })}
                     placeholder="e.g. AeroDynamics Multan"
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">City</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">City</label>
                   <input
                     type="text"
                     value={newContact.city}
                     onChange={(e) => setNewContact({ ...newContact, city: e.target.value })}
                     placeholder="Multan"
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">WhatsApp Phone *</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">WhatsApp Phone *</label>
                   <input
                     type="text"
                     required
                     value={newContact.phone}
                     onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
                     placeholder="0300 1234567"
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Email Address</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Email Address</label>
                   <input
                     type="email"
                     value={newContact.email}
                     onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
                     placeholder="client@company.com"
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Primary Trade Tags</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Primary Trade Tags</label>
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {(["3D Printing", "Laser Cutting", "CNC Machining", "CAD Design", "Industrial Fabrication"] as TradeType[]).map((tag) => {
                     const active = newContact.tradeTags.includes(tag);
@@ -870,10 +874,10 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                         type="button"
                         key={tag}
                         onClick={() => toggleNewTradeTag(tag)}
-                        className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
                           active 
-                            ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs" 
-                            : "bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-700"
+                            ? "bg-[#fe7518] text-slate-950 font-black shadow-sm" 
+                            : "bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-700 border border-slate-300 dark:border-zinc-700"
                         }`}
                       >
                         {tag}
@@ -883,17 +887,17 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-zinc-800">
+              <div className="flex items-center justify-end gap-2.5 pt-4 border-t-2 border-slate-200 dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-semibold"
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold hover:bg-slate-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-bold shadow-xs btn-haptic"
+                  className="px-5 py-2.5 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black shadow-md border-2 border-[#e56208] btn-haptic"
                 >
                   Save Client
                 </button>
@@ -906,49 +910,49 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
       {/* Edit Client Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#12141c] border border-slate-300 dark:border-zinc-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 dark:border-zinc-800 pb-3">
-              <h3 className="text-base font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
-                <Edit className="w-4 h-4 text-[#fe7518]" />
+          <div className="bg-white dark:bg-[#12141c] border-2 border-slate-300 dark:border-zinc-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-zinc-800 pb-3">
+              <h3 className="text-base font-extrabold text-slate-950 dark:text-white flex items-center gap-2">
+                <Edit className="w-5 h-5 text-[#fe7518]" />
                 <span>Edit Client Profile</span>
               </h3>
               <button 
                 onClick={() => setIsEditModalOpen(false)}
-                className="text-slate-400 hover:text-slate-900 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
+                className="text-slate-500 hover:text-slate-950 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveEdit} className="space-y-3.5 text-xs">
+            <form onSubmit={handleSaveEdit} className="space-y-4 text-xs">
               <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Full Name *</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Full Name *</label>
                 <input
                   type="text"
                   required
                   value={editContact.name}
                   onChange={(e) => setEditContact({ ...editContact, name: e.target.value })}
-                  className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm font-medium"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Company / Workshop</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Company / Workshop</label>
                   <input
                     type="text"
                     value={editContact.company}
                     onChange={(e) => setEditContact({ ...editContact, company: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">City</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">City</label>
                   <input
                     type="text"
                     value={editContact.city}
                     onChange={(e) => setEditContact({ ...editContact, city: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-[#161822] text-slate-900 dark:text-zinc-100 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
               </div>

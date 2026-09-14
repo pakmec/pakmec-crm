@@ -737,30 +737,30 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
       {/* Upload Media / Pin Modal */}
       {isPinModalOpen && activeJob && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="border-b border-[var(--border)] pb-3 flex items-center justify-between">
-              <h3 className="text-base font-bold text-[var(--foreground)] flex items-center gap-2">
-                <UploadCloud className="w-4 h-4 text-[#fe7518]" />
+          <div className="bg-white dark:bg-[#12151e] border-2 border-slate-300 dark:border-zinc-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="border-b-2 border-slate-200 dark:border-zinc-800 pb-3 flex items-center justify-between">
+              <h3 className="text-base font-black text-slate-950 dark:text-white flex items-center gap-2">
+                <UploadCloud className="w-5 h-5 text-[#fe7518]" />
                 <span>Upload & Pin to {activeJob.id}</span>
               </h3>
               <button 
                 onClick={() => setIsPinModalOpen(false)} 
                 aria-label="Close upload modal"
-                className="text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic"
+                className="text-slate-500 hover:text-slate-950 dark:text-zinc-400 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleAddPin} className="space-y-3.5 text-xs">
+            <form onSubmit={handleAddPin} className="space-y-4 text-xs">
               {/* Genuine File Upload Picker */}
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">
-                  Upload Any File from PC / Mobile (Image, CAD .step/.stl/.dxf, PDF)
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
+                  Upload File from PC / Mobile (.png, .step, .stl, .dxf, .pdf)
                 </label>
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-[var(--border)] hover:border-[#fe7518] bg-[var(--surface-100)] p-4 rounded-xl text-center cursor-pointer transition-colors"
+                  className="border-2 border-dashed border-slate-300 dark:border-zinc-700 hover:border-[#fe7518] bg-slate-50 dark:bg-[#161822] p-4 rounded-xl text-center cursor-pointer transition-colors"
                 >
                   <input
                     ref={fileInputRef}
@@ -769,28 +769,28 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                     onChange={handleFileUpload}
                   />
                   {isUploading ? (
-                    <div className="flex flex-col items-center gap-2 text-[var(--foreground)]">
+                    <div className="flex flex-col items-center gap-2 text-slate-950 dark:text-zinc-100">
                       <Loader2 className="w-6 h-6 text-[#fe7518] animate-spin" />
-                      <span className="font-mono text-xs">Uploading file to server…</span>
+                      <span className="text-xs font-bold">Uploading file to server…</span>
                     </div>
                   ) : pinUrl ? (
-                    <div className="flex flex-col items-center gap-1 text-emerald-400">
+                    <div className="flex flex-col items-center gap-1 text-emerald-600 dark:text-emerald-400">
                       <CheckCircle2 className="w-6 h-6" />
-                      <span className="font-mono text-xs font-bold">File Attached & Ready</span>
-                      <span className="text-[10px] text-[var(--muted)] truncate max-w-xs">{pinUrl}</span>
+                      <span className="text-xs font-black">File Attached & Ready</span>
+                      <span className="text-xs font-semibold text-slate-700 dark:text-zinc-300 truncate max-w-xs">{pinUrl}</span>
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center gap-1.5 text-[var(--muted)]">
+                    <div className="flex flex-col items-center gap-1.5 text-slate-700 dark:text-zinc-300">
                       <UploadCloud className="w-6 h-6 text-[#fe7518]" />
-                      <span className="text-xs font-medium text-[var(--foreground)]">Click or drag file here to upload</span>
-                      <span className="text-[10px] font-mono text-[var(--muted)]">Supports .png, .jpg, .stl, .step, .dxf, .dwg, .pdf</span>
+                      <span className="text-xs font-bold text-slate-950 dark:text-zinc-100">Click or drag file here to upload</span>
+                      <span className="text-[11px] font-semibold text-slate-600 dark:text-zinc-400">Supports .png, .jpg, .stl, .step, .dxf, .dwg, .pdf</span>
                     </div>
                   )}
                 </div>
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Pin Title *</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Pin Title *</label>
                 <input
                   type="text"
                   required
@@ -798,18 +798,18 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                   aria-label="Pin Title"
                   onChange={(e) => setPinTitle(e.target.value)}
                   placeholder="e.g. Tariq WhatsApp Spec Drawing, Billet Pass 1"
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-[#fe7518] outline-none font-mono"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-bold text-xs sm:text-sm shadow-xs"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[var(--muted)] font-mono mb-1">Pin Category</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Pin Category</label>
                   <select
                     value={pinType}
                     aria-label="Pin Category"
                     onChange={(e) => setPinType(e.target.value as any)}
-                    className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-[#fe7518] outline-none"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-bold text-xs shadow-xs"
                   >
                     <option value="image">Client Image / Screenshot</option>
                     <option value="progress_photo">Workshop Progress Photo</option>
@@ -820,42 +820,42 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[var(--muted)] font-mono mb-1">Tag Label</label>
+                  <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Tag Label</label>
                   <input
                     type="text"
                     value={pinTag}
                     aria-label="Tag Label"
                     onChange={(e) => setPinTag(e.target.value)}
                     placeholder="e.g. Client Spec, QC, Tolerance"
-                    className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-[#fe7518] outline-none font-mono"
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none font-bold text-xs sm:text-sm shadow-xs"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Engineering Notes</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Engineering Notes</label>
                 <textarea
                   rows={2}
                   value={pinNotes}
                   aria-label="Engineering Notes"
                   onChange={(e) => setPinNotes(e.target.value)}
                   placeholder="Key machining notes, RPM settings, client audio message details…"
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-[#fe7518] outline-none resize-none"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none resize-none font-semibold text-xs shadow-xs"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border)]">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setIsPinModalOpen(false)}
-                  className="px-3 py-1.5 rounded-lg bg-[var(--surface-100)] text-[var(--muted)] hover:bg-[var(--surface-200)]"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold hover:bg-slate-200 text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isUploading}
-                  className="px-4 py-2 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black shadow-md"
+                  className="px-5 py-2.5 rounded-xl bg-[#fe7518] hover:bg-[#e56208] text-slate-950 font-black shadow-md text-xs btn-haptic"
                 >
                   Pin to Board
                 </button>
@@ -868,26 +868,26 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
       {/* Collect Advance Modal */}
       {isAdvanceModalOpen && activeJob && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="border-b border-[var(--border)] pb-3 flex items-center justify-between">
-              <h3 className="text-base font-bold text-[var(--foreground)] flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-emerald-400" />
+          <div className="bg-white dark:bg-[#12151e] border-2 border-slate-300 dark:border-zinc-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="border-b-2 border-slate-200 dark:border-zinc-800 pb-3 flex items-center justify-between">
+              <h3 className="text-base font-black text-slate-950 dark:text-white flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>Collect Advance Deposit</span>
               </h3>
               <button 
                 onClick={() => setIsAdvanceModalOpen(false)} 
                 aria-label="Close advance deposit modal"
-                className="text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic"
+                className="text-slate-500 hover:text-slate-950 dark:text-zinc-400 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleRecordAdvance} className="space-y-3 text-xs">
-              <div className="p-3 rounded-lg bg-[var(--surface-100)] border border-[var(--border)] font-mono space-y-1">
-                <div className="text-[var(--foreground)] font-bold">{activeJob.title}</div>
-                <div className="text-[#fe7518]">Client: {activeJob.contactName}</div>
-                <div className="text-[var(--muted)] flex items-center gap-3">
+            <form onSubmit={handleRecordAdvance} className="space-y-3.5 text-xs">
+              <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800 space-y-1.5">
+                <div className="text-slate-950 dark:text-white font-black text-sm">{activeJob.title}</div>
+                <div className="text-[#fe7518] font-bold text-xs">Client: {activeJob.contactName}</div>
+                <div className="text-slate-800 dark:text-zinc-200 font-bold flex items-center gap-3 pt-1 border-t border-slate-200 dark:border-zinc-700">
                   <span>Total: <CurrencyDisplay amount={activeJob.totalAmount} size="xs" /></span>
                   <span>|</span>
                   <span>Due: <CurrencyDisplay amount={activeJob.balanceDue} size="xs" color="amber" /></span>
@@ -895,7 +895,7 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Advance Amount (PKR) *</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Advance Amount (PKR) *</label>
                 <input
                   type="number"
                   required
@@ -903,17 +903,17 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                   value={advanceAmount}
                   aria-label="Advance Amount in Pakistani Rupees"
                   onChange={(e) => setAdvanceAmount(Number(e.target.value))}
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none font-mono text-sm"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-sm shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Payment Method</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Payment Method</label>
                 <select
                   value={advanceMethod}
                   aria-label="Payment Method"
                   onChange={(e) => setAdvanceMethod(e.target.value as any)}
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-xs sm:text-sm shadow-xs"
                 >
                   <option value="Bank Transfer">Bank Transfer (Meezan / HBL / UBL)</option>
                   <option value="JazzCash">JazzCash (0300-8472910)</option>
@@ -923,28 +923,28 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Transaction Ref No.</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Transaction Ref No.</label>
                 <input
                   type="text"
                   value={advanceRef}
                   aria-label="Transaction Reference Number"
                   onChange={(e) => setAdvanceRef(e.target.value)}
                   placeholder="e.g. TRX-992019, Meezan Receipt"
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none font-mono"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-xs sm:text-sm shadow-xs"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border)]">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setIsAdvanceModalOpen(false)}
-                  className="px-3 py-1.5 rounded-lg bg-[var(--surface-100)] text-[var(--muted)] hover:bg-[var(--surface-200)]"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold hover:bg-slate-200 text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold shadow-md btn-haptic"
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black shadow-md btn-haptic text-xs"
                 >
                   Confirm Advance
                 </button>
@@ -957,34 +957,34 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
       {/* Record Settlement Modal (Direct from Kanban Board) */}
       {isSettlementModalOpen && activeJob && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="border-b border-[var(--border)] pb-3 flex items-center justify-between">
-              <h3 className="text-base font-bold text-[var(--foreground)] flex items-center gap-2">
+          <div className="bg-white dark:bg-[#12151e] border-2 border-slate-300 dark:border-zinc-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="border-b-2 border-slate-200 dark:border-zinc-800 pb-3 flex items-center justify-between">
+              <h3 className="text-base font-black text-slate-950 dark:text-white flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>Record Balance Settlement</span>
               </h3>
               <button 
                 onClick={() => setIsSettlementModalOpen(false)} 
                 aria-label="Close settlement modal"
-                className="text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic"
+                className="text-slate-500 hover:text-slate-950 dark:text-zinc-400 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleRecordSettlement} className="space-y-3 text-xs">
-              <div className="p-3 rounded-lg bg-[var(--surface-100)] border border-[var(--border)] font-mono space-y-1">
-                <div className="text-[var(--foreground)] font-bold">{activeJob.title}</div>
-                <div className="text-[#fe7518]">Client: {activeJob.contactName}</div>
-                <div className="text-[var(--muted)] flex items-center justify-between pt-1">
+            <form onSubmit={handleRecordSettlement} className="space-y-3.5 text-xs">
+              <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800 space-y-1.5">
+                <div className="text-slate-950 dark:text-white font-black text-sm">{activeJob.title}</div>
+                <div className="text-[#fe7518] font-bold text-xs">Client: {activeJob.contactName}</div>
+                <div className="text-slate-800 dark:text-zinc-200 font-bold flex items-center justify-between pt-1 border-t border-slate-200 dark:border-zinc-700">
                   <span>Total: <CurrencyDisplay amount={activeJob.totalAmount} size="xs" /></span>
-                  <span>Adv Paid: <CurrencyDisplay amount={activeJob.advancePaid} size="xs" color="green" /></span>
-                  <span className="font-bold">Due: <CurrencyDisplay amount={activeJob.balanceDue} size="xs" color="amber" /></span>
+                  <span className="text-emerald-700 dark:text-emerald-400">Adv: <CurrencyDisplay amount={activeJob.advancePaid} size="xs" color="green" /></span>
+                  <span className="font-extrabold text-amber-800 dark:text-amber-400">Due: <CurrencyDisplay amount={activeJob.balanceDue} size="xs" color="amber" /></span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Settlement Amount (PKR) *</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Settlement Amount (PKR) *</label>
                 <input
                   type="number"
                   required
@@ -993,17 +993,17 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                   value={settlementAmount}
                   aria-label="Settlement Amount in Pakistani Rupees"
                   onChange={(e) => setSettlementAmount(Number(e.target.value))}
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none font-mono text-sm"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-sm shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Payment Method</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Payment Method</label>
                 <select
                   value={settlementMethod}
                   aria-label="Payment Method"
                   onChange={(e) => setSettlementMethod(e.target.value as any)}
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-xs sm:text-sm shadow-xs"
                 >
                   <option value="Bank Transfer">Bank Transfer (Meezan / HBL / UBL)</option>
                   <option value="JazzCash">JazzCash (0300-8472910)</option>
@@ -1014,40 +1014,40 @@ export const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Transaction Ref / Cheque No.</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Transaction Ref / Cheque No.</label>
                 <input
                   type="text"
                   value={settlementRef}
                   aria-label="Transaction Reference Number"
                   onChange={(e) => setSettlementRef(e.target.value)}
                   placeholder="e.g. HBL-TRX-992019, Meezan Receipt, Cash Slip"
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none font-mono"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-xs sm:text-sm shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Settlement Notes</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Settlement Notes</label>
                 <textarea
                   rows={2}
                   value={settlementNotes}
                   aria-label="Settlement Notes"
                   onChange={(e) => setSettlementNotes(e.target.value)}
                   placeholder="Paid before TCS dispatch, handed over at Multan workshop…"
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none resize-none"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none resize-none font-semibold text-xs shadow-xs"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border)]">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setIsSettlementModalOpen(false)}
-                  className="px-3 py-1.5 rounded-lg bg-[var(--surface-100)] text-[var(--muted)] hover:bg-[var(--surface-200)] btn-haptic"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold hover:bg-slate-200 text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold shadow-md btn-haptic"
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black shadow-md btn-haptic text-xs"
                 >
                   Confirm Settlement
                 </button>

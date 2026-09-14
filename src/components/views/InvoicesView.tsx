@@ -161,14 +161,14 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
         {/* Left Column (4 Cols): Invoices List */}
         <div className={`lg:col-span-4 space-y-3 no-print ${mobileTab === "preview" ? "hidden lg:block" : "block"}`}>
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-4 h-4 text-slate-700 dark:text-zinc-300 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={search}
               aria-label="Search invoices by ID or client name"
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search invoices by ID, client…"
-              className="w-full bg-[var(--surface-100)] text-[16px] sm:text-xs text-[var(--foreground)] placeholder-slate-500 dark:placeholder-zinc-400 pl-8 pr-3 py-2 min-h-[40px] rounded-lg border border-[var(--border)] focus:border-[#fe7518] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fe7518]/50 font-sans touch-manipulation"
+              className="w-full bg-white dark:bg-[#161822] text-sm text-slate-950 dark:text-zinc-100 placeholder-slate-500 dark:placeholder-zinc-400 pl-10 pr-3.5 py-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] focus:outline-none focus:ring-2 focus:ring-[#fe7518]/30 font-bold shadow-xs touch-manipulation"
             />
           </div>
 
@@ -494,33 +494,33 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
       {/* Record Payment Modal */}
       {paymentModalInvoice && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print">
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="border-b border-[var(--border)] pb-3 flex items-center justify-between">
-              <h3 className="text-base font-bold text-[var(--foreground)] flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-emerald-400" />
+          <div className="bg-white dark:bg-[#12151e] border-2 border-slate-300 dark:border-zinc-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="border-b-2 border-slate-200 dark:border-zinc-800 pb-3 flex items-center justify-between">
+              <h3 className="text-base font-black text-slate-950 dark:text-white flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>Record Invoice Payment</span>
               </h3>
               <button 
                 onClick={() => setPaymentModalInvoice(null)} 
                 aria-label="Close payment modal"
-                className="text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic"
+                className="text-slate-500 hover:text-slate-950 dark:text-zinc-400 dark:hover:text-zinc-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors btn-haptic"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleRecordPayment} className="space-y-3 text-xs">
-              <div className="p-3 rounded-lg bg-[var(--surface-100)] border border-[var(--border)] font-mono space-y-1">
-                <div className="text-[var(--foreground)] font-bold">{paymentModalInvoice.id}</div>
-                <div className="text-[#fe7518]">Client: {paymentModalInvoice.contactName}</div>
-                <div className="text-[var(--muted)] flex items-center gap-2">
+            <form onSubmit={handleRecordPayment} className="space-y-3.5 text-xs">
+              <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-[#161822] border-2 border-slate-200 dark:border-zinc-800 space-y-1.5">
+                <div className="text-slate-950 dark:text-white font-black text-sm">{paymentModalInvoice.id}</div>
+                <div className="text-[#fe7518] font-bold text-xs">Client: {paymentModalInvoice.contactName}</div>
+                <div className="text-slate-800 dark:text-zinc-200 font-bold flex items-center justify-between pt-1 border-t border-slate-200 dark:border-zinc-700">
                   <span>Balance Remaining:</span>
                   <CurrencyDisplay amount={paymentModalInvoice.balancePayable - paymentModalInvoice.amountPaid} size="xs" color="amber" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Settlement Amount (PKR) *</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Settlement Amount (PKR) *</label>
                 <input
                   type="number"
                   required
@@ -528,17 +528,17 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
                   value={paymentAmount}
                   aria-label="Settlement Amount in Pakistani Rupees"
                   onChange={(e) => setPaymentAmount(Number(e.target.value))}
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none font-mono text-sm"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-sm shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Payment Method</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Payment Method</label>
                 <select
                   value={paymentMethod}
                   aria-label="Payment Method"
                   onChange={(e) => setPaymentMethod(e.target.value as any)}
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-xs sm:text-sm shadow-xs"
                 >
                   <option value="Bank Transfer">Bank Transfer (Meezan / HBL / UBL)</option>
                   <option value="JazzCash">JazzCash (0300-8472910)</option>
@@ -549,40 +549,40 @@ export const InvoicesView: React.FC<InvoicesViewProps> = ({ initialSelectedJobId
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Transaction Ref / Cheque No.</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Transaction Ref / Cheque No.</label>
                 <input
                   type="text"
                   value={paymentRef}
                   aria-label="Transaction Reference or Cheque Number"
                   onChange={(e) => setPaymentRef(e.target.value)}
                   placeholder="e.g. TRX-4482910, Cash Voucher #12"
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none font-mono"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none font-bold text-xs sm:text-sm shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[var(--muted)] font-mono mb-1">Settlement Notes</label>
+                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Settlement Notes</label>
                 <textarea
                   rows={2}
                   value={paymentNotes}
                   aria-label="Settlement Notes"
                   onChange={(e) => setPaymentNotes(e.target.value)}
                   placeholder="Paid upon parcel delivery, TCS receipt…"
-                  className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-emerald-500 outline-none resize-none"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-emerald-500 outline-none resize-none font-semibold text-xs shadow-xs"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border)]">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-slate-200 dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setPaymentModalInvoice(null)}
-                  className="px-3 py-1.5 rounded-lg bg-[var(--surface-100)] text-[var(--muted)] hover:bg-[var(--surface-200)]"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold hover:bg-slate-200 text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-md"
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black shadow-md btn-haptic text-xs"
                 >
                   Save Settlement
                 </button>
