@@ -56,14 +56,17 @@ export function printIsolatedElement(elementId: string, docTitle: string = "PAKM
             -webkit-font-smoothing: antialiased !important;
           }
 
-          /* Force printable container to full width with zero shadows */
-          .printable-document {
+          /* Force printable container to full width with zero shadows or outer borders */
+          .printable-document,
+          #quotation-print-area,
+          #invoice-print-area {
             position: static !important;
             width: 100% !important;
             max-width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
             border: none !important;
+            outline: none !important;
             box-shadow: none !important;
             background: #ffffff !important;
             color: #0f172a !important;

@@ -109,6 +109,39 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
   const [discount, setDiscount] = useState<number>(0);
   const [notes, setNotes] = useState<string>("Precision tolerance within ±0.03mm. Quality inspection report provided upon delivery in Multan.");
 
+  // Commercial Terms & Deposit Detail State (fully editable)
+  const [terms, setTerms] = useState<string>("");
+  const [isTermsManuallyEdited, setIsTermsManuallyEdited] = useState<boolean>(false);
+
+  // Per-Quote Rate & Setup Fee States (dynamically prefilled from settings)
+  const [printMachineRate, setPrintMachineRate] = useState<number>(settings.printing.machineRatePerHour);
+  const [printSetupFee, setPrintSetupFee] = useState<number>(settings.printing.setupFee);
+
+  const [laserCutRate, setLaserCutRate] = useState<number>(settings.laser.cutRatePerMeter);
+  const [laserSetupFee, setLaserSetupFee] = useState<number>(settings.laser.setupFee);
+
+  const [cncMachineRate, setCncMachineRate] = useState<number>(settings.cnc.machineRatePerHour);
+  const [cncSetupPerFixture, setCncSetupPerFixture] = useState<number>(settings.cnc.setupPerFixture);
+  const [cncCamFee, setCncCamFee] = useState<number>(settings.cnc.camProgrammingFee);
+
+  const [cadHourlyRate, setCadHourlyRate] = useState<number>(settings.cad.hourlyRatePkr);
+  const [constRatePerSqFt, setConstRatePerSqFt] = useState<number>(settings.construction.industrialShedPerSqFt || 2300);
+
+  // Custom Domain Rate & Setup states
+  const [customSetupFee, setCustomSetupFee] = useState<number>(3500);
+
+  // Sync rate defaults whenever company settings change
+  useEffect(() => {
+    setPrintMachineRate(settings.printing.machineRatePerHour);
+    setPrintSetupFee(settings.printing.setupFee);
+    setLaserCutRate(settings.laser.cutRatePerMeter);
+    setLaserSetupFee(settings.laser.setupFee);
+    setCncMachineRate(settings.cnc.machineRatePerHour);
+    setCncSetupPerFixture(settings.cnc.setupPerFixture);
+    setCncCamFee(settings.cnc.camProgrammingFee);
+    setCadHourlyRate(settings.cad.hourlyRatePkr);
+  }, [settings]);
+
   // Trade Specs State
   // 3D Printing
   const [printMaterial, setPrintMaterial] = useState("PLA");
@@ -212,6 +245,33 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
         }];
       }
       return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const handleAddOrUpdateCustomSetupFee = (amount: number = customSetupFee) => {
+    setCustomLineItems(prev => {
+      const existingIdx = prev.findIndex(item => item.unit === "setup" || item.description.toLowerCase().includes("setup"));
+      if (existingIdx >= 0) {
+        const updated = [...prev];
+        updated[existingIdx] = {
+          ...updated[existingIdx],
+          unitPrice: amount,
+          amount: Math.round((Number(updated[existingIdx].quantity) || 1) * amount)
+        };
+        return updated;
+      }
+      return [
+        ...prev,
+        {
+          id: `li-cust-setup-${Date.now()}`,
+          description: "Workshop Machine Setup, Tooling & Calibration",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "setup",
+          unitPrice: amount,
+          amount: amount
+        }
+      ];
     });
   };
 
@@ -362,7 +422,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
 
       const matRate = matRates[printMaterial] || 5;
       const matCost = Math.round(printWeightGrams * matRate);
-      const machineCost = Math.round(printHours * settings.printing.machineRatePerHour);
+      const machineCost = Math.round(printHours * printMachineRate);
       const finishCost = finishRates[printFinish] || 0;
 
       items = [
@@ -381,19 +441,22 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           trade: "3D Printing",
           quantity: printHours,
           unit: "hrs",
-          unitPrice: settings.printing.machineRatePerHour,
+          unitPrice: printMachineRate,
           amount: machineCost
-        },
-        {
+        }
+      ];
+
+      if (printSetupFee > 0) {
+        items.push({
           id: "li-gen-3",
           description: "Build Chamber Setup, Slicing & Calibration",
           trade: "3D Printing",
           quantity: 1,
           unit: "setup",
-          unitPrice: settings.printing.setupFee,
-          amount: settings.printing.setupFee
-        }
-      ];
+          unitPrice: printSetupFee,
+          amount: printSetupFee
+        });
+      }
 
       if (finishCost > 0) {
         items.push({
@@ -415,7 +478,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       };
       const mRate = matRates[laserMaterial] || 0.8;
       const matCost = Math.round(laserAreaSqCm * mRate);
-      const cutCost = Math.round(laserCutMeters * settings.laser.cutRatePerMeter);
+      const cutCost = Math.round(laserCutMeters * laserCutRate);
       const pierceCost = Math.round(laserPierces * settings.laser.pierceCost);
 
       items = [
@@ -434,7 +497,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           trade: "Laser Cutting",
           quantity: laserCutMeters,
           unit: "meters",
-          unitPrice: settings.laser.cutRatePerMeter,
+          unitPrice: laserCutRate,
           amount: cutCost
         },
         {
@@ -445,17 +508,20 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           unit: "pts",
           unitPrice: settings.laser.pierceCost,
           amount: pierceCost
-        },
-        {
+        }
+      ];
+
+      if (laserSetupFee > 0) {
+        items.push({
           id: "li-gen-4",
           description: "Laser Beam Optical Alignment & Sheet Nesting Setup",
           trade: "Laser Cutting",
           quantity: 1,
           unit: "setup",
-          unitPrice: settings.laser.setupFee,
-          amount: settings.laser.setupFee
-        }
-      ];
+          unitPrice: laserSetupFee,
+          amount: laserSetupFee
+        });
+      }
     } else if (selectedTrade === "CNC Machining") {
       const metalRates: Record<string, number> = {
         "Aluminum 6061-T6": settings.cnc.aluminum6061PerCc,
@@ -465,8 +531,8 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       };
       const metalRate = metalRates[cncMetal] || 20;
       const metalCost = Math.round(cncVolumeCc * metalRate);
-      const machCost = Math.round(cncMachiningHours * settings.cnc.machineRatePerHour);
-      const fixCost = Math.round(cncFixtures * settings.cnc.setupPerFixture);
+      const machCost = Math.round(cncMachiningHours * cncMachineRate);
+      const fixCost = Math.round(cncFixtures * cncSetupPerFixture);
 
       items = [
         {
@@ -484,33 +550,36 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           trade: "CNC Machining",
           quantity: cncMachiningHours,
           unit: "hrs",
-          unitPrice: settings.cnc.machineRatePerHour,
+          unitPrice: cncMachineRate,
           amount: machCost
-        },
-        {
+        }
+      ];
+
+      if (fixCost > 0) {
+        items.push({
           id: "li-gen-3",
           description: `Fixture Clamping & Setup Calibrations (${cncFixtures} operations)`,
           trade: "CNC Machining",
           quantity: cncFixtures,
           unit: "fixtures",
-          unitPrice: settings.cnc.setupPerFixture,
+          unitPrice: cncSetupPerFixture,
           amount: fixCost
-        }
-      ];
+        });
+      }
 
-      if (cncCamProgramming) {
+      if (cncCamProgramming && cncCamFee > 0) {
         items.push({
           id: "li-gen-4",
           description: "Mastercam 3D Toolpath CAM Programming & Machine Code Verification",
           trade: "CNC Machining",
           quantity: 1,
           unit: "setup",
-          unitPrice: settings.cnc.camProgrammingFee,
-          amount: settings.cnc.camProgrammingFee
+          unitPrice: cncCamFee,
+          amount: cncCamFee
         });
       }
     } else if (selectedTrade === "CAD Design") {
-      const rate = settings.cad.hourlyRatePkr;
+      const rate = cadHourlyRate;
       const mults = {
         Simple: settings.cad.simpleMultiplier,
         Medium: settings.cad.mediumMultiplier,
@@ -541,13 +610,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
         }
       ];
     } else if (selectedTrade === "Industrial Fabrication") {
-      const rates: Record<string, number> = {
-        "Grey Structure": settings.construction.greyStructurePerSqFt,
-        "Turnkey Industrial": settings.construction.turnkeyPerSqFt,
-        "Industrial Shed": settings.construction.industrialShedPerSqFt,
-      };
-      const r = rates[constStructureType] || 2300;
-      const total = Math.round(constAreaSqFt * r);
+      const total = Math.round(constAreaSqFt * constRatePerSqFt);
 
       items = [
         {
@@ -556,7 +619,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           trade: "Industrial Fabrication",
           quantity: constAreaSqFt,
           unit: "sq.ft",
-          unitPrice: r,
+          unitPrice: constRatePerSqFt,
           amount: total
         }
       ];
@@ -575,20 +638,29 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
     printHours,
     printInfill,
     printFinish,
+    printMachineRate,
+    printSetupFee,
     laserMaterial,
     laserAreaSqCm,
     laserCutMeters,
     laserPierces,
+    laserCutRate,
+    laserSetupFee,
     cncMetal,
     cncVolumeCc,
     cncMachiningHours,
     cncFixtures,
     cncCamProgramming,
+    cncMachineRate,
+    cncSetupPerFixture,
+    cncCamFee,
     cadHours,
     cadComplexity,
     cadRevisions,
+    cadHourlyRate,
     constAreaSqFt,
     constStructureType,
+    constRatePerSqFt,
     customLineItems,
     settings
   ]);
@@ -607,6 +679,15 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
   const balanceDue = Math.max(0, total - advanceRequired);
   const calculatedAdvancePercent = total > 0 ? Math.round((advanceRequired / total) * 100) : advancePercent;
 
+  // Auto-synchronize commercial terms when not manually customized
+  useEffect(() => {
+    if (!isTermsManuallyEdited) {
+      setTerms(
+        `${calculatedAdvancePercent}% advance deposit (${formatCurrency(advanceRequired)}) required to procure materials and reserve workshop machine queue in Multan. Remaining balance of ${formatCurrency(balanceDue)} payable upon delivery.`
+      );
+    }
+  }, [calculatedAdvancePercent, advanceRequired, balanceDue, isTermsManuallyEdited]);
+
   // Handle Quote Generation
   const handleCreateQuote = (e: React.FormEvent) => {
     e.preventDefault();
@@ -616,6 +697,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
     validUntilDate.setDate(today.getDate() + validDays);
 
     const tradeLabel = selectedTrade === "Custom Domain" ? (customTradeTitle.trim() || "Custom Domain") : selectedTrade;
+    const finalTerms = terms.trim() || `${calculatedAdvancePercent}% advance deposit (${formatCurrency(advanceRequired)}) required to procure materials and reserve workshop machine queue in Multan. Remaining balance of ${formatCurrency(balanceDue)} payable upon delivery.`;
 
     if (clientMode === "walkin") {
       if (!walkinName.trim() || !walkinPhone.trim()) {
@@ -651,7 +733,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           advancePercent: calculatedAdvancePercent,
           advanceRequired: advanceRequired,
           notes: notes,
-          terms: `${calculatedAdvancePercent}% advance deposit (${formatCurrency(advanceRequired)}) required to procure materials and reserve workshop machine queue in Multan. Remaining balance of ${formatCurrency(balanceDue)} payable upon delivery.`,
+          terms: finalTerms,
         },
         {
           name: walkinName.trim(),
@@ -704,7 +786,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       advancePercent: calculatedAdvancePercent,
       advanceRequired: advanceRequired,
       notes: notes,
-      terms: `${calculatedAdvancePercent}% advance deposit (${formatCurrency(advanceRequired)}) required to procure materials and reserve workshop machine queue in Multan. Remaining balance of ${formatCurrency(balanceDue)} payable upon delivery.`,
+      terms: finalTerms,
     });
 
     setSelectedQuoteForPreview(created);
@@ -783,7 +865,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       advancePercent: editAdvancePercent,
       advanceRequired: newAdvanceRequired,
       notes: editNotes,
-      terms: editTerms || `${editAdvancePercent}% advance deposit (${formatCurrency(newAdvanceRequired)}) required. Remaining balance of ${formatCurrency(newBalanceDue)} payable upon delivery.`,
+      terms: editTerms.trim() || `${editAdvancePercent}% advance deposit (${formatCurrency(newAdvanceRequired)}) required to procure materials and reserve workshop machine queue in Multan. Remaining balance of ${formatCurrency(newBalanceDue)} payable upon delivery.`,
     };
 
     updateQuote(updatedQuote);
@@ -1046,13 +1128,13 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     <select
                       value={printMaterial}
                       onChange={(e) => setPrintMaterial(e.target.value)}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     >
-                      <option value="PLA">PLA Standard (PKR 4.5/g)</option>
-                      <option value="PETG">PETG High-Strength (PKR 6.5/g)</option>
-                      <option value="ABS">ABS Heat-Resistant (PKR 7.0/g)</option>
-                      <option value="Resin">High-Detail SLA Resin (PKR 18.0/g)</option>
-                      <option value="TPU">TPU Flexible (PKR 10.0/g)</option>
+                      <option value="PLA">PLA Standard (PKR {settings.printing.plaPerGram}/g)</option>
+                      <option value="PETG">PETG High-Strength (PKR {settings.printing.petgPerGram}/g)</option>
+                      <option value="ABS">ABS Heat-Resistant (PKR {settings.printing.absPerGram}/g)</option>
+                      <option value="Resin">High-Detail SLA Resin (PKR {settings.printing.resinPerGram}/g)</option>
+                      <option value="TPU">TPU Flexible (PKR {settings.printing.tpuPerGram}/g)</option>
                     </select>
                   </div>
 
@@ -1063,7 +1145,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       min={1}
                       value={printWeightGrams}
                       onChange={(e) => setPrintWeightGrams(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
@@ -1075,7 +1157,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       step={0.5}
                       value={printHours}
                       onChange={(e) => setPrintHours(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
@@ -1087,7 +1169,29 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       max={100}
                       value={printInfill}
                       onChange={(e) => setPrintInfill(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Machine Hourly Rate (PKR/hr)</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={printMachineRate}
+                      onChange={(e) => setPrintMachineRate(Number(e.target.value))}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Build Setup & Calibration Fee (PKR)</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={printSetupFee}
+                      onChange={(e) => setPrintSetupFee(Number(e.target.value))}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
@@ -1096,7 +1200,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     <select
                       value={printFinish}
                       onChange={(e) => setPrintFinish(e.target.value)}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     >
                       <option value="None">None (Standard Support Removal only)</option>
                       <option value="Sanding & Deburr">Sanding & Deburr (+PKR 400)</option>
@@ -1115,12 +1219,12 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     <select
                       value={laserMaterial}
                       onChange={(e) => setLaserMaterial(e.target.value)}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     >
-                      <option value="Acrylic 3mm Clear">Cast Acrylic 3mm Clear (PKR 0.7/cm²)</option>
-                      <option value="Acrylic 5mm Cast">Cast Acrylic 5mm Frosted (PKR 1.2/cm²)</option>
-                      <option value="MDF 3mm Sheet">MDF Laser Wood 3mm (PKR 0.35/cm²)</option>
-                      <option value="Mild Steel Sheet 1.5mm">Mild Steel 1.5mm (PKR 1.8/cm²)</option>
+                      <option value="Acrylic 3mm Clear">Cast Acrylic 3mm Clear (PKR {settings.laser.acrylic3mmPerSqCm}/cm²)</option>
+                      <option value="Acrylic 5mm Cast">Cast Acrylic 5mm Frosted (PKR {settings.laser.acrylic5mmPerSqCm}/cm²)</option>
+                      <option value="MDF 3mm Sheet">MDF Laser Wood 3mm (PKR {settings.laser.mdf3mmPerSqCm}/cm²)</option>
+                      <option value="Mild Steel Sheet 1.5mm">Mild Steel 1.5mm (PKR {settings.laser.mildSteelPerSqCm}/cm²)</option>
                     </select>
                   </div>
 
@@ -1131,7 +1235,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       min={10}
                       value={laserAreaSqCm}
                       onChange={(e) => setLaserAreaSqCm(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
@@ -1142,7 +1246,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       min={1}
                       value={laserCutMeters}
                       onChange={(e) => setLaserCutMeters(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
@@ -1153,7 +1257,29 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       min={1}
                       value={laserPierces}
                       onChange={(e) => setLaserPierces(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Cut Rate (PKR/meter)</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={laserCutRate}
+                      onChange={(e) => setLaserCutRate(Number(e.target.value))}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Laser Nesting & Setup Fee (PKR)</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={laserSetupFee}
+                      onChange={(e) => setLaserSetupFee(Number(e.target.value))}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
                 </div>
@@ -1167,12 +1293,12 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     <select
                       value={cncMetal}
                       onChange={(e) => setCncMetal(e.target.value)}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     >
-                      <option value="Aluminum 6061-T6">Aluminum 6061-T6 (PKR 20/cm³)</option>
-                      <option value="Brass C360">Brass C360 Free-Cutting (PKR 42/cm³)</option>
-                      <option value="Delrin / Acetal">Delrin / Acetal Polymer (PKR 14/cm³)</option>
-                      <option value="Carbon Steel 1018">Carbon Steel 1018 (PKR 12/cm³)</option>
+                      <option value="Aluminum 6061-T6">Aluminum 6061-T6 (PKR {settings.cnc.aluminum6061PerCc}/cm³)</option>
+                      <option value="Brass C360">Brass C360 Free-Cutting (PKR {settings.cnc.brassPerCc}/cm³)</option>
+                      <option value="Delrin / Acetal">Delrin / Acetal Polymer (PKR {settings.cnc.delrinPerCc}/cm³)</option>
+                      <option value="Carbon Steel 1018">Carbon Steel 1018 (PKR {settings.cnc.steelPerCc}/cm³)</option>
                     </select>
                   </div>
 
@@ -1183,7 +1309,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       min={10}
                       value={cncVolumeCc}
                       onChange={(e) => setCncVolumeCc(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
@@ -1195,7 +1321,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       step={0.5}
                       value={cncMachiningHours}
                       onChange={(e) => setCncMachiningHours(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
@@ -1206,21 +1332,57 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       min={1}
                       value={cncFixtures}
                       onChange={(e) => setCncFixtures(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
-                  <div className="sm:col-span-2 flex items-center gap-2.5 pt-2">
+                  <div>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">CNC Hourly Rate (PKR/hr)</label>
                     <input
-                      type="checkbox"
-                      id="camCheck"
-                      checked={cncCamProgramming}
-                      onChange={(e) => setCncCamProgramming(e.target.checked)}
-                      className="w-4 h-4 accent-[#fe7518] rounded cursor-pointer"
+                      type="number"
+                      min={0}
+                      value={cncMachineRate}
+                      onChange={(e) => setCncMachineRate(Number(e.target.value))}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
-                    <label htmlFor="camCheck" className="text-slate-950 dark:text-zinc-100 font-bold cursor-pointer text-sm">
-                      Include Mastercam Toolpath Programming & Verification (+PKR {settings.cnc.camProgrammingFee})
-                    </label>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Fixture Setup Fee (PKR/fixture)</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={cncSetupPerFixture}
+                      onChange={(e) => setCncSetupPerFixture(Number(e.target.value))}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-[#161822] border border-slate-200 dark:border-zinc-800">
+                    <div className="flex items-center gap-2.5">
+                      <input
+                        type="checkbox"
+                        id="camCheck"
+                        checked={cncCamProgramming}
+                        onChange={(e) => setCncCamProgramming(e.target.checked)}
+                        className="w-4 h-4 accent-[#fe7518] rounded cursor-pointer"
+                      />
+                      <label htmlFor="camCheck" className="text-slate-950 dark:text-zinc-100 font-bold cursor-pointer text-sm">
+                        Include Mastercam 3D Toolpath Verification
+                      </label>
+                    </div>
+                    {cncCamProgramming && (
+                      <div className="flex items-center gap-2">
+                        <label className="text-xs font-bold text-slate-700 dark:text-zinc-300 whitespace-nowrap">CAM Fee (PKR):</label>
+                        <input
+                          type="number"
+                          min={0}
+                          value={cncCamFee}
+                          onChange={(e) => setCncCamFee(Number(e.target.value))}
+                          className="w-28 bg-white dark:bg-[#12141c] text-slate-950 dark:text-white px-2.5 py-1 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -1233,11 +1395,11 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     <select
                       value={cadComplexity}
                       onChange={(e) => setCadComplexity(e.target.value as any)}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     >
-                      <option value="Simple">Simple (Basic bracket or 2D profile - PKR {settings.cad.hourlyRatePkr}/hr)</option>
-                      <option value="Medium">Medium (Multi-component assembly - PKR {Math.round(settings.cad.hourlyRatePkr * 1.35)}/hr)</option>
-                      <option value="Complex">Complex (Full mechanism assembly, FEA study - PKR {Math.round(settings.cad.hourlyRatePkr * 1.85)}/hr)</option>
+                      <option value="Simple">Simple (Basic bracket or 2D profile - PKR {cadHourlyRate}/hr)</option>
+                      <option value="Medium">Medium (Multi-component assembly - PKR {Math.round(cadHourlyRate * 1.35)}/hr)</option>
+                      <option value="Complex">Complex (Full mechanism assembly, FEA study - PKR {Math.round(cadHourlyRate * 1.85)}/hr)</option>
                     </select>
                   </div>
 
@@ -1248,11 +1410,22 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       min={1}
                       value={cadHours}
                       onChange={(e) => setCadHours(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
 
-                  <div className="sm:col-span-2">
+                  <div>
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Hourly Design Rate (PKR/hr)</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={cadHourlyRate}
+                      onChange={(e) => setCadHourlyRate(Number(e.target.value))}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
+                    />
+                  </div>
+
+                  <div>
                     <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Included Revision Cycles</label>
                     <input
                       type="number"
@@ -1260,7 +1433,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       max={5}
                       value={cadRevisions}
                       onChange={(e) => setCadRevisions(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
                 </div>
@@ -1273,12 +1446,18 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Structure Grade</label>
                     <select
                       value={constStructureType}
-                      onChange={(e) => setConstStructureType(e.target.value)}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setConstStructureType(val);
+                        if (val === "Industrial Shed") setConstRatePerSqFt(settings.construction.industrialShedPerSqFt || 2300);
+                        else if (val === "Grey Structure") setConstRatePerSqFt(settings.construction.greyStructurePerSqFt || 1850);
+                        else if (val === "Turnkey Industrial") setConstRatePerSqFt(settings.construction.turnkeyPerSqFt || 3600);
+                      }}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     >
-                      <option value="Industrial Shed">Industrial Shed Steel Truss (PKR 2,300/sqft)</option>
-                      <option value="Grey Structure">Heavy Commercial Grey Structure (PKR 1,850/sqft)</option>
-                      <option value="Turnkey Industrial">Turnkey Complete Finishing (PKR 3,600/sqft)</option>
+                      <option value="Industrial Shed">Industrial Shed Steel Truss</option>
+                      <option value="Grey Structure">Heavy Commercial Grey Structure</option>
+                      <option value="Turnkey Industrial">Turnkey Complete Finishing</option>
                     </select>
                   </div>
 
@@ -1289,7 +1468,18 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       min={100}
                       value={constAreaSqFt}
                       onChange={(e) => setConstAreaSqFt(Number(e.target.value))}
-                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100 mb-1.5">Fabrication & Erection Rate (PKR/sq.ft)</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={constRatePerSqFt}
+                      onChange={(e) => setConstRatePerSqFt(Number(e.target.value))}
+                      className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                     />
                   </div>
                 </div>
@@ -1433,6 +1623,32 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       >
                         + Workshop Repair
                       </button>
+                    </div>
+
+                    {/* Setup & Tooling Fee Quick Bar */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-white dark:bg-[#12141c] rounded-xl border-2 border-slate-200 dark:border-zinc-800">
+                      <div className="flex items-center gap-2">
+                        <label className="text-xs font-bold text-slate-800 dark:text-zinc-200 whitespace-nowrap">
+                          Setup & Tooling Fee (PKR):
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          value={customSetupFee}
+                          onChange={(e) => setCustomSetupFee(Number(e.target.value))}
+                          className="w-28 bg-slate-50 dark:bg-[#181b24] text-slate-950 dark:text-white px-2.5 py-1 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleAddOrUpdateCustomSetupFee(customSetupFee)}
+                          className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-900 dark:text-zinc-100 text-xs font-bold border border-slate-300 dark:border-zinc-700"
+                        >
+                          + Apply Setup Line
+                        </button>
+                      </div>
+                      <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">
+                        Directly calculates into live quotation subtotal and deposit
+                      </span>
                     </div>
 
                     {/* Line Items List */}
@@ -1757,6 +1973,41 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm sm:text-base shadow-xs"
                   />
                 </div>
+              </div>
+
+              {/* Payment Terms & Commercial Details */}
+              <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-zinc-800">
+                <div className="flex items-center justify-between">
+                  <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100">
+                    Payment Terms & Advance Conditions
+                  </label>
+                  {isTermsManuallyEdited && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsTermsManuallyEdited(false);
+                        const autoTerms = `${calculatedAdvancePercent}% advance deposit (${formatCurrency(advanceRequired)}) required to procure materials and reserve workshop machine queue in Multan. Remaining balance of ${formatCurrency(balanceDue)} payable upon delivery.`;
+                        setTerms(autoTerms);
+                      }}
+                      className="text-xs font-bold text-[#fe7518] hover:underline"
+                    >
+                      ↺ Reset to Formula
+                    </button>
+                  )}
+                </div>
+                <textarea
+                  rows={2}
+                  value={terms}
+                  onChange={(e) => {
+                    setTerms(e.target.value);
+                    setIsTermsManuallyEdited(true);
+                  }}
+                  placeholder="e.g. 50% advance deposit (PKR 5,000) required to procure materials and reserve workshop machine queue in Multan. Remaining balance of PKR 5,000 payable upon delivery."
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-medium p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-xs sm:text-sm shadow-xs resize-y"
+                />
+                <p className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">
+                  Editable payment condition printed directly on the client quotation and WhatsApp dispatch.
+                </p>
               </div>
             </div>
           </div>
@@ -2100,7 +2351,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   {/* Isolated Printable Quotation */}
                   <div 
                     id="quotation-print-area"
-                    className="printable-document bg-white text-black p-4 sm:p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-200 print-surface font-sans space-y-8 min-h-[750px] overflow-x-auto"
+                    className="printable-document bg-white text-black p-4 sm:p-8 sm:p-10 rounded-2xl shadow-xl print-surface font-sans space-y-8 min-h-[750px] overflow-x-auto"
                   >
                     <div className="print-header flex items-start justify-between border-b-2 border-black pb-5 gap-4">
                       <div className="space-y-1">
@@ -2395,6 +2646,33 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-white p-2 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
                   />
                 </div>
+              </div>
+
+              {/* Terms & Payment Conditions */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-200">
+                    Payment Terms & Deposit Conditions
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditTerms(
+                        `${editAdvancePercent}% advance deposit (${formatCurrency(editAdvanceRequired)}) required to procure materials and reserve workshop machine queue in Multan. Remaining balance of ${formatCurrency(Math.max(0, editTotal - editAdvanceRequired))} payable upon delivery.`
+                      );
+                    }}
+                    className="text-[10px] font-bold text-[#fe7518] hover:underline"
+                  >
+                    ↺ Reset to Formula
+                  </button>
+                </div>
+                <textarea
+                  rows={2}
+                  value={editTerms}
+                  onChange={(e) => setEditTerms(e.target.value)}
+                  className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-white p-2.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-medium focus:border-[#fe7518] outline-none shadow-xs"
+                  placeholder="e.g. 50% advance deposit (PKR 5,000) required to procure materials..."
+                />
               </div>
 
               <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-[#0c0d12] border-2 border-slate-300 dark:border-zinc-800 flex items-center justify-between text-xs sm:text-sm">

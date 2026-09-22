@@ -356,6 +356,18 @@ export const SettingsView: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
+                    Setup / Fixture Fee (PKR)
+                  </label>
+                  <input
+                    type="number"
+                    value={form.cnc.setupPerFixture}
+                    onChange={(e) => setForm({ ...form, cnc: { ...form.cnc, setupPerFixture: Number(e.target.value) } })}
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
                     Al 6061-T6 (PKR/cm³)
                   </label>
                   <input
@@ -456,6 +468,18 @@ export const SettingsView: React.FC = () => {
                     type="number"
                     value={form.laser.cutRatePerMeter}
                     onChange={(e) => setForm({ ...form, laser: { ...form.laser, cutRatePerMeter: Number(e.target.value) } })}
+                    className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
+                    Setup Fee (PKR)
+                  </label>
+                  <input
+                    type="number"
+                    value={form.laser.setupFee}
+                    onChange={(e) => setForm({ ...form, laser: { ...form.laser, setupFee: Number(e.target.value) } })}
                     className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
                   />
                 </div>
