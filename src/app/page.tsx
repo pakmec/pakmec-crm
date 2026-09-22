@@ -311,6 +311,7 @@ export default function Home() {
                   <option value="Laser Cutting">Laser Cutting</option>
                   <option value="CAD Design">CAD Design</option>
                   <option value="Industrial Fabrication">Industrial Fabrication</option>
+                  <option value="Custom Domain">Custom Domain</option>
                 </select>
               </div>
 
@@ -390,6 +391,7 @@ export default function Home() {
                     <option value="Laser Cutting">Laser Cutting</option>
                     <option value="CAD Design">CAD Design</option>
                     <option value="Industrial Fabrication">Industrial Fabrication</option>
+                    <option value="Custom Domain">Custom Domain</option>
                   </select>
                 </div>
               </div>

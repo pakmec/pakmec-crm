@@ -3,7 +3,8 @@ export type TradeType =
   | "Laser Cutting"
   | "CNC Machining"
   | "CAD Design"
-  | "Industrial Fabrication";
+  | "Industrial Fabrication"
+  | "Custom Domain";
 
 export type Currency = "PKR";
 
@@ -74,6 +75,12 @@ export interface TradeSpecs {
   structureType?: string;
   areaSqFt?: number;
   materialGrade?: string;
+
+  // Custom Domain specs
+  customDomainName?: string;
+  customCategory?: string;
+  customScope?: string;
+  customLeadTime?: string;
 }
 
 export type QuoteStatus = "draft" | "sent" | "approved" | "rejected" | "expired";

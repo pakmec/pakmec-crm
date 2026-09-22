@@ -22,7 +22,9 @@ import {
   Users,
   X,
   Sparkles,
-  ShieldCheck
+  ShieldCheck,
+  Sliders,
+  Wrench
 } from "lucide-react";
 import { useCrm } from "@/context/CrmContext";
 import { TradeType, Quote, QuoteLineItem, TradeSpecs } from "@/types";
@@ -136,6 +138,188 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
   // Construction
   const [constAreaSqFt, setConstAreaSqFt] = useState(1200);
   const [constStructureType, setConstStructureType] = useState("Industrial Shed");
+
+  // Custom Domain State
+  const [customTradeTitle, setCustomTradeTitle] = useState("Custom Engineering Services");
+  const [customScopeNotes, setCustomScopeNotes] = useState("Bespoke fabrication, specialized machining, and assembly to custom drawings.");
+  const [customLeadTime, setCustomLeadTime] = useState("5-7 Business Days");
+  const [customLineItems, setCustomLineItems] = useState<QuoteLineItem[]>([
+    {
+      id: "li-cust-init-1",
+      description: "Custom Raw Material Stock & Tooling Preparation",
+      trade: "Custom Domain",
+      quantity: 1,
+      unit: "lot",
+      unitPrice: 12500,
+      amount: 12500
+    },
+    {
+      id: "li-cust-init-2",
+      description: "Specialized Precision Machining & Skilled Labor (Workshop Queue)",
+      trade: "Custom Domain",
+      quantity: 8,
+      unit: "hrs",
+      unitPrice: 1800,
+      amount: 14400
+    },
+    {
+      id: "li-cust-init-3",
+      description: "Quality Control CMM Inspection & Protective Packaging (Multan)",
+      trade: "Custom Domain",
+      quantity: 1,
+      unit: "job",
+      unitPrice: 3500,
+      amount: 3500
+    }
+  ]);
+
+  const handleAddCustomItem = () => {
+    const newItem: QuoteLineItem = {
+      id: `li-cust-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+      description: "Custom Deliverable / Operation",
+      trade: "Custom Domain",
+      quantity: 1,
+      unit: "pcs",
+      unitPrice: 2500,
+      amount: 2500
+    };
+    setCustomLineItems(prev => [...prev, newItem]);
+  };
+
+  const handleUpdateCustomItem = (index: number, field: keyof QuoteLineItem, value: any) => {
+    setCustomLineItems(prev => {
+      const updated = [...prev];
+      const item = { ...updated[index], [field]: value };
+      if (field === "quantity" || field === "unitPrice") {
+        item.amount = Math.round((Number(item.quantity) || 0) * (Number(item.unitPrice) || 0));
+      }
+      updated[index] = item;
+      return updated;
+    });
+  };
+
+  const handleRemoveCustomItem = (index: number) => {
+    setCustomLineItems(prev => {
+      if (prev.length <= 1) {
+        return [{
+          id: `li-cust-${Date.now()}`,
+          description: "Custom Engineering Deliverable",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "job",
+          unitPrice: 1000,
+          amount: 1000
+        }];
+      }
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const handleLoadCustomTemplate = (templateType: "material_labor" | "turnkey" | "consulting" | "repair") => {
+    if (templateType === "material_labor") {
+      setCustomLineItems([
+        {
+          id: `li-t1-1-${Date.now()}`,
+          description: "Specialized Raw Material Stock & Ingot Sourcing",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "lot",
+          unitPrice: 15000,
+          amount: 15000
+        },
+        {
+          id: `li-t1-2-${Date.now()}`,
+          description: "Dedicated Master Machinist Run Time & Tooling Setup",
+          trade: "Custom Domain",
+          quantity: 10,
+          unit: "hrs",
+          unitPrice: 2000,
+          amount: 20000
+        },
+        {
+          id: `li-t1-3-${Date.now()}`,
+          description: "Post-Machining Surface Finishing & Deburring",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "job",
+          unitPrice: 4000,
+          amount: 4000
+        }
+      ]);
+    } else if (templateType === "turnkey") {
+      setCustomLineItems([
+        {
+          id: `li-t2-1-${Date.now()}`,
+          description: "Complete Turnkey System Engineering & Mechanical Assembly",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "system",
+          unitPrice: 45000,
+          amount: 45000
+        },
+        {
+          id: `li-t2-2-${Date.now()}`,
+          description: "Factory Acceptance Testing (FAT) & 24hr Load Run",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "test",
+          unitPrice: 8500,
+          amount: 8500
+        }
+      ]);
+    } else if (templateType === "consulting") {
+      setCustomLineItems([
+        {
+          id: `li-t3-1-${Date.now()}`,
+          description: "Specialized Engineering R&D / Reverse Engineering Analysis",
+          trade: "Custom Domain",
+          quantity: 12,
+          unit: "hrs",
+          unitPrice: 2500,
+          amount: 30000
+        },
+        {
+          id: `li-t3-2-${Date.now()}`,
+          description: "Production Drawing Package (.STEP, .DXF, .PDF with Tolerances)",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "package",
+          unitPrice: 12000,
+          amount: 12000
+        }
+      ]);
+    } else if (templateType === "repair") {
+      setCustomLineItems([
+        {
+          id: `li-t4-1-${Date.now()}`,
+          description: "Workshop Component Disassembly, Cleaning & Ultrasonic Degreasing",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "job",
+          unitPrice: 6000,
+          amount: 6000
+        },
+        {
+          id: `li-t4-2-${Date.now()}`,
+          description: "Precision Hardfacing / Metal Spray Re-machining to OEM Specs",
+          trade: "Custom Domain",
+          quantity: 4,
+          unit: "hrs",
+          unitPrice: 2800,
+          amount: 11200
+        },
+        {
+          id: `li-t4-3-${Date.now()}`,
+          description: "Replacement Seals, High-Tensile Fasteners & Final Pressure Test",
+          trade: "Custom Domain",
+          quantity: 1,
+          unit: "set",
+          unitPrice: 7500,
+          amount: 7500
+        }
+      ]);
+    }
+  };
 
   // Generated Line Items
   const [lineItems, setLineItems] = useState<QuoteLineItem[]>([]);
@@ -376,6 +560,11 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           amount: total
         }
       ];
+    } else if (selectedTrade === "Custom Domain") {
+      items = customLineItems.map(item => ({
+        ...item,
+        trade: "Custom Domain" as TradeType
+      }));
     }
 
     setLineItems(items);
@@ -400,6 +589,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
     cadRevisions,
     constAreaSqFt,
     constStructureType,
+    customLineItems,
     settings
   ]);
 
@@ -425,13 +615,15 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
     const validUntilDate = new Date();
     validUntilDate.setDate(today.getDate() + validDays);
 
+    const tradeLabel = selectedTrade === "Custom Domain" ? (customTradeTitle.trim() || "Custom Domain") : selectedTrade;
+
     if (clientMode === "walkin") {
       if (!walkinName.trim() || !walkinPhone.trim()) {
         alert("Please enter the client full name and WhatsApp phone number.");
         return;
       }
 
-      const title = quoteTitle.trim() || `${selectedTrade} Custom Order for ${walkinName.trim()}`;
+      const title = quoteTitle.trim() || `${tradeLabel} Custom Order for ${walkinName.trim()}`;
 
       const { quote: createdQuote, contact: createdContact } = createQuoteWithNewContact(
         {
@@ -443,11 +635,14 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
           validUntil: validUntilDate.toISOString().split("T")[0],
           specs: {
             trade: selectedTrade,
-            material: printMaterial,
+            material: selectedTrade === "Custom Domain" ? (customTradeTitle.trim() || "Custom Domain") : printMaterial,
             weightGrams: printWeightGrams,
             sheetMaterial: laserMaterial,
             metalType: cncMetal,
             complexity: cadComplexity,
+            customDomainName: customTradeTitle.trim(),
+            customScope: customScopeNotes.trim(),
+            customLeadTime: customLeadTime.trim()
           },
           lineItems: lineItems,
           subtotal: subtotal,
@@ -478,7 +673,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       return;
     }
 
-    const title = quoteTitle.trim() || `${selectedTrade} Custom Order for ${contact.name}`;
+    const title = quoteTitle.trim() || `${tradeLabel} Custom Order for ${contact.name}`;
 
     const created = createQuote({
       contactId: contact.id,
@@ -493,11 +688,14 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
       validUntil: validUntilDate.toISOString().split("T")[0],
       specs: {
         trade: selectedTrade,
-        material: printMaterial,
+        material: selectedTrade === "Custom Domain" ? (customTradeTitle.trim() || "Custom Domain") : printMaterial,
         weightGrams: printWeightGrams,
         sheetMaterial: laserMaterial,
         metalType: cncMetal,
         complexity: cadComplexity,
+        customDomainName: customTradeTitle.trim(),
+        customScope: customScopeNotes.trim(),
+        customLeadTime: customLeadTime.trim()
       },
       lineItems: lineItems,
       subtotal: subtotal,
@@ -766,6 +964,15 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     activeIcon: "text-emerald-600 dark:text-emerald-400",
                     activeTitle: "text-emerald-700 dark:text-emerald-300"
                   },
+                  { 
+                    name: "Custom Domain", 
+                    icon: Sliders, 
+                    desc: "Bespoke & Custom Rates",
+                    badge: "Bespoke",
+                    activeStyle: "bg-amber-50/90 dark:bg-amber-950/30 border-amber-500 ring-2 ring-amber-500/40",
+                    activeIcon: "text-amber-600 dark:text-amber-400",
+                    activeTitle: "text-amber-700 dark:text-amber-300"
+                  },
                 ].map((t) => {
                   const Icon = t.icon;
                   const isSelected = selectedTrade === t.name;
@@ -817,15 +1024,17 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                   </span>
                   <div>
                     <h2 className="text-sm sm:text-base font-black tracking-wide text-slate-950 dark:text-white uppercase">
-                      STEP 2: {selectedTrade.toUpperCase()} CALCULATION PARAMETERS
+                      STEP 2: {selectedTrade === "Custom Domain" ? (customTradeTitle || "CUSTOM DOMAIN").toUpperCase() : selectedTrade.toUpperCase()} CALCULATION PARAMETERS
                     </h2>
                     <p className="text-xs text-slate-600 dark:text-zinc-400 font-medium">
-                      Configure stock envelope, machine run hours, and workshop finishing
+                      {selectedTrade === "Custom Domain"
+                        ? "Define custom domain, specifications, and bespoke itemized cost formulas"
+                        : "Configure stock envelope, machine run hours, and workshop finishing"}
                     </p>
                   </div>
                 </div>
                 <span className="text-xs font-black px-3 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-950/70 text-emerald-900 dark:text-emerald-300 border-2 border-emerald-300 dark:border-emerald-700 uppercase tracking-wider shrink-0">
-                  Live Rates
+                  {selectedTrade === "Custom Domain" ? "Bespoke Engine" : "Live Rates"}
                 </span>
               </div>
 
@@ -1082,6 +1291,242 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                       onChange={(e) => setConstAreaSqFt(Number(e.target.value))}
                       className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
                     />
+                  </div>
+                </div>
+              )}
+
+              {/* Custom Domain Builder Fields */}
+              {selectedTrade === "Custom Domain" && (
+                <div className="space-y-4">
+                  {/* Custom Domain Name + Presets */}
+                  <div className="p-4 rounded-xl bg-amber-50/50 dark:bg-[#161822] border-2 border-amber-200 dark:border-zinc-700 space-y-3">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block font-bold text-sm text-slate-950 dark:text-zinc-100">
+                          Custom Trade / Domain Title *
+                        </label>
+                        <span className="text-[11px] font-bold text-amber-700 dark:text-amber-400">
+                          Free-form or click preset below
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={customTradeTitle}
+                        onChange={(e) => setCustomTradeTitle(e.target.value)}
+                        placeholder="e.g. Electronics & PCB Assembly, Tool & Die Making, Surface Finishing..."
+                        className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-bold p-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm sm:text-base shadow-xs"
+                      />
+                    </div>
+
+                    {/* Quick Preset Pills */}
+                    <div className="space-y-1.5">
+                      <span className="text-xs font-bold text-slate-600 dark:text-zinc-400">
+                        Popular Domain Presets:
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {[
+                          "Electronics & PCB Assembly",
+                          "Tool & Die Making",
+                          "Powder Coating & Anodizing",
+                          "Hydraulics & Pneumatics",
+                          "Reverse Engineering & CMM",
+                          "Sheet Metal Stamping",
+                          "General Workshop Repair",
+                          "Custom Automation & Robotics"
+                        ].map((preset) => (
+                          <button
+                            key={preset}
+                            type="button"
+                            onClick={() => setCustomTradeTitle(preset)}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                              customTradeTitle === preset
+                                ? "bg-amber-500 text-slate-950 font-black shadow-xs"
+                                : "bg-white dark:bg-[#1f2230] text-slate-700 dark:text-zinc-300 border border-slate-300 dark:border-zinc-700 hover:border-amber-400"
+                            }`}
+                          >
+                            {preset}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Technical Scope & Lead Time */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                      <div className="sm:col-span-2">
+                        <label className="block font-bold text-xs text-slate-950 dark:text-zinc-200 mb-1">
+                          Technical Scope & Workshop Specs
+                        </label>
+                        <input
+                          type="text"
+                          value={customScopeNotes}
+                          onChange={(e) => setCustomScopeNotes(e.target.value)}
+                          placeholder="e.g. Turnkey assembly with material procurement and tolerance inspection"
+                          className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-medium p-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-bold text-xs text-slate-950 dark:text-zinc-200 mb-1">
+                          Estimated Lead Time
+                        </label>
+                        <input
+                          type="text"
+                          value={customLeadTime}
+                          onChange={(e) => setCustomLeadTime(e.target.value)}
+                          placeholder="e.g. 5-7 Business Days"
+                          className="w-full bg-white dark:bg-[#12141c] text-slate-950 dark:text-zinc-100 font-bold p-2.5 rounded-xl border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Interactive Line Items & Rates Builder */}
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#161822] border-2 border-slate-300 dark:border-zinc-700 space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-zinc-800 pb-2.5">
+                      <div>
+                        <div className="text-sm font-black text-slate-950 dark:text-white flex items-center gap-2">
+                          <Sliders className="w-4 h-4 text-[#fe7518]" />
+                          <span>Custom Calculation Line Items & Rates</span>
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-zinc-400 font-medium">
+                          Build custom cost parameters, labor rates, and machine operations
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleAddCustomItem}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#fe7518] hover:bg-[#e56208] text-slate-950 text-xs font-black shadow-xs btn-haptic shrink-0"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>+ Add Line Item</span>
+                      </button>
+                    </div>
+
+                    {/* Quick Template Buttons */}
+                    <div className="flex items-center gap-1.5 flex-wrap text-xs">
+                      <span className="font-bold text-slate-600 dark:text-zinc-400 text-[11px]">Templates:</span>
+                      <button
+                        type="button"
+                        onClick={() => handleLoadCustomTemplate("material_labor")}
+                        className="px-2 py-1 rounded bg-white dark:bg-[#1f2230] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700 hover:border-slate-500 font-semibold text-[11px]"
+                      >
+                        + Material + Labor + Setup
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleLoadCustomTemplate("turnkey")}
+                        className="px-2 py-1 rounded bg-white dark:bg-[#1f2230] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700 hover:border-slate-500 font-semibold text-[11px]"
+                      >
+                        + Turnkey System
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleLoadCustomTemplate("consulting")}
+                        className="px-2 py-1 rounded bg-white dark:bg-[#1f2230] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700 hover:border-slate-500 font-semibold text-[11px]"
+                      >
+                        + Engineering / R&D
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleLoadCustomTemplate("repair")}
+                        className="px-2 py-1 rounded bg-white dark:bg-[#1f2230] text-slate-800 dark:text-zinc-200 border border-slate-300 dark:border-zinc-700 hover:border-slate-500 font-semibold text-[11px]"
+                      >
+                        + Workshop Repair
+                      </button>
+                    </div>
+
+                    {/* Line Items List */}
+                    <div className="space-y-2.5 pt-1">
+                      {customLineItems.map((item, idx) => (
+                        <div
+                          key={item.id || idx}
+                          className="p-3 rounded-xl bg-white dark:bg-[#12141c] border-2 border-slate-200 dark:border-zinc-800 space-y-2 shadow-xs"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 flex items-center justify-center text-[10px] font-black shrink-0">
+                              {idx + 1}
+                            </span>
+                            <input
+                              type="text"
+                              value={item.description}
+                              placeholder="Item / Operation Description..."
+                              onChange={(e) => handleUpdateCustomItem(idx, "description", e.target.value)}
+                              className="flex-1 bg-slate-50 dark:bg-[#161822] text-slate-950 dark:text-white px-3 py-1.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 focus:border-[#fe7518] outline-none text-xs font-bold"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveCustomItem(idx)}
+                              className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded transition-colors"
+                              title="Delete Item"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-12 gap-2 text-xs">
+                            <div className="sm:col-span-3">
+                              <label className="block text-[10px] font-bold text-slate-700 dark:text-zinc-400 uppercase">Quantity</label>
+                              <input
+                                type="number"
+                                min={0.1}
+                                step={0.1}
+                                value={item.quantity}
+                                onChange={(e) => handleUpdateCustomItem(idx, "quantity", Number(e.target.value))}
+                                className="w-full bg-slate-50 dark:bg-[#161822] text-slate-950 dark:text-white p-1.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
+                              />
+                            </div>
+
+                            <div className="sm:col-span-3">
+                              <label className="block text-[10px] font-bold text-slate-700 dark:text-zinc-400 uppercase">Unit</label>
+                              <select
+                                value={item.unit}
+                                onChange={(e) => handleUpdateCustomItem(idx, "unit", e.target.value)}
+                                className="w-full bg-slate-50 dark:bg-[#161822] text-slate-950 dark:text-white p-1.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
+                              >
+                                <option value="pcs">pcs</option>
+                                <option value="hrs">hrs</option>
+                                <option value="lot">lot</option>
+                                <option value="job">job</option>
+                                <option value="set">set</option>
+                                <option value="units">units</option>
+                                <option value="kg">kg</option>
+                                <option value="grams">grams</option>
+                                <option value="meters">meters</option>
+                                <option value="sq.ft">sq.ft</option>
+                                <option value="days">days</option>
+                                <option value="package">package</option>
+                                <option value="system">system</option>
+                              </select>
+                            </div>
+
+                            <div className="sm:col-span-3">
+                              <label className="block text-[10px] font-bold text-slate-700 dark:text-zinc-400 uppercase">Unit Rate (PKR)</label>
+                              <input
+                                type="number"
+                                min={0}
+                                value={item.unitPrice}
+                                onChange={(e) => handleUpdateCustomItem(idx, "unitPrice", Number(e.target.value))}
+                                className="w-full bg-slate-50 dark:bg-[#161822] text-slate-950 dark:text-white p-1.5 rounded-lg border-2 border-slate-300 dark:border-zinc-700 text-xs font-bold"
+                              />
+                            </div>
+
+                            <div className="sm:col-span-3">
+                              <label className="block text-[10px] font-bold text-slate-700 dark:text-zinc-400 uppercase">Amount</label>
+                              <div className="p-1.5 bg-slate-100 dark:bg-[#181a24] rounded-lg text-xs font-black text-slate-950 dark:text-white text-right tabular-nums">
+                                {formatCurrency(item.amount)}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-zinc-800 text-xs font-bold">
+                      <span className="text-slate-600 dark:text-zinc-400">Step 2 Subtotal Calculated:</span>
+                      <span className="text-base font-black text-slate-950 dark:text-white tabular-nums">
+                        {formatCurrency(customLineItems.reduce((s, i) => s + (Number(i.amount) || 0), 0))}
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
@@ -1844,6 +2289,7 @@ export const QuotesView: React.FC<QuotesViewProps> = ({
                     <option value="Laser Cutting">Laser Cutting</option>
                     <option value="CAD Design">CAD Design</option>
                     <option value="Industrial Fabrication">Industrial Fabrication</option>
+                    <option value="Custom Domain">Custom Domain</option>
                   </select>
                 </div>
               </div>

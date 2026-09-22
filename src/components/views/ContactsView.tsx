@@ -914,7 +914,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
               <div>
                 <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Primary Trade Tags</label>
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  {(["3D Printing", "Laser Cutting", "CNC Machining", "CAD Design", "Industrial Fabrication"] as TradeType[]).map((tag) => {
+                  {(["3D Printing", "Laser Cutting", "CNC Machining", "CAD Design", "Industrial Fabrication", "Custom Domain"] as TradeType[]).map((tag) => {
                     const active = newContact.tradeTags.includes(tag);
                     return (
                       <button
@@ -1029,7 +1029,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
               <div>
                 <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Primary Trade Tags</label>
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  {(["3D Printing", "Laser Cutting", "CNC Machining", "CAD Design", "Industrial Fabrication"] as TradeType[]).map((tag) => {
+                  {(["3D Printing", "Laser Cutting", "CNC Machining", "CAD Design", "Industrial Fabrication", "Custom Domain"] as TradeType[]).map((tag) => {
                     const active = editContact.tradeTags.includes(tag);
                     return (
                       <button

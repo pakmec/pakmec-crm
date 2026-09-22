@@ -67,6 +67,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     { name: "Laser Cutting", count: nonArchivedJobs.filter(j => j.trade === "Laser Cutting").length, color: "#f59e0b" },
     { name: "CAD Design", count: nonArchivedJobs.filter(j => j.trade === "CAD Design").length, color: "#64748b" },
     { name: "Industrial Fabrication", count: nonArchivedJobs.filter(j => j.trade === "Industrial Fabrication").length, color: "#fe7518" },
+    { name: "Custom Domain", count: nonArchivedJobs.filter(j => j.trade === "Custom Domain").length, color: "#8b5cf6" },
   ];
 
   const recentLogs = nonArchivedContacts
