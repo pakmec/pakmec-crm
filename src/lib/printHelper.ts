@@ -1,6 +1,31 @@
-export function printIsolatedElement(elementId: string, docTitle: string = "PAKMEC Document") {
+interface PrintOptions {
+  /**
+   * "legacy" (default) applies the invoice print overrides below.
+   * "document" prints the element exactly as styled on screen (multi-page A4 sheets).
+   */
+  mode?: "legacy" | "document";
+}
+
+const DOCUMENT_PRINT_CSS = `
+  @page { size: A4 portrait; margin: 12mm 14mm; }
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  /* html:not(.dark) body matches the app's light-theme rule, which is also !important */
+  html, body, html:not(.dark) body {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+`;
+
+export function printIsolatedElement(elementId: string, docTitle: string = "PAKMEC Document", options: PrintOptions = {}) {
   const printContent = document.getElementById(elementId);
   if (!printContent) return;
+  const isDocument = options.mode === "document";
 
   // Create an isolated hidden iframe with exact A4 desktop dimensions
   const iframe = document.createElement("iframe");
@@ -24,6 +49,19 @@ export function printIsolatedElement(elementId: string, docTitle: string = "PAKM
     .join("\n");
 
   doc.open();
+  if (isDocument) {
+    // Body classes carry the next/font CSS variables, so the sheet keeps the app typefaces
+    doc.write(`<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>${docTitle}</title>
+    ${headStyles}
+    <style>${DOCUMENT_PRINT_CSS}</style>
+  </head>
+  <body class="${document.body.className}">${printContent.outerHTML}</body>
+</html>`);
+  } else {
   doc.write(`
     <!DOCTYPE html>
     <html lang="en">
@@ -43,7 +81,7 @@ export function printIsolatedElement(elementId: string, docTitle: string = "PAKM
             print-color-adjust: exact !important;
           }
           
-          html, body {
+          html, body, html:not(.dark) body {
             width: 100% !important;
             min-height: 100% !important;
             margin: 0 !important;
@@ -294,11 +332,17 @@ export function printIsolatedElement(elementId: string, docTitle: string = "PAKM
       </body>
     </html>
   `);
+  }
   doc.close();
 
-  // Wait for images and fonts in the iframe to finish rendering before triggering print
-  const triggerPrint = () => {
+  // Wait for images and fonts in the iframe to finish rendering before triggering print.
+  // Several timers can call this; only the first may open the dialog.
+  let printed = false;
+  const triggerPrint = async () => {
+    if (printed) return;
+    printed = true;
     try {
+      await doc.fonts?.ready;
       iframe.contentWindow?.focus();
       iframe.contentWindow?.print();
     } catch (e) {
@@ -332,7 +376,7 @@ export function printIsolatedElement(elementId: string, docTitle: string = "PAKM
         img.onerror = checkAllLoaded;
       }
     });
-    // Fallback safety timeout
-    setTimeout(triggerPrint, 600);
+    // Fallback in case an image never fires load/error
+    setTimeout(triggerPrint, 1500);
   }
 }

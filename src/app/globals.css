@@ -405,6 +405,44 @@ html:not(.dark) .bg-black\/60 {
   backdrop-filter: blur(4px);
 }
 
+/* A4 quotation sheets (components/quotes/QuoteDocument). 210mm = 794px on screen. */
+.quote-sheet {
+  display: flex;
+  flex-direction: column;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 14mm 14mm 12mm;
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 10px 28px -10px rgba(15, 23, 42, 0.28);
+}
+
+/* Sheets are always light paper: undo the dark-theme text remap above */
+html.dark .quote-doc .text-slate-500 {
+  color: #64748b !important;
+}
+
+@media print {
+  .quote-doc {
+    display: block !important;
+  }
+
+  /* @page supplies the margins; min-height keeps each footer near the sheet bottom */
+  .quote-sheet {
+    width: auto;
+    min-height: 268mm;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    break-after: page;
+  }
+
+  .quote-sheet:last-child {
+    break-after: auto;
+  }
+}
+
 /* Print Stylesheet for PAKMEC Documents */
 @media print {
   @page {

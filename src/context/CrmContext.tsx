@@ -23,6 +23,7 @@ import {
   initialSettings 
 } from "@/lib/mockData";
 import { getRolePermissions, getUserByRole } from "@/lib/auth";
+import { nextSequentialId } from "@/lib/quoteDocument";
 
 interface CrmContextType {
   // Data
@@ -64,7 +65,7 @@ interface CrmContextType {
   createQuote: (quote: Omit<Quote, "id">) => Quote;
   createQuoteWithNewContact: (
     quoteData: Omit<Quote, "id" | "contactId" | "contactName" | "contactPhone" | "contactCompany">,
-    newContactData: { name: string; phone: string; company?: string; city?: string }
+    newContactData: { name: string; phone: string; company?: string; city?: string; address?: string }
   ) => { quote: Quote; contact: Contact };
   updateQuote: (quote: Quote) => void;
   deleteQuote: (id: string) => void;
@@ -451,11 +452,10 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Quotes Actions
   const createQuote = (quoteData: Omit<Quote, "id">): Quote => {
-    const count = quotes.length + 1;
     const newQuote: Quote = {
       ...quoteData,
       currency: "PKR",
-      id: `QT-2026-${count.toString().padStart(3, "0")}`
+      id: nextSequentialId("QT", quotes.map(q => q.id))
     };
     setQuotes(prev => [newQuote, ...prev]);
     syncToDb("quotes", newQuote.id, newQuote, "upsert");
@@ -471,7 +471,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const createQuoteWithNewContact = (
     quoteData: Omit<Quote, "id" | "contactId" | "contactName" | "contactPhone" | "contactCompany">,
-    newContactData: { name: string; phone: string; company?: string; city?: string }
+    newContactData: { name: string; phone: string; company?: string; city?: string; address?: string }
   ): { quote: Quote; contact: Contact } => {
     const randomSuffix = Math.random().toString(36).substring(2, 6);
     const newContact: Contact = {
@@ -480,7 +480,8 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       phone: newContactData.phone.trim(),
       email: "",
       city: (newContactData.city || "Multan").trim(),
-      tradeTags: [quoteData.trade],
+      address: (newContactData.address || "").trim() || undefined,
+      tradeTags: quoteData.trade ? [quoteData.trade] : [],
       notes: "Client registered during quote creation.",
       id: `cnt-${Date.now()}-${randomSuffix}`,
       createdAt: new Date().toISOString(),
@@ -496,7 +497,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             hour12: true
           }),
           author: currentUser?.name || "PAKMEC",
-          text: `Client registered in Multan database during quote creation. Initial trade: ${quoteData.trade}`,
+          text: `Client registered in Multan database during quote creation. Initial trade: ${quoteData.trade || "not set"}`,
           type: "general"
         }
       ]
@@ -505,7 +506,6 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setContacts(prev => [newContact, ...prev]);
     syncToDb("contacts", newContact.id, newContact, "upsert");
 
-    const count = quotes.length + 1;
     const newQuote: Quote = {
       ...quoteData,
       contactId: newContact.id,
@@ -513,7 +513,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       contactPhone: newContact.phone,
       contactCompany: newContact.company,
       currency: "PKR",
-      id: `QT-2026-${count.toString().padStart(3, "0")}`
+      id: nextSequentialId("QT", quotes.map(q => q.id))
     };
 
     setQuotes(prev => [newQuote, ...prev]);
@@ -542,8 +542,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const quote = quotes.find(q => q.id === quoteId);
     if (!quote) throw new Error("Quote not found");
 
-    const jobCount = jobs.length + 1;
-    const jobId = `JOB-2026-${jobCount.toString().padStart(3, "0")}`;
+    const jobId = nextSequentialId("JOB", jobs.map(j => j.id));
 
     const advanceAmount = advanceReceived ? quote.advanceRequired : 0;
     const balanceDue = quote.total - advanceAmount;
@@ -594,8 +593,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateQuote(updatedQuote);
 
     // Auto-generate invoice
-    const invCount = invoices.length + 1;
-    const invId = `INV-2026-${invCount.toString().padStart(3, "0")}`;
+    const invId = nextSequentialId("INV", invoices.map(i => i.id));
 
     const newInvoice: Invoice = {
       id: invId,
@@ -646,11 +644,10 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Jobs Actions
   const createJob = (jobData: Omit<Job, "id">): Job => {
-    const count = jobs.length + 1;
     const newJob: Job = {
       ...jobData,
       currency: "PKR",
-      id: `JOB-2026-${count.toString().padStart(3, "0")}`
+      id: nextSequentialId("JOB", jobs.map(j => j.id))
     };
     setJobs(prev => [newJob, ...prev]);
     syncToDb("jobs", newJob.id, newJob, "upsert");
@@ -766,11 +763,10 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Invoices Actions
   const createInvoice = (invoiceData: Omit<Invoice, "id">): Invoice => {
-    const count = invoices.length + 1;
     const newInvoice: Invoice = {
       ...invoiceData,
       currency: "PKR",
-      id: `INV-2026-${count.toString().padStart(3, "0")}`
+      id: nextSequentialId("INV", invoices.map(i => i.id))
     };
     setInvoices(prev => [newInvoice, ...prev]);
     syncToDb("invoices", newInvoice.id, newInvoice, "upsert");

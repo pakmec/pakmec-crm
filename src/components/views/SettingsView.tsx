@@ -238,6 +238,23 @@ export const SettingsView: React.FC = () => {
                   className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] focus:bg-white dark:focus:bg-[#1a1d29] focus:ring-2 focus:ring-[#fe7518]/30 outline-none text-sm shadow-xs transition-all"
                 />
               </div>
+
+              <div>
+                <label htmlFor="company-website" className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
+                  Website
+                </label>
+                <input
+                  id="company-website"
+                  type="text"
+                  inputMode="url"
+                  autoComplete="url"
+                  value={form.company.website || ""}
+                  onChange={(e) => setForm({ ...form, company: { ...form.company, website: e.target.value } })}
+                  placeholder="www.pakmec.com"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
+                />
+              </div>
+
             </div>
           </div>
         )}
@@ -247,7 +264,7 @@ export const SettingsView: React.FC = () => {
           <div className="bg-white dark:bg-[#12141c] p-6 rounded-2xl border-2 border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
             <div className="border-b-2 border-slate-100 dark:border-zinc-800 pb-3">
               <h2 className="text-base font-extrabold text-slate-950 dark:text-white">Settlement & Payment Channels</h2>
-              <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 mt-0.5">Displayed on official invoices for advance deposits and balance settlements.</p>
+              <p className="text-xs font-medium text-slate-600 dark:text-zinc-400 mt-0.5">Printed on quotations and invoices. Empty fields are left off the printed bank box.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -274,6 +291,34 @@ export const SettingsView: React.FC = () => {
                   onChange={(e) => setForm({ ...form, company: { ...form.company, bankAccountTitle: e.target.value } })}
                   placeholder="PAKMEC ENGINEERING SERVICES"
                   className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="company-bankBranch" className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
+                  Bank Branch
+                </label>
+                <input
+                  id="company-bankBranch"
+                  type="text"
+                  value={form.company.bankBranch || ""}
+                  onChange={(e) => setForm({ ...form, company: { ...form.company, bankBranch: e.target.value } })}
+                  placeholder="Hussain Agahi Br-MTN"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="company-bankAccountNumber" className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">
+                  Account Number
+                </label>
+                <input
+                  id="company-bankAccountNumber"
+                  type="text"
+                  value={form.company.bankAccountNumber || ""}
+                  onChange={(e) => setForm({ ...form, company: { ...form.company, bankAccountNumber: e.target.value } })}
+                  placeholder="05050111015508"
+                  className="w-full bg-white dark:bg-[#161822] text-slate-950 dark:text-zinc-100 font-semibold px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-zinc-700 hover:border-slate-400 focus:border-[#fe7518] outline-none text-sm font-mono tracking-wider"
                 />
               </div>
 
