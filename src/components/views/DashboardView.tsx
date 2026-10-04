@@ -61,14 +61,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const urgentJobs = nonArchivedJobs.filter(j => (j.priority === "urgent" || j.priority === "high") && j.stage !== "delivered");
   const totalPendingBalance = nonArchivedJobs.reduce((sum, j) => sum + (j.balanceDue || 0), 0);
 
-  const trades: { name: TradeType; count: number; color: string }[] = [
-    { name: "CNC Machining", count: nonArchivedJobs.filter(j => j.trade === "CNC Machining").length, color: "#10b981" },
-    { name: "3D Printing", count: nonArchivedJobs.filter(j => j.trade === "3D Printing").length, color: "#0284c7" },
-    { name: "Laser Cutting", count: nonArchivedJobs.filter(j => j.trade === "Laser Cutting").length, color: "#f59e0b" },
-    { name: "CAD Design", count: nonArchivedJobs.filter(j => j.trade === "CAD Design").length, color: "#64748b" },
-    { name: "Industrial Fabrication", count: nonArchivedJobs.filter(j => j.trade === "Industrial Fabrication").length, color: "#fe7518" },
-    { name: "Custom Domain", count: nonArchivedJobs.filter(j => j.trade === "Custom Domain").length, color: "#8b5cf6" },
-  ];
+  // Group by whatever trades jobs actually use, so new services appear automatically
+  const TRADE_COLORS = ["#10b981", "#0284c7", "#f59e0b", "#64748b", "#fe7518", "#8b5cf6", "#e11d48", "#0d9488"];
+  const tradeCounts = new Map<string, { name: TradeType; count: number }>();
+  for (const j of nonArchivedJobs) {
+    const name = (j.trade || "").trim() || "Unassigned";
+    const key = name.toLowerCase();
+    const entry = tradeCounts.get(key) || { name, count: 0 };
+    entry.count += 1;
+    tradeCounts.set(key, entry);
+  }
+  const trades = Array.from(tradeCounts.values())
+    .sort((a, b) => b.count - a.count)
+    .map((t, i) => ({ ...t, color: TRADE_COLORS[i % TRADE_COLORS.length] }));
 
   const recentLogs = nonArchivedContacts
     .flatMap(c => (c.whatsappLogs || []).map(l => ({ ...l, contactName: c.name, contactPhone: c.phone, contactId: c.id })))
@@ -334,6 +339,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </h3>
 
             <div className="space-y-3">
+              {trades.length === 0 && (
+                <p className="text-xs font-medium text-slate-600 dark:text-zinc-400">No jobs yet — the breakdown appears once a quote is converted into a job.</p>
+              )}
               {trades.map((t) => {
                 const total = nonArchivedJobs.length || 1;
                 const percent = Math.round((t.count / total) * 100);

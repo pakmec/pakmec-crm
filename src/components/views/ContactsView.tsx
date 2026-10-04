@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useCrm } from "@/context/CrmContext";
 import { Contact, TradeType, WhatsAppLog } from "@/types";
+import { TradeTagPicker } from "@/components/ui/TradeInput";
 import { CurrencyDisplay } from "@/components/ui/CurrencyDisplay";
 
 export function formatWhatsAppPhone(phone: string): string {
@@ -238,25 +239,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
     }
   };
 
-  const toggleNewTradeTag = (tag: TradeType) => {
-    setNewContact((prev) => {
-      const exists = prev.tradeTags.includes(tag);
-      return {
-        ...prev,
-        tradeTags: exists ? prev.tradeTags.filter((t) => t !== tag) : [...prev.tradeTags, tag],
-      };
-    });
-  };
 
-  const toggleEditTradeTag = (tag: TradeType) => {
-    setEditContact((prev) => {
-      const exists = prev.tradeTags.includes(tag);
-      return {
-        ...prev,
-        tradeTags: exists ? prev.tradeTags.filter((t) => t !== tag) : [...prev.tradeTags, tag],
-      };
-    });
-  };
 
   const handleExecuteArchive = () => {
     if (!actionTargetContact) return;
@@ -372,9 +355,11 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
 
           {/* Trade Filter Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs w-full">
-            {["all", "CNC Machining", "3D Printing", "Laser Cutting", "CAD Design"].map((t) => (
+            {["all", ...Array.from(new Set(contacts.flatMap((c) => c.tradeTags || []).filter(Boolean)))].map((t) => (
               <button
                 key={t}
+                type="button"
+                aria-pressed={filterTrade === t}
                 onClick={() => setFilterTrade(t)}
                 className={`px-3 py-1.5 rounded-lg whitespace-nowrap shrink-0 font-bold transition-colors ${
                   filterTrade === t 
@@ -911,28 +896,12 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-bold text-slate-950 dark:text-zinc-100 mb-1.5">Primary Trade Tags</label>
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {(["3D Printing", "Laser Cutting", "CNC Machining", "CAD Design", "Industrial Fabrication", "Custom Domain"] as TradeType[]).map((tag) => {
-                    const active = newContact.tradeTags.includes(tag);
-                    return (
-                      <button
-                        type="button"
-                        key={tag}
-                        onClick={() => toggleNewTradeTag(tag)}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
-                          active 
-                            ? "bg-[#fe7518] text-slate-950 font-black shadow-sm" 
-                            : "bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-700 border border-slate-300 dark:border-zinc-700"
-                        }`}
-                      >
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              <TradeTagPicker
+                label="Primary trade tags"
+                labelClassName="block text-sm font-bold text-slate-950 dark:text-zinc-100"
+                value={newContact.tradeTags}
+                onChange={(tradeTags) => setNewContact((prev) => ({ ...prev, tradeTags }))}
+              />
 
               <div className="flex items-center justify-end gap-2.5 pt-4 border-t-2 border-slate-200 dark:border-zinc-800">
                 <button
@@ -1026,28 +995,12 @@ export const ContactsView: React.FC<ContactsViewProps> = ({ onOpenNewQuoteForCon
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-800 dark:text-zinc-200 mb-1">Primary Trade Tags</label>
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {(["3D Printing", "Laser Cutting", "CNC Machining", "CAD Design", "Industrial Fabrication", "Custom Domain"] as TradeType[]).map((tag) => {
-                    const active = editContact.tradeTags.includes(tag);
-                    return (
-                      <button
-                        type="button"
-                        key={tag}
-                        onClick={() => toggleEditTradeTag(tag)}
-                        className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
-                          active 
-                            ? "bg-[#fe7518] text-slate-950 font-bold shadow-xs" 
-                            : "bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-700"
-                        }`}
-                      >
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              <TradeTagPicker
+                label="Primary trade tags"
+                labelClassName="block text-xs font-semibold text-slate-800 dark:text-zinc-200"
+                value={editContact.tradeTags}
+                onChange={(tradeTags) => setEditContact((prev) => ({ ...prev, tradeTags }))}
+              />
 
               <div className="flex items-center justify-between gap-2 pt-3 border-t border-slate-200 dark:border-zinc-800">
                 {permissions.canDeleteOrArchive && (

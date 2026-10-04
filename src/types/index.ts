@@ -1,10 +1,8 @@
-export type TradeType = 
-  | "3D Printing"
-  | "Laser Cutting"
-  | "CNC Machining"
-  | "CAD Design"
-  | "Industrial Fabrication"
-  | "Custom Domain";
+/**
+ * Trade / service name. Free text so new services never need a code change;
+ * DEFAULT_TRADES in lib/trades only seeds suggestions.
+ */
+export type TradeType = string;
 
 export type Currency = "PKR";
 
@@ -33,14 +31,78 @@ export interface Contact {
   archivedAt?: string;
 }
 
+export interface QuoteKeyValue {
+  id: string;
+  label: string;
+  value: string;
+}
+
 export interface QuoteLineItem {
   id: string;
-  description: string;
-  trade: TradeType;
+  description: string; // item title
+  trade: TradeType; // category line printed under the title
   quantity: number;
   unit: string;
   unitPrice: number;
   amount: number;
+  details?: string; // long-form scope paragraph
+  highlights?: QuoteKeyValue[]; // key specs printed inline, e.g. "Spindle: 300 W"
+}
+
+/** Extra row in the totals column, e.g. "Estimated Completion: 7–10 Working Days". */
+export interface QuoteInfoRow extends QuoteKeyValue {
+  emphasis?: boolean;
+}
+
+export interface QuoteListGroup {
+  id: string;
+  title: string;
+  items: string[];
+  accent?: boolean;
+}
+
+export interface QuoteClause {
+  id: string;
+  title: string;
+  body: string;
+}
+
+export type QuoteBlockKind = "highlights" | "table" | "lists" | "clauses" | "text";
+
+/** One section on an additional quotation page. Fields used depend on `kind`. */
+export interface QuoteBlock {
+  id: string;
+  kind: QuoteBlockKind;
+  heading: string;
+  note?: string;
+  rows?: QuoteKeyValue[]; // highlights, table
+  columns?: [string, string]; // table
+  groups?: QuoteListGroup[]; // lists
+  clauses?: QuoteClause[]; // clauses
+  body?: string; // text
+}
+
+export interface QuotePage {
+  id: string;
+  title: string;
+  blocks: QuoteBlock[];
+}
+
+/** Reusable quotation layout saved from the builder. */
+export interface QuoteTemplate {
+  id: string;
+  name: string;
+  createdAt: string;
+  trade: TradeType;
+  title: string;
+  validDays: number;
+  advancePercent: number;
+  advanceStatus?: "required" | "received";
+  balanceLabel?: string;
+  terms: string;
+  lineItems: QuoteLineItem[];
+  infoRows: QuoteInfoRow[];
+  pages: QuotePage[];
 }
 
 export interface TradeSpecs {
@@ -109,6 +171,13 @@ export interface Quote {
   convertedToJobId?: string;
   isArchived?: boolean;
   archivedAt?: string;
+  // Document fields (optional so quotes saved before the modular builder still load)
+  clientAddress?: string;
+  advanceStatus?: "required" | "received";
+  balanceLabel?: string;
+  infoRows?: QuoteInfoRow[];
+  paymentDetails?: QuoteKeyValue[];
+  pages?: QuotePage[];
 }
 
 export type JobStage = "queued" | "in_progress" | "qc" | "ready" | "delivered";
@@ -250,10 +319,14 @@ export interface TradeRatesSettings {
     bankName: string;
     bankAccountTitle: string;
     bankIban: string;
+    bankBranch?: string;
+    bankAccountNumber?: string;
+    website?: string;
     jazzCashNumber: string;
     easyPaisaNumber: string;
     defaultAdvancePercent: number;
   };
+  quoteTemplates?: QuoteTemplate[];
 }
 
 // User Authentication & Role-Based Access Control (RBAC)

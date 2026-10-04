@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { DashboardView } from "@/components/views/DashboardView";
 import { ContactsView } from "@/components/views/ContactsView";
 import { QuotesView } from "@/components/views/QuotesView";
+import { TradeInput } from "@/components/ui/TradeInput";
 import { JobsKanbanView } from "@/components/views/JobsKanbanView";
 import { InvoicesView } from "@/components/views/InvoicesView";
 import { SettingsView } from "@/components/views/SettingsView";
@@ -55,13 +56,13 @@ export default function Home() {
   const [contactPhone, setContactPhone] = useState("");
   const [contactCompany, setContactCompany] = useState("");
   const [contactCity, setContactCity] = useState("Multan");
-  const [contactTrade, setContactTrade] = useState<TradeType>("CNC Machining");
+  const [contactTrade, setContactTrade] = useState<TradeType>("");
 
   // New Job modal state
   const [isNewJobOpen, setIsNewJobOpen] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [jobContactId, setJobContactId] = useState(contacts[0]?.id || "");
-  const [jobTrade, setJobTrade] = useState<TradeType>("CNC Machining");
+  const [jobTrade, setJobTrade] = useState<TradeType>("");
   const [jobTotal, setJobTotal] = useState(25000);
   const [jobAdvance, setJobAdvance] = useState(12500);
   const [jobPriority, setJobPriority] = useState<JobPriority>("high");
@@ -107,7 +108,7 @@ export default function Home() {
       phone: contactPhone.trim(),
       email: "",
       city: contactCity.trim(),
-      tradeTags: [contactTrade],
+      tradeTags: contactTrade.trim() ? [contactTrade.trim()] : [],
     });
 
     setIsNewContactOpen(false);
@@ -128,7 +129,7 @@ export default function Home() {
       contactPhone: contact.phone,
       contactCompany: contact.company,
       title: jobTitle.trim(),
-      trade: jobTrade,
+      trade: jobTrade.trim(),
       stage: "queued",
       priority: jobPriority,
       currency: "PKR",
@@ -211,6 +212,7 @@ export default function Home() {
           {activeTab === "quotes" && (
             <QuotesView
               preselectedContactId={targetContactIdForQuote}
+              onPreselectConsumed={() => setTargetContactIdForQuote(undefined)}
               onJobCreated={handleOpenJobDetail}
             />
           )}
@@ -299,21 +301,13 @@ export default function Home() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[#828c9c] font-mono mb-1">Primary Trade Interest</label>
-                <select
-                  value={contactTrade}
-                  onChange={(e) => setContactTrade(e.target.value as TradeType)}
-                  className="w-full bg-[#161821] text-white p-2 rounded-md border border-[#242938] focus:border-[#fe7518] outline-none"
-                >
-                  <option value="CNC Machining">CNC Machining</option>
-                  <option value="3D Printing">3D Printing</option>
-                  <option value="Laser Cutting">Laser Cutting</option>
-                  <option value="CAD Design">CAD Design</option>
-                  <option value="Industrial Fabrication">Industrial Fabrication</option>
-                  <option value="Custom Domain">Custom Domain</option>
-                </select>
-              </div>
+              <TradeInput
+                label="Primary trade interest"
+                labelClassName="block text-[#828c9c] font-mono mb-1"
+                inputClassName="w-full bg-[#161821] text-white p-2 rounded-md border border-[#242938] focus:border-[#fe7518] outline-none text-base sm:text-xs"
+                value={contactTrade}
+                onChange={setContactTrade}
+              />
 
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#202533]">
                 <button
@@ -366,7 +360,7 @@ export default function Home() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-3">
                 <div>
                   <label className="block text-[var(--muted)] font-mono mb-1">Client</label>
                   <select
@@ -379,21 +373,13 @@ export default function Home() {
                     ))}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-[var(--muted)] font-mono mb-1">Trade</label>
-                  <select
-                    value={jobTrade}
-                    onChange={(e) => setJobTrade(e.target.value as TradeType)}
-                    className="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-[#fe7518] outline-none"
-                  >
-                    <option value="CNC Machining">CNC Machining</option>
-                    <option value="3D Printing">3D Printing</option>
-                    <option value="Laser Cutting">Laser Cutting</option>
-                    <option value="CAD Design">CAD Design</option>
-                    <option value="Industrial Fabrication">Industrial Fabrication</option>
-                    <option value="Custom Domain">Custom Domain</option>
-                  </select>
-                </div>
+                <TradeInput
+                  label="Trade / service"
+                  labelClassName="block text-[var(--muted)] font-mono mb-1"
+                  inputClassName="w-full bg-[var(--surface-100)] text-[var(--foreground)] p-2 rounded-md border border-[var(--border)] focus:border-[#fe7518] outline-none text-base sm:text-xs"
+                  value={jobTrade}
+                  onChange={setJobTrade}
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
